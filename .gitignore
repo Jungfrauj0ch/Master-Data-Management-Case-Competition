@@ -1,0 +1,13 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+.streamlit/secrets.toml
+.streamlit/*.log
+.env
+.test-tmp*/
+pytest-cache-files-*/

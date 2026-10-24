@@ -1,0 +1,4 @@
+[server]
+# Poll source files so changes are detected reliably in this OneDrive workspace.
+fileWatcherType = "poll"
+runOnSave = true
