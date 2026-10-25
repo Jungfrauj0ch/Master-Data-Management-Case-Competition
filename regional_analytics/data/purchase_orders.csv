@@ -1,0 +1,1191 @@
+order_id,customer_id,country,business_entity,product,order_date,quantity,order_status
+PO00001,C001,Singapore,SPD,Product A,2025-01-03,111,Confirmed Order
+PO00002,C001,Singapore,SPD,Product B,2025-01-11,75,Enquiry
+PO00003,C001,Singapore,SPD,Product C,2025-01-05,52,Confirmed Order
+PO00004,C002,Singapore,QTS,Product B,2025-01-27,77,Confirmed Order
+PO00005,C003,Singapore,QTG,Product A,2025-01-04,115,Confirmed Order
+PO00006,C003,Singapore,QTG,Product B,2025-01-07,84,Confirmed Order
+PO00007,C003,Singapore,QTG,Product C,2025-01-05,58,Confirmed Order
+PO00008,C004,Singapore,SPD,Product A,2025-01-06,92,Confirmed Order
+PO00009,C004,Singapore,SPD,Product B,2025-01-13,90,Confirmed Order
+PO00010,C004,Singapore,SPD,Product C,2025-01-26,58,Enquiry
+PO00011,C005,Singapore,QTS,Product A,2025-01-03,114,Confirmed Order
+PO00012,C006,Singapore,QTG,Product A,2025-01-08,97,Confirmed Order
+PO00013,C006,Singapore,QTG,Product B,2025-01-27,84,Confirmed Order
+PO00014,C006,Singapore,QTG,Product C,2025-01-15,74,Confirmed Order
+PO00015,C007,Singapore,SPD,Product A,2025-01-26,99,Confirmed Order
+PO00016,C007,Singapore,SPD,Product B,2025-01-12,75,Confirmed Order
+PO00017,C007,Singapore,SPD,Product C,2025-01-10,50,Pending Purchase Request
+PO00018,C008,Singapore,QTS,Product A,2025-01-02,89,Confirmed Order
+PO00019,C008,Singapore,QTS,Product B,2025-01-15,72,Confirmed Order
+PO00020,C009,Singapore,QTG,Product A,2025-01-26,98,Pending Purchase Request
+PO00021,C009,Singapore,QTG,Product B,2025-01-03,88,Confirmed Order
+PO00022,C009,Singapore,QTG,Product C,2025-01-19,62,Confirmed Order
+PO00023,C010,Singapore,SPD,Product A,2025-01-13,98,Confirmed Order
+PO00024,C011,Malaysia,SPD,Product C,2025-01-16,42,Confirmed Order
+PO00025,C012,Malaysia,QTS,Product A,2025-01-22,88,Confirmed Order
+PO00026,C012,Malaysia,QTS,Product B,2025-01-25,56,Enquiry
+PO00027,C012,Malaysia,QTS,Product C,2025-01-04,61,Confirmed Order
+PO00028,C013,Malaysia,QTG,Product A,2025-01-21,86,Enquiry
+PO00029,C013,Malaysia,QTG,Product B,2025-01-17,79,Confirmed Order
+PO00030,C013,Malaysia,QTG,Product C,2025-01-10,49,Confirmed Order
+PO00031,C014,Malaysia,SPD,Product A,2025-01-12,112,Confirmed Order
+PO00032,C014,Malaysia,SPD,Product B,2025-01-07,66,Enquiry
+PO00033,C014,Malaysia,SPD,Product C,2025-01-03,42,Confirmed Order
+PO00034,C015,Malaysia,QTS,Product A,2025-01-04,112,Confirmed Order
+PO00035,C016,Malaysia,QTG,Product A,2025-01-15,111,Confirmed Order
+PO00036,C016,Malaysia,QTG,Product C,2025-01-21,47,Confirmed Order
+PO00037,C017,Malaysia,SPD,Product B,2025-01-15,78,Confirmed Order
+PO00038,C017,Malaysia,SPD,Product C,2025-01-12,54,Pending Purchase Request
+PO00039,C018,Malaysia,QTS,Product A,2025-01-17,69,Confirmed Order
+PO00040,C018,Malaysia,QTS,Product B,2025-01-03,73,Confirmed Order
+PO00041,C018,Malaysia,QTS,Product C,2025-01-04,58,Confirmed Order
+PO00042,C019,Malaysia,QTG,Product B,2025-01-04,69,Confirmed Order
+PO00043,C019,Malaysia,QTG,Product C,2025-01-13,54,Confirmed Order
+PO00044,C020,Malaysia,SPD,Product A,2025-01-22,104,Pending Purchase Request
+PO00045,C021,Indonesia,SPD,Product A,2025-01-10,157,Confirmed Order
+PO00046,C021,Indonesia,SPD,Product B,2025-01-06,75,Pending Purchase Request
+PO00047,C022,Indonesia,QTS,Product A,2025-01-09,136,Confirmed Order
+PO00048,C022,Indonesia,QTS,Product B,2025-01-22,97,Confirmed Order
+PO00049,C023,Indonesia,QTG,Product B,2025-01-19,84,Confirmed Order
+PO00050,C023,Indonesia,QTG,Product C,2025-01-03,66,Confirmed Order
+PO00051,C024,Indonesia,SPD,Product A,2025-01-14,132,Confirmed Order
+PO00052,C024,Indonesia,SPD,Product B,2025-01-18,88,Confirmed Order
+PO00053,C024,Indonesia,SPD,Product C,2025-01-20,66,Confirmed Order
+PO00054,C025,Indonesia,QTS,Product A,2025-01-18,127,Confirmed Order
+PO00055,C026,Indonesia,QTG,Product B,2025-01-06,69,Enquiry
+PO00056,C026,Indonesia,QTG,Product C,2025-01-24,54,Confirmed Order
+PO00057,C027,Indonesia,SPD,Product A,2025-01-11,117,Confirmed Order
+PO00058,C027,Indonesia,SPD,Product B,2025-01-25,79,Confirmed Order
+PO00059,C027,Indonesia,SPD,Product C,2025-01-25,59,Confirmed Order
+PO00060,C028,Indonesia,QTS,Product A,2025-01-12,101,Pending Purchase Request
+PO00061,C028,Indonesia,QTS,Product B,2025-01-01,85,Confirmed Order
+PO00062,C029,Indonesia,QTG,Product A,2025-01-06,101,Confirmed Order
+PO00063,C029,Indonesia,QTG,Product B,2025-01-11,78,Confirmed Order
+PO00064,C031,Thailand,SPD,Product B,2025-01-12,57,Confirmed Order
+PO00065,C031,Thailand,SPD,Product C,2025-01-07,47,Confirmed Order
+PO00066,C032,Thailand,QTS,Product B,2025-01-07,63,Enquiry
+PO00067,C032,Thailand,QTS,Product C,2025-01-02,52,Confirmed Order
+PO00068,C033,Thailand,QTG,Product B,2025-01-26,63,Confirmed Order
+PO00069,C033,Thailand,QTG,Product C,2025-01-22,39,Confirmed Order
+PO00070,C034,Thailand,SPD,Product A,2025-01-06,78,Enquiry
+PO00071,C034,Thailand,SPD,Product B,2025-01-14,50,Pending Purchase Request
+PO00072,C035,Thailand,QTS,Product A,2025-01-27,66,Confirmed Order
+PO00073,C036,Thailand,QTG,Product A,2025-01-12,63,Confirmed Order
+PO00074,C036,Thailand,QTG,Product B,2025-01-21,43,Confirmed Order
+PO00075,C038,Thailand,QTS,Product A,2025-01-13,85,Confirmed Order
+PO00076,C038,Thailand,QTS,Product C,2025-01-10,35,Confirmed Order
+PO00077,C039,Thailand,QTG,Product A,2025-01-16,81,Confirmed Order
+PO00078,C039,Thailand,QTG,Product C,2025-01-20,41,Confirmed Order
+PO00079,C040,Thailand,SPD,Product A,2025-01-16,85,Confirmed Order
+PO00080,C041,Vietnam,SPD,Product A,2025-01-11,95,Confirmed Order
+PO00081,C041,Vietnam,SPD,Product C,2025-01-06,46,Enquiry
+PO00082,C042,Vietnam,QTS,Product A,2025-01-06,90,Confirmed Order
+PO00083,C043,Vietnam,QTG,Product A,2025-01-03,108,Confirmed Order
+PO00084,C043,Vietnam,QTG,Product B,2025-01-21,56,Enquiry
+PO00085,C044,Vietnam,SPD,Product A,2025-01-15,89,Confirmed Order
+PO00086,C044,Vietnam,SPD,Product B,2025-01-19,65,Enquiry
+PO00087,C044,Vietnam,SPD,Product C,2025-01-11,40,Pending Purchase Request
+PO00088,C046,Vietnam,QTG,Product A,2025-01-25,87,Confirmed Order
+PO00089,C046,Vietnam,QTG,Product B,2025-01-16,60,Confirmed Order
+PO00090,C047,Vietnam,SPD,Product A,2025-01-05,77,Confirmed Order
+PO00091,C047,Vietnam,SPD,Product B,2025-01-18,70,Confirmed Order
+PO00092,C047,Vietnam,SPD,Product C,2025-01-08,42,Confirmed Order
+PO00093,C048,Vietnam,QTS,Product A,2025-01-23,94,Confirmed Order
+PO00094,C048,Vietnam,QTS,Product C,2025-01-22,32,Confirmed Order
+PO00095,C049,Vietnam,QTG,Product B,2025-01-26,78,Confirmed Order
+PO00096,C049,Vietnam,QTG,Product C,2025-01-23,39,Confirmed Order
+PO00097,C051,Singapore,SPD,Product A,2025-01-06,134,Confirmed Order
+PO00098,C051,Singapore,SPD,Product B,2025-01-01,87,Confirmed Order
+PO00099,C051,Singapore,SPD,Product C,2025-01-07,57,Confirmed Order
+PO00100,C052,Singapore,SPD,Product A,2025-01-26,102,Confirmed Order
+PO00101,C052,Singapore,SPD,Product B,2025-01-02,86,Confirmed Order
+PO00102,C052,Singapore,SPD,Product C,2025-01-18,56,Enquiry
+PO00103,C001,Singapore,SPD,Product A,2025-02-18,102,Confirmed Order
+PO00104,C001,Singapore,SPD,Product B,2025-02-07,87,Confirmed Order
+PO00105,C001,Singapore,SPD,Product C,2025-02-18,62,Confirmed Order
+PO00106,C002,Singapore,QTS,Product B,2025-02-03,98,Enquiry
+PO00107,C002,Singapore,QTS,Product C,2025-02-25,56,Confirmed Order
+PO00108,C003,Singapore,QTG,Product A,2025-02-21,95,Confirmed Order
+PO00109,C003,Singapore,QTG,Product B,2025-02-08,90,Confirmed Order
+PO00110,C003,Singapore,QTG,Product C,2025-02-22,70,Confirmed Order
+PO00111,C004,Singapore,SPD,Product A,2025-02-19,109,Enquiry
+PO00112,C004,Singapore,SPD,Product B,2025-02-17,97,Pending Purchase Request
+PO00113,C004,Singapore,SPD,Product C,2025-02-01,56,Confirmed Order
+PO00114,C005,Singapore,QTS,Product A,2025-02-09,127,Confirmed Order
+PO00115,C006,Singapore,QTG,Product A,2025-02-21,130,Confirmed Order
+PO00116,C006,Singapore,QTG,Product B,2025-02-08,85,Confirmed Order
+PO00117,C006,Singapore,QTG,Product C,2025-02-08,78,Pending Purchase Request
+PO00118,C007,Singapore,SPD,Product A,2025-02-03,121,Confirmed Order
+PO00119,C007,Singapore,SPD,Product B,2025-02-17,85,Confirmed Order
+PO00120,C007,Singapore,SPD,Product C,2025-02-07,71,Confirmed Order
+PO00121,C008,Singapore,QTS,Product B,2025-02-10,69,Confirmed Order
+PO00122,C008,Singapore,QTS,Product C,2025-02-12,58,Confirmed Order
+PO00123,C009,Singapore,QTG,Product A,2025-02-19,105,Confirmed Order
+PO00124,C009,Singapore,QTG,Product B,2025-02-24,67,Enquiry
+PO00125,C010,Singapore,SPD,Product A,2025-02-06,108,Confirmed Order
+PO00126,C011,Malaysia,SPD,Product A,2025-02-11,82,Confirmed Order
+PO00127,C011,Malaysia,SPD,Product C,2025-02-01,38,Enquiry
+PO00128,C012,Malaysia,QTS,Product A,2025-02-04,108,Confirmed Order
+PO00129,C012,Malaysia,QTS,Product B,2025-02-17,88,Confirmed Order
+PO00130,C012,Malaysia,QTS,Product C,2025-02-16,46,Confirmed Order
+PO00131,C013,Malaysia,QTG,Product B,2025-02-09,80,Confirmed Order
+PO00132,C013,Malaysia,QTG,Product C,2025-02-02,52,Confirmed Order
+PO00133,C014,Malaysia,SPD,Product A,2025-02-09,92,Confirmed Order
+PO00134,C014,Malaysia,SPD,Product C,2025-02-14,56,Pending Purchase Request
+PO00135,C015,Malaysia,QTS,Product A,2025-02-15,92,Confirmed Order
+PO00136,C016,Malaysia,QTG,Product A,2025-02-04,115,Pending Purchase Request
+PO00137,C016,Malaysia,QTG,Product B,2025-02-12,68,Confirmed Order
+PO00138,C017,Malaysia,SPD,Product A,2025-02-26,118,Confirmed Order
+PO00139,C017,Malaysia,SPD,Product C,2025-02-03,56,Confirmed Order
+PO00140,C018,Malaysia,QTS,Product A,2025-02-05,92,Confirmed Order
+PO00141,C018,Malaysia,QTS,Product B,2025-02-04,74,Enquiry
+PO00142,C018,Malaysia,QTS,Product C,2025-02-21,54,Confirmed Order
+PO00143,C019,Malaysia,QTG,Product A,2025-02-12,89,Confirmed Order
+PO00144,C019,Malaysia,QTG,Product C,2025-02-24,59,Enquiry
+PO00145,C020,Malaysia,SPD,Product A,2025-02-10,92,Confirmed Order
+PO00146,C021,Indonesia,SPD,Product A,2025-02-07,125,Enquiry
+PO00147,C021,Indonesia,SPD,Product B,2025-02-23,76,Confirmed Order
+PO00148,C021,Indonesia,SPD,Product C,2025-02-12,64,Confirmed Order
+PO00149,C022,Indonesia,QTS,Product B,2025-02-15,70,Confirmed Order
+PO00150,C022,Indonesia,QTS,Product C,2025-02-16,51,Confirmed Order
+PO00151,C023,Indonesia,QTG,Product A,2025-02-08,134,Confirmed Order
+PO00152,C023,Indonesia,QTG,Product B,2025-02-19,91,Confirmed Order
+PO00153,C023,Indonesia,QTG,Product C,2025-02-06,63,Enquiry
+PO00154,C024,Indonesia,SPD,Product A,2025-02-07,120,Confirmed Order
+PO00155,C024,Indonesia,SPD,Product C,2025-02-07,65,Confirmed Order
+PO00156,C025,Indonesia,QTS,Product A,2025-02-21,132,Confirmed Order
+PO00157,C026,Indonesia,QTG,Product A,2025-02-23,125,Confirmed Order
+PO00158,C026,Indonesia,QTG,Product C,2025-02-11,60,Confirmed Order
+PO00159,C027,Indonesia,SPD,Product A,2025-02-26,129,Enquiry
+PO00160,C027,Indonesia,SPD,Product C,2025-02-03,56,Confirmed Order
+PO00161,C028,Indonesia,QTS,Product A,2025-02-20,115,Confirmed Order
+PO00162,C029,Indonesia,QTG,Product B,2025-02-02,86,Confirmed Order
+PO00163,C029,Indonesia,QTG,Product C,2025-02-22,62,Pending Purchase Request
+PO00164,C030,Indonesia,SPD,Product A,2025-02-10,130,Enquiry
+PO00165,C031,Thailand,SPD,Product A,2025-02-14,90,Pending Purchase Request
+PO00166,C031,Thailand,SPD,Product B,2025-02-20,57,Confirmed Order
+PO00167,C032,Thailand,QTS,Product A,2025-02-14,100,Confirmed Order
+PO00168,C032,Thailand,QTS,Product B,2025-02-07,68,Confirmed Order
+PO00169,C033,Thailand,QTG,Product A,2025-02-14,72,Pending Purchase Request
+PO00170,C033,Thailand,QTG,Product B,2025-02-14,67,Confirmed Order
+PO00171,C035,Thailand,QTS,Product A,2025-02-03,79,Confirmed Order
+PO00172,C036,Thailand,QTG,Product B,2025-02-09,63,Pending Purchase Request
+PO00173,C037,Thailand,SPD,Product A,2025-02-21,82,Confirmed Order
+PO00174,C037,Thailand,SPD,Product B,2025-02-11,52,Confirmed Order
+PO00175,C037,Thailand,SPD,Product C,2025-02-22,39,Confirmed Order
+PO00176,C038,Thailand,QTS,Product B,2025-02-14,68,Confirmed Order
+PO00177,C039,Thailand,QTG,Product A,2025-02-02,72,Pending Purchase Request
+PO00178,C039,Thailand,QTG,Product B,2025-02-03,65,Confirmed Order
+PO00179,C041,Vietnam,SPD,Product B,2025-02-08,55,Confirmed Order
+PO00180,C041,Vietnam,SPD,Product C,2025-02-11,56,Confirmed Order
+PO00181,C042,Vietnam,QTS,Product A,2025-02-20,97,Confirmed Order
+PO00182,C042,Vietnam,QTS,Product B,2025-02-16,69,Confirmed Order
+PO00183,C043,Vietnam,QTG,Product A,2025-02-03,101,Confirmed Order
+PO00184,C043,Vietnam,QTG,Product C,2025-02-14,55,Confirmed Order
+PO00185,C044,Vietnam,SPD,Product B,2025-02-05,72,Pending Purchase Request
+PO00186,C046,Vietnam,QTG,Product A,2025-02-21,110,Confirmed Order
+PO00187,C046,Vietnam,QTG,Product B,2025-02-19,73,Confirmed Order
+PO00188,C046,Vietnam,QTG,Product C,2025-02-01,45,Confirmed Order
+PO00189,C047,Vietnam,SPD,Product A,2025-02-05,105,Confirmed Order
+PO00190,C047,Vietnam,SPD,Product B,2025-02-22,83,Confirmed Order
+PO00191,C047,Vietnam,SPD,Product C,2025-02-27,46,Enquiry
+PO00192,C048,Vietnam,QTS,Product A,2025-02-04,114,Confirmed Order
+PO00193,C048,Vietnam,QTS,Product B,2025-02-17,59,Confirmed Order
+PO00194,C048,Vietnam,QTS,Product C,2025-02-02,44,Enquiry
+PO00195,C051,Singapore,SPD,Product A,2025-02-17,117,Pending Purchase Request
+PO00196,C051,Singapore,SPD,Product B,2025-02-14,77,Confirmed Order
+PO00197,C051,Singapore,SPD,Product C,2025-02-21,60,Confirmed Order
+PO00198,C052,Singapore,SPD,Product A,2025-02-17,119,Confirmed Order
+PO00199,C052,Singapore,SPD,Product C,2025-02-15,59,Pending Purchase Request
+PO00200,C001,Singapore,SPD,Product A,2025-03-18,111,Confirmed Order
+PO00201,C001,Singapore,SPD,Product B,2025-03-25,82,Enquiry
+PO00202,C001,Singapore,SPD,Product C,2025-03-27,61,Confirmed Order
+PO00203,C002,Singapore,QTS,Product A,2025-03-21,140,Confirmed Order
+PO00204,C002,Singapore,QTS,Product C,2025-03-27,54,Confirmed Order
+PO00205,C003,Singapore,QTG,Product A,2025-03-13,119,Confirmed Order
+PO00206,C003,Singapore,QTG,Product B,2025-03-22,105,Confirmed Order
+PO00207,C005,Singapore,QTS,Product A,2025-03-09,103,Pending Purchase Request
+PO00208,C006,Singapore,QTG,Product A,2025-03-08,120,Confirmed Order
+PO00209,C006,Singapore,QTG,Product C,2025-03-04,69,Confirmed Order
+PO00210,C007,Singapore,SPD,Product A,2025-03-20,121,Confirmed Order
+PO00211,C007,Singapore,SPD,Product B,2025-03-26,95,Confirmed Order
+PO00212,C007,Singapore,SPD,Product C,2025-03-24,68,Confirmed Order
+PO00213,C008,Singapore,QTS,Product A,2025-03-23,128,Confirmed Order
+PO00214,C008,Singapore,QTS,Product C,2025-03-02,60,Confirmed Order
+PO00215,C009,Singapore,QTG,Product A,2025-03-21,112,Confirmed Order
+PO00216,C009,Singapore,QTG,Product B,2025-03-06,86,Confirmed Order
+PO00217,C009,Singapore,QTG,Product C,2025-03-20,47,Confirmed Order
+PO00218,C011,Malaysia,SPD,Product A,2025-03-17,114,Confirmed Order
+PO00219,C011,Malaysia,SPD,Product B,2025-03-12,80,Confirmed Order
+PO00220,C011,Malaysia,SPD,Product C,2025-03-10,55,Confirmed Order
+PO00221,C012,Malaysia,QTS,Product A,2025-03-11,99,Confirmed Order
+PO00222,C012,Malaysia,QTS,Product C,2025-03-04,54,Confirmed Order
+PO00223,C013,Malaysia,QTG,Product B,2025-03-01,70,Confirmed Order
+PO00224,C013,Malaysia,QTG,Product C,2025-03-16,55,Confirmed Order
+PO00225,C014,Malaysia,SPD,Product A,2025-03-05,131,Confirmed Order
+PO00226,C015,Malaysia,QTS,Product A,2025-03-19,126,Confirmed Order
+PO00227,C016,Malaysia,QTG,Product A,2025-03-14,136,Confirmed Order
+PO00228,C016,Malaysia,QTG,Product B,2025-03-13,81,Enquiry
+PO00229,C017,Malaysia,SPD,Product C,2025-03-02,56,Confirmed Order
+PO00230,C018,Malaysia,QTS,Product B,2025-03-18,98,Confirmed Order
+PO00231,C019,Malaysia,QTG,Product A,2025-03-10,122,Confirmed Order
+PO00232,C019,Malaysia,QTG,Product B,2025-03-27,93,Confirmed Order
+PO00233,C019,Malaysia,QTG,Product C,2025-03-21,60,Confirmed Order
+PO00234,C021,Indonesia,SPD,Product A,2025-03-05,143,Confirmed Order
+PO00235,C021,Indonesia,SPD,Product B,2025-03-02,100,Enquiry
+PO00236,C021,Indonesia,SPD,Product C,2025-03-17,76,Confirmed Order
+PO00237,C022,Indonesia,QTS,Product A,2025-03-19,151,Confirmed Order
+PO00238,C022,Indonesia,QTS,Product B,2025-03-19,99,Confirmed Order
+PO00239,C022,Indonesia,QTS,Product C,2025-03-16,77,Confirmed Order
+PO00240,C023,Indonesia,QTG,Product A,2025-03-11,138,Pending Purchase Request
+PO00241,C023,Indonesia,QTG,Product B,2025-03-01,100,Confirmed Order
+PO00242,C023,Indonesia,QTG,Product C,2025-03-06,62,Pending Purchase Request
+PO00243,C024,Indonesia,SPD,Product A,2025-03-27,130,Confirmed Order
+PO00244,C024,Indonesia,SPD,Product B,2025-03-09,93,Confirmed Order
+PO00245,C026,Indonesia,QTG,Product A,2025-03-25,141,Confirmed Order
+PO00246,C026,Indonesia,QTG,Product B,2025-03-13,89,Pending Purchase Request
+PO00247,C027,Indonesia,SPD,Product A,2025-03-11,129,Enquiry
+PO00248,C027,Indonesia,SPD,Product B,2025-03-11,98,Enquiry
+PO00249,C027,Indonesia,SPD,Product C,2025-03-16,64,Confirmed Order
+PO00250,C028,Indonesia,QTS,Product A,2025-03-27,124,Confirmed Order
+PO00251,C028,Indonesia,QTS,Product C,2025-03-01,63,Confirmed Order
+PO00252,C029,Indonesia,QTG,Product B,2025-03-07,87,Pending Purchase Request
+PO00253,C029,Indonesia,QTG,Product C,2025-03-23,72,Pending Purchase Request
+PO00254,C031,Thailand,SPD,Product A,2025-03-22,80,Enquiry
+PO00255,C031,Thailand,SPD,Product B,2025-03-14,67,Confirmed Order
+PO00256,C031,Thailand,SPD,Product C,2025-03-22,50,Confirmed Order
+PO00257,C032,Thailand,QTS,Product A,2025-03-19,99,Pending Purchase Request
+PO00258,C032,Thailand,QTS,Product C,2025-03-05,54,Confirmed Order
+PO00259,C033,Thailand,QTG,Product A,2025-03-13,92,Confirmed Order
+PO00260,C033,Thailand,QTG,Product B,2025-03-15,65,Confirmed Order
+PO00261,C034,Thailand,SPD,Product A,2025-03-13,72,Confirmed Order
+PO00262,C034,Thailand,SPD,Product B,2025-03-15,55,Confirmed Order
+PO00263,C034,Thailand,SPD,Product C,2025-03-11,44,Confirmed Order
+PO00264,C035,Thailand,QTS,Product A,2025-03-08,98,Confirmed Order
+PO00265,C036,Thailand,QTG,Product C,2025-03-10,48,Confirmed Order
+PO00266,C037,Thailand,SPD,Product B,2025-03-08,70,Confirmed Order
+PO00267,C038,Thailand,QTS,Product A,2025-03-23,87,Confirmed Order
+PO00268,C038,Thailand,QTS,Product C,2025-03-25,37,Enquiry
+PO00269,C039,Thailand,QTG,Product A,2025-03-14,84,Confirmed Order
+PO00270,C039,Thailand,QTG,Product B,2025-03-18,63,Confirmed Order
+PO00271,C041,Vietnam,SPD,Product A,2025-03-15,107,Confirmed Order
+PO00272,C041,Vietnam,SPD,Product B,2025-03-23,85,Confirmed Order
+PO00273,C041,Vietnam,SPD,Product C,2025-03-05,52,Enquiry
+PO00274,C042,Vietnam,QTS,Product B,2025-03-06,64,Confirmed Order
+PO00275,C042,Vietnam,QTS,Product C,2025-03-12,56,Confirmed Order
+PO00276,C043,Vietnam,QTG,Product A,2025-03-27,110,Confirmed Order
+PO00277,C043,Vietnam,QTG,Product B,2025-03-14,84,Confirmed Order
+PO00278,C043,Vietnam,QTG,Product C,2025-03-09,52,Pending Purchase Request
+PO00279,C044,Vietnam,SPD,Product A,2025-03-21,103,Confirmed Order
+PO00280,C044,Vietnam,SPD,Product B,2025-03-05,63,Confirmed Order
+PO00281,C045,Vietnam,QTS,Product A,2025-03-04,95,Confirmed Order
+PO00282,C046,Vietnam,QTG,Product C,2025-03-10,41,Confirmed Order
+PO00283,C047,Vietnam,SPD,Product A,2025-03-21,96,Enquiry
+PO00284,C047,Vietnam,SPD,Product B,2025-03-24,81,Confirmed Order
+PO00285,C047,Vietnam,SPD,Product C,2025-03-01,50,Confirmed Order
+PO00286,C048,Vietnam,QTS,Product A,2025-03-14,112,Confirmed Order
+PO00287,C048,Vietnam,QTS,Product C,2025-03-12,42,Confirmed Order
+PO00288,C049,Vietnam,QTG,Product B,2025-03-14,62,Enquiry
+PO00289,C050,Vietnam,SPD,Product A,2025-03-18,95,Pending Purchase Request
+PO00290,C051,Singapore,SPD,Product A,2025-03-01,133,Confirmed Order
+PO00291,C051,Singapore,SPD,Product B,2025-03-08,86,Enquiry
+PO00292,C051,Singapore,SPD,Product C,2025-03-24,52,Confirmed Order
+PO00293,C052,Singapore,SPD,Product A,2025-03-16,120,Confirmed Order
+PO00294,C052,Singapore,SPD,Product B,2025-03-20,73,Confirmed Order
+PO00295,C001,Singapore,SPD,Product A,2025-04-21,108,Confirmed Order
+PO00296,C001,Singapore,SPD,Product B,2025-04-16,103,Confirmed Order
+PO00297,C001,Singapore,SPD,Product C,2025-04-10,59,Confirmed Order
+PO00298,C002,Singapore,QTS,Product B,2025-04-05,82,Confirmed Order
+PO00299,C002,Singapore,QTS,Product C,2025-04-10,59,Confirmed Order
+PO00300,C003,Singapore,QTG,Product A,2025-04-23,136,Confirmed Order
+PO00301,C003,Singapore,QTG,Product C,2025-04-23,53,Confirmed Order
+PO00302,C004,Singapore,SPD,Product B,2025-04-04,94,Confirmed Order
+PO00303,C004,Singapore,SPD,Product C,2025-04-11,72,Confirmed Order
+PO00304,C005,Singapore,QTS,Product A,2025-04-18,138,Confirmed Order
+PO00305,C006,Singapore,QTG,Product A,2025-04-05,141,Confirmed Order
+PO00306,C006,Singapore,QTG,Product B,2025-04-22,84,Confirmed Order
+PO00307,C006,Singapore,QTG,Product C,2025-04-17,60,Confirmed Order
+PO00308,C007,Singapore,SPD,Product A,2025-04-27,132,Confirmed Order
+PO00309,C007,Singapore,SPD,Product B,2025-04-23,68,Confirmed Order
+PO00310,C008,Singapore,QTS,Product B,2025-04-19,101,Confirmed Order
+PO00311,C008,Singapore,QTS,Product C,2025-04-26,60,Confirmed Order
+PO00312,C009,Singapore,QTG,Product A,2025-04-24,123,Enquiry
+PO00313,C009,Singapore,QTG,Product C,2025-04-11,64,Confirmed Order
+PO00314,C010,Singapore,SPD,Product A,2025-04-20,126,Confirmed Order
+PO00315,C011,Malaysia,SPD,Product A,2025-04-07,144,Confirmed Order
+PO00316,C011,Malaysia,SPD,Product B,2025-04-21,89,Confirmed Order
+PO00317,C011,Malaysia,SPD,Product C,2025-04-14,67,Confirmed Order
+PO00318,C012,Malaysia,QTS,Product C,2025-04-21,57,Enquiry
+PO00319,C013,Malaysia,QTG,Product A,2025-04-15,78,Confirmed Order
+PO00320,C013,Malaysia,QTG,Product B,2025-04-21,74,Enquiry
+PO00321,C013,Malaysia,QTG,Product C,2025-04-24,58,Enquiry
+PO00322,C014,Malaysia,SPD,Product A,2025-04-14,120,Confirmed Order
+PO00323,C014,Malaysia,SPD,Product C,2025-04-16,60,Confirmed Order
+PO00324,C015,Malaysia,QTS,Product A,2025-04-04,131,Confirmed Order
+PO00325,C016,Malaysia,QTG,Product B,2025-04-01,97,Confirmed Order
+PO00326,C016,Malaysia,QTG,Product C,2025-04-04,51,Confirmed Order
+PO00327,C017,Malaysia,SPD,Product A,2025-04-02,125,Confirmed Order
+PO00328,C017,Malaysia,SPD,Product C,2025-04-18,58,Confirmed Order
+PO00329,C018,Malaysia,QTS,Product B,2025-04-08,72,Confirmed Order
+PO00330,C018,Malaysia,QTS,Product C,2025-04-20,45,Confirmed Order
+PO00331,C019,Malaysia,QTG,Product A,2025-04-17,108,Confirmed Order
+PO00332,C019,Malaysia,QTG,Product B,2025-04-18,88,Confirmed Order
+PO00333,C022,Indonesia,QTS,Product C,2025-04-18,69,Pending Purchase Request
+PO00334,C023,Indonesia,QTG,Product C,2025-04-09,66,Confirmed Order
+PO00335,C024,Indonesia,SPD,Product B,2025-04-22,99,Confirmed Order
+PO00336,C024,Indonesia,SPD,Product C,2025-04-25,67,Confirmed Order
+PO00337,C026,Indonesia,QTG,Product B,2025-04-18,97,Pending Purchase Request
+PO00338,C026,Indonesia,QTG,Product C,2025-04-16,70,Enquiry
+PO00339,C027,Indonesia,SPD,Product B,2025-04-22,64,Confirmed Order
+PO00340,C027,Indonesia,SPD,Product C,2025-04-14,67,Confirmed Order
+PO00341,C028,Indonesia,QTS,Product A,2025-04-17,163,Confirmed Order
+PO00342,C028,Indonesia,QTS,Product B,2025-04-13,102,Confirmed Order
+PO00343,C028,Indonesia,QTS,Product C,2025-04-05,54,Confirmed Order
+PO00344,C029,Indonesia,QTG,Product A,2025-04-05,132,Confirmed Order
+PO00345,C029,Indonesia,QTG,Product B,2025-04-01,105,Confirmed Order
+PO00346,C031,Thailand,SPD,Product A,2025-04-11,121,Confirmed Order
+PO00347,C031,Thailand,SPD,Product C,2025-04-23,41,Confirmed Order
+PO00348,C032,Thailand,QTS,Product B,2025-04-04,80,Confirmed Order
+PO00349,C032,Thailand,QTS,Product C,2025-04-10,47,Confirmed Order
+PO00350,C033,Thailand,QTG,Product A,2025-04-23,66,Confirmed Order
+PO00351,C033,Thailand,QTG,Product B,2025-04-11,75,Confirmed Order
+PO00352,C033,Thailand,QTG,Product C,2025-04-25,42,Enquiry
+PO00353,C034,Thailand,SPD,Product A,2025-04-19,95,Confirmed Order
+PO00354,C034,Thailand,SPD,Product B,2025-04-18,71,Enquiry
+PO00355,C034,Thailand,SPD,Product C,2025-04-24,37,Confirmed Order
+PO00356,C036,Thailand,QTG,Product A,2025-04-16,100,Confirmed Order
+PO00357,C036,Thailand,QTG,Product B,2025-04-24,63,Confirmed Order
+PO00358,C036,Thailand,QTG,Product C,2025-04-08,43,Confirmed Order
+PO00359,C037,Thailand,SPD,Product A,2025-04-12,117,Confirmed Order
+PO00360,C037,Thailand,SPD,Product B,2025-04-13,61,Confirmed Order
+PO00361,C037,Thailand,SPD,Product C,2025-04-06,55,Confirmed Order
+PO00362,C038,Thailand,QTS,Product A,2025-04-02,90,Enquiry
+PO00363,C038,Thailand,QTS,Product B,2025-04-24,57,Confirmed Order
+PO00364,C039,Thailand,QTG,Product B,2025-04-26,69,Confirmed Order
+PO00365,C039,Thailand,QTG,Product C,2025-04-21,48,Confirmed Order
+PO00366,C040,Thailand,SPD,Product A,2025-04-02,90,Confirmed Order
+PO00367,C041,Vietnam,SPD,Product A,2025-04-01,85,Enquiry
+PO00368,C041,Vietnam,SPD,Product B,2025-04-18,63,Confirmed Order
+PO00369,C042,Vietnam,QTS,Product A,2025-04-23,85,Confirmed Order
+PO00370,C042,Vietnam,QTS,Product B,2025-04-12,82,Pending Purchase Request
+PO00371,C042,Vietnam,QTS,Product C,2025-04-08,58,Confirmed Order
+PO00372,C043,Vietnam,QTG,Product A,2025-04-02,118,Confirmed Order
+PO00373,C043,Vietnam,QTG,Product B,2025-04-09,82,Confirmed Order
+PO00374,C043,Vietnam,QTG,Product C,2025-04-01,55,Confirmed Order
+PO00375,C044,Vietnam,SPD,Product A,2025-04-14,102,Confirmed Order
+PO00376,C044,Vietnam,SPD,Product B,2025-04-05,51,Pending Purchase Request
+PO00377,C046,Vietnam,QTG,Product A,2025-04-25,100,Confirmed Order
+PO00378,C046,Vietnam,QTG,Product B,2025-04-23,83,Confirmed Order
+PO00379,C046,Vietnam,QTG,Product C,2025-04-04,46,Confirmed Order
+PO00380,C047,Vietnam,SPD,Product B,2025-04-13,56,Enquiry
+PO00381,C047,Vietnam,SPD,Product C,2025-04-18,59,Confirmed Order
+PO00382,C048,Vietnam,QTS,Product A,2025-04-11,111,Confirmed Order
+PO00383,C048,Vietnam,QTS,Product B,2025-04-17,92,Enquiry
+PO00384,C048,Vietnam,QTS,Product C,2025-04-22,57,Confirmed Order
+PO00385,C049,Vietnam,QTG,Product A,2025-04-26,90,Confirmed Order
+PO00386,C049,Vietnam,QTG,Product C,2025-04-26,64,Confirmed Order
+PO00387,C050,Vietnam,SPD,Product A,2025-04-25,94,Confirmed Order
+PO00388,C051,Singapore,SPD,Product A,2025-04-09,138,Enquiry
+PO00389,C051,Singapore,SPD,Product B,2025-04-27,94,Confirmed Order
+PO00390,C051,Singapore,SPD,Product C,2025-04-09,63,Pending Purchase Request
+PO00391,C052,Singapore,SPD,Product A,2025-04-26,128,Confirmed Order
+PO00392,C052,Singapore,SPD,Product B,2025-04-06,84,Confirmed Order
+PO00393,C052,Singapore,SPD,Product C,2025-04-08,64,Confirmed Order
+PO00394,C001,Singapore,SPD,Product A,2025-05-09,139,Confirmed Order
+PO00395,C001,Singapore,SPD,Product B,2025-05-25,99,Enquiry
+PO00396,C001,Singapore,SPD,Product C,2025-05-26,76,Confirmed Order
+PO00397,C002,Singapore,QTS,Product A,2025-05-10,124,Confirmed Order
+PO00398,C002,Singapore,QTS,Product B,2025-05-13,101,Confirmed Order
+PO00399,C003,Singapore,QTG,Product A,2025-05-22,142,Confirmed Order
+PO00400,C003,Singapore,QTG,Product B,2025-05-03,98,Confirmed Order
+PO00401,C003,Singapore,QTG,Product C,2025-05-17,53,Confirmed Order
+PO00402,C004,Singapore,SPD,Product C,2025-05-01,52,Confirmed Order
+PO00403,C005,Singapore,QTS,Product A,2025-05-12,134,Confirmed Order
+PO00404,C006,Singapore,QTG,Product A,2025-05-09,133,Confirmed Order
+PO00405,C006,Singapore,QTG,Product B,2025-05-01,92,Pending Purchase Request
+PO00406,C006,Singapore,QTG,Product C,2025-05-03,56,Confirmed Order
+PO00407,C007,Singapore,SPD,Product B,2025-05-12,102,Confirmed Order
+PO00408,C008,Singapore,QTS,Product A,2025-05-20,115,Confirmed Order
+PO00409,C008,Singapore,QTS,Product B,2025-05-05,72,Confirmed Order
+PO00410,C008,Singapore,QTS,Product C,2025-05-03,69,Confirmed Order
+PO00411,C009,Singapore,QTG,Product B,2025-05-11,92,Confirmed Order
+PO00412,C010,Singapore,SPD,Product A,2025-05-20,96,Pending Purchase Request
+PO00413,C011,Malaysia,SPD,Product B,2025-05-13,83,Confirmed Order
+PO00414,C011,Malaysia,SPD,Product C,2025-05-25,59,Pending Purchase Request
+PO00415,C012,Malaysia,QTS,Product A,2025-05-04,124,Pending Purchase Request
+PO00416,C012,Malaysia,QTS,Product B,2025-05-17,92,Pending Purchase Request
+PO00417,C013,Malaysia,QTG,Product A,2025-05-04,160,Confirmed Order
+PO00418,C013,Malaysia,QTG,Product B,2025-05-06,80,Confirmed Order
+PO00419,C013,Malaysia,QTG,Product C,2025-05-26,46,Confirmed Order
+PO00420,C014,Malaysia,SPD,Product A,2025-05-05,133,Confirmed Order
+PO00421,C014,Malaysia,SPD,Product C,2025-05-19,48,Confirmed Order
+PO00422,C015,Malaysia,QTS,Product A,2025-05-27,99,Confirmed Order
+PO00423,C016,Malaysia,QTG,Product B,2025-05-03,90,Confirmed Order
+PO00424,C016,Malaysia,QTG,Product C,2025-05-27,46,Confirmed Order
+PO00425,C017,Malaysia,SPD,Product B,2025-05-07,81,Confirmed Order
+PO00426,C017,Malaysia,SPD,Product C,2025-05-18,64,Confirmed Order
+PO00427,C018,Malaysia,QTS,Product A,2025-05-01,119,Confirmed Order
+PO00428,C018,Malaysia,QTS,Product B,2025-05-23,90,Confirmed Order
+PO00429,C018,Malaysia,QTS,Product C,2025-05-10,60,Confirmed Order
+PO00430,C019,Malaysia,QTG,Product B,2025-05-09,90,Confirmed Order
+PO00431,C019,Malaysia,QTG,Product C,2025-05-19,64,Enquiry
+PO00432,C020,Malaysia,SPD,Product A,2025-05-22,102,Confirmed Order
+PO00433,C021,Indonesia,SPD,Product A,2025-05-24,154,Confirmed Order
+PO00434,C021,Indonesia,SPD,Product B,2025-05-21,109,Confirmed Order
+PO00435,C021,Indonesia,SPD,Product C,2025-05-25,65,Confirmed Order
+PO00436,C022,Indonesia,QTS,Product A,2025-05-12,134,Enquiry
+PO00437,C022,Indonesia,QTS,Product B,2025-05-16,85,Confirmed Order
+PO00438,C023,Indonesia,QTG,Product A,2025-05-16,125,Confirmed Order
+PO00439,C023,Indonesia,QTG,Product B,2025-05-09,84,Pending Purchase Request
+PO00440,C023,Indonesia,QTG,Product C,2025-05-22,80,Confirmed Order
+PO00441,C025,Indonesia,QTS,Product A,2025-05-13,136,Confirmed Order
+PO00442,C026,Indonesia,QTG,Product A,2025-05-14,139,Confirmed Order
+PO00443,C026,Indonesia,QTG,Product B,2025-05-19,103,Confirmed Order
+PO00444,C026,Indonesia,QTG,Product C,2025-05-20,67,Confirmed Order
+PO00445,C027,Indonesia,SPD,Product A,2025-05-03,109,Confirmed Order
+PO00446,C027,Indonesia,SPD,Product C,2025-05-27,63,Confirmed Order
+PO00447,C028,Indonesia,QTS,Product C,2025-05-26,62,Confirmed Order
+PO00448,C029,Indonesia,QTG,Product B,2025-05-03,86,Confirmed Order
+PO00449,C029,Indonesia,QTG,Product C,2025-05-11,72,Confirmed Order
+PO00450,C030,Indonesia,SPD,Product A,2025-05-05,123,Enquiry
+PO00451,C031,Thailand,SPD,Product B,2025-05-15,81,Enquiry
+PO00452,C031,Thailand,SPD,Product C,2025-05-01,44,Pending Purchase Request
+PO00453,C032,Thailand,QTS,Product A,2025-05-21,83,Confirmed Order
+PO00454,C032,Thailand,QTS,Product B,2025-05-04,83,Confirmed Order
+PO00455,C033,Thailand,QTG,Product A,2025-05-23,79,Confirmed Order
+PO00456,C033,Thailand,QTG,Product B,2025-05-08,47,Confirmed Order
+PO00457,C034,Thailand,SPD,Product A,2025-05-25,66,Confirmed Order
+PO00458,C034,Thailand,SPD,Product B,2025-05-07,75,Confirmed Order
+PO00459,C036,Thailand,QTG,Product C,2025-05-18,47,Enquiry
+PO00460,C037,Thailand,SPD,Product A,2025-05-20,100,Pending Purchase Request
+PO00461,C037,Thailand,SPD,Product B,2025-05-21,58,Confirmed Order
+PO00462,C037,Thailand,SPD,Product C,2025-05-14,43,Pending Purchase Request
+PO00463,C038,Thailand,QTS,Product A,2025-05-25,71,Confirmed Order
+PO00464,C038,Thailand,QTS,Product C,2025-05-09,44,Confirmed Order
+PO00465,C039,Thailand,QTG,Product A,2025-05-19,114,Confirmed Order
+PO00466,C039,Thailand,QTG,Product B,2025-05-01,75,Confirmed Order
+PO00467,C039,Thailand,QTG,Product C,2025-05-21,44,Confirmed Order
+PO00468,C040,Thailand,SPD,Product A,2025-05-20,75,Confirmed Order
+PO00469,C041,Vietnam,SPD,Product A,2025-05-05,117,Confirmed Order
+PO00470,C041,Vietnam,SPD,Product B,2025-05-16,75,Confirmed Order
+PO00471,C041,Vietnam,SPD,Product C,2025-05-09,56,Confirmed Order
+PO00472,C042,Vietnam,QTS,Product A,2025-05-22,103,Confirmed Order
+PO00473,C042,Vietnam,QTS,Product B,2025-05-14,76,Confirmed Order
+PO00474,C042,Vietnam,QTS,Product C,2025-05-16,58,Confirmed Order
+PO00475,C043,Vietnam,QTG,Product A,2025-05-05,92,Confirmed Order
+PO00476,C043,Vietnam,QTG,Product B,2025-05-12,72,Confirmed Order
+PO00477,C043,Vietnam,QTG,Product C,2025-05-26,44,Enquiry
+PO00478,C044,Vietnam,SPD,Product A,2025-05-23,106,Confirmed Order
+PO00479,C045,Vietnam,QTS,Product A,2025-05-14,92,Confirmed Order
+PO00480,C046,Vietnam,QTG,Product A,2025-05-01,100,Confirmed Order
+PO00481,C046,Vietnam,QTG,Product C,2025-05-05,52,Confirmed Order
+PO00482,C047,Vietnam,SPD,Product A,2025-05-08,102,Confirmed Order
+PO00483,C047,Vietnam,SPD,Product B,2025-05-24,73,Enquiry
+PO00484,C047,Vietnam,SPD,Product C,2025-05-19,58,Confirmed Order
+PO00485,C048,Vietnam,QTS,Product C,2025-05-13,65,Confirmed Order
+PO00486,C049,Vietnam,QTG,Product A,2025-05-26,102,Pending Purchase Request
+PO00487,C049,Vietnam,QTG,Product B,2025-05-22,64,Confirmed Order
+PO00488,C049,Vietnam,QTG,Product C,2025-05-11,56,Confirmed Order
+PO00489,C050,Vietnam,SPD,Product A,2025-05-21,106,Confirmed Order
+PO00490,C051,Singapore,SPD,Product A,2025-05-25,124,Confirmed Order
+PO00491,C051,Singapore,SPD,Product B,2025-05-18,86,Confirmed Order
+PO00492,C051,Singapore,SPD,Product C,2025-05-23,52,Confirmed Order
+PO00493,C052,Singapore,SPD,Product B,2025-05-01,86,Confirmed Order
+PO00494,C052,Singapore,SPD,Product C,2025-05-16,55,Confirmed Order
+PO00495,C001,Singapore,SPD,Product A,2025-06-14,115,Confirmed Order
+PO00496,C001,Singapore,SPD,Product B,2025-06-13,77,Confirmed Order
+PO00497,C001,Singapore,SPD,Product C,2025-06-11,70,Confirmed Order
+PO00498,C002,Singapore,QTS,Product B,2025-06-07,94,Confirmed Order
+PO00499,C002,Singapore,QTS,Product C,2025-06-13,56,Confirmed Order
+PO00500,C003,Singapore,QTG,Product C,2025-06-04,67,Confirmed Order
+PO00501,C004,Singapore,SPD,Product A,2025-06-01,117,Confirmed Order
+PO00502,C005,Singapore,QTS,Product A,2025-06-21,124,Confirmed Order
+PO00503,C006,Singapore,QTG,Product A,2025-06-02,124,Confirmed Order
+PO00504,C006,Singapore,QTG,Product B,2025-06-01,76,Confirmed Order
+PO00505,C006,Singapore,QTG,Product C,2025-06-27,56,Pending Purchase Request
+PO00506,C007,Singapore,SPD,Product C,2025-06-25,54,Pending Purchase Request
+PO00507,C008,Singapore,QTS,Product A,2025-06-08,128,Pending Purchase Request
+PO00508,C008,Singapore,QTS,Product B,2025-06-27,95,Confirmed Order
+PO00509,C008,Singapore,QTS,Product C,2025-06-22,52,Confirmed Order
+PO00510,C009,Singapore,QTG,Product A,2025-06-02,136,Confirmed Order
+PO00511,C009,Singapore,QTG,Product C,2025-06-12,73,Confirmed Order
+PO00512,C010,Singapore,SPD,Product A,2025-06-23,140,Confirmed Order
+PO00513,C012,Malaysia,QTS,Product A,2025-06-05,123,Confirmed Order
+PO00514,C012,Malaysia,QTS,Product B,2025-06-23,79,Confirmed Order
+PO00515,C012,Malaysia,QTS,Product C,2025-06-06,60,Confirmed Order
+PO00516,C013,Malaysia,QTG,Product A,2025-06-08,121,Enquiry
+PO00517,C013,Malaysia,QTG,Product C,2025-06-19,54,Confirmed Order
+PO00518,C014,Malaysia,SPD,Product A,2025-06-01,127,Confirmed Order
+PO00519,C014,Malaysia,SPD,Product B,2025-06-15,94,Confirmed Order
+PO00520,C015,Malaysia,QTS,Product A,2025-06-16,120,Confirmed Order
+PO00521,C016,Malaysia,QTG,Product A,2025-06-24,97,Confirmed Order
+PO00522,C016,Malaysia,QTG,Product B,2025-06-21,75,Confirmed Order
+PO00523,C016,Malaysia,QTG,Product C,2025-06-25,57,Confirmed Order
+PO00524,C017,Malaysia,SPD,Product C,2025-06-15,49,Confirmed Order
+PO00525,C018,Malaysia,QTS,Product A,2025-06-17,108,Confirmed Order
+PO00526,C018,Malaysia,QTS,Product B,2025-06-21,80,Pending Purchase Request
+PO00527,C019,Malaysia,QTG,Product A,2025-06-12,123,Confirmed Order
+PO00528,C019,Malaysia,QTG,Product B,2025-06-22,92,Confirmed Order
+PO00529,C019,Malaysia,QTG,Product C,2025-06-13,49,Confirmed Order
+PO00530,C020,Malaysia,SPD,Product A,2025-06-01,112,Enquiry
+PO00531,C021,Indonesia,SPD,Product A,2025-06-24,121,Confirmed Order
+PO00532,C021,Indonesia,SPD,Product B,2025-06-26,101,Confirmed Order
+PO00533,C021,Indonesia,SPD,Product C,2025-06-26,69,Confirmed Order
+PO00534,C022,Indonesia,QTS,Product A,2025-06-16,164,Confirmed Order
+PO00535,C022,Indonesia,QTS,Product B,2025-06-13,107,Confirmed Order
+PO00536,C022,Indonesia,QTS,Product C,2025-06-21,80,Pending Purchase Request
+PO00537,C023,Indonesia,QTG,Product A,2025-06-02,153,Confirmed Order
+PO00538,C023,Indonesia,QTG,Product B,2025-06-04,102,Confirmed Order
+PO00539,C024,Indonesia,SPD,Product A,2025-06-18,147,Confirmed Order
+PO00540,C025,Indonesia,QTS,Product A,2025-06-11,121,Confirmed Order
+PO00541,C026,Indonesia,QTG,Product A,2025-06-26,134,Confirmed Order
+PO00542,C026,Indonesia,QTG,Product B,2025-06-02,91,Pending Purchase Request
+PO00543,C026,Indonesia,QTG,Product C,2025-06-22,58,Confirmed Order
+PO00544,C027,Indonesia,SPD,Product A,2025-06-24,155,Confirmed Order
+PO00545,C027,Indonesia,SPD,Product B,2025-06-26,89,Pending Purchase Request
+PO00546,C027,Indonesia,SPD,Product C,2025-06-18,85,Confirmed Order
+PO00547,C028,Indonesia,QTS,Product A,2025-06-20,167,Confirmed Order
+PO00548,C028,Indonesia,QTS,Product B,2025-06-04,107,Confirmed Order
+PO00549,C028,Indonesia,QTS,Product C,2025-06-05,77,Enquiry
+PO00550,C029,Indonesia,QTG,Product C,2025-06-03,58,Confirmed Order
+PO00551,C030,Indonesia,SPD,Product A,2025-06-22,121,Confirmed Order
+PO00552,C031,Thailand,SPD,Product C,2025-06-03,49,Confirmed Order
+PO00553,C032,Thailand,QTS,Product A,2025-06-26,89,Confirmed Order
+PO00554,C032,Thailand,QTS,Product C,2025-06-18,52,Confirmed Order
+PO00555,C033,Thailand,QTG,Product A,2025-06-06,71,Confirmed Order
+PO00556,C033,Thailand,QTG,Product C,2025-06-07,43,Confirmed Order
+PO00557,C034,Thailand,SPD,Product B,2025-06-21,53,Confirmed Order
+PO00558,C034,Thailand,SPD,Product C,2025-06-07,48,Confirmed Order
+PO00559,C035,Thailand,QTS,Product A,2025-06-10,92,Pending Purchase Request
+PO00560,C036,Thailand,QTG,Product B,2025-06-08,75,Pending Purchase Request
+PO00561,C036,Thailand,QTG,Product C,2025-06-27,47,Enquiry
+PO00562,C038,Thailand,QTS,Product A,2025-06-01,103,Confirmed Order
+PO00563,C038,Thailand,QTS,Product B,2025-06-18,63,Confirmed Order
+PO00564,C038,Thailand,QTS,Product C,2025-06-16,43,Enquiry
+PO00565,C039,Thailand,QTG,Product B,2025-06-27,67,Confirmed Order
+PO00566,C039,Thailand,QTG,Product C,2025-06-04,43,Confirmed Order
+PO00567,C040,Thailand,SPD,Product A,2025-06-02,99,Confirmed Order
+PO00568,C041,Vietnam,SPD,Product B,2025-06-03,83,Pending Purchase Request
+PO00569,C042,Vietnam,QTS,Product A,2025-06-01,89,Confirmed Order
+PO00570,C042,Vietnam,QTS,Product B,2025-06-16,55,Pending Purchase Request
+PO00571,C042,Vietnam,QTS,Product C,2025-06-13,56,Confirmed Order
+PO00572,C043,Vietnam,QTG,Product A,2025-06-02,109,Pending Purchase Request
+PO00573,C043,Vietnam,QTG,Product C,2025-06-12,46,Pending Purchase Request
+PO00574,C044,Vietnam,SPD,Product A,2025-06-09,105,Confirmed Order
+PO00575,C044,Vietnam,SPD,Product C,2025-06-17,46,Confirmed Order
+PO00576,C045,Vietnam,QTS,Product A,2025-06-13,110,Confirmed Order
+PO00577,C046,Vietnam,QTG,Product A,2025-06-16,104,Confirmed Order
+PO00578,C046,Vietnam,QTG,Product B,2025-06-04,92,Enquiry
+PO00579,C046,Vietnam,QTG,Product C,2025-06-27,55,Enquiry
+PO00580,C047,Vietnam,SPD,Product A,2025-06-10,83,Confirmed Order
+PO00581,C047,Vietnam,SPD,Product C,2025-06-04,66,Pending Purchase Request
+PO00582,C048,Vietnam,QTS,Product A,2025-06-16,100,Enquiry
+PO00583,C048,Vietnam,QTS,Product C,2025-06-07,48,Enquiry
+PO00584,C049,Vietnam,QTG,Product A,2025-06-12,110,Confirmed Order
+PO00585,C049,Vietnam,QTG,Product B,2025-06-14,85,Pending Purchase Request
+PO00586,C049,Vietnam,QTG,Product C,2025-06-12,53,Confirmed Order
+PO00587,C050,Vietnam,SPD,Product A,2025-06-07,119,Enquiry
+PO00588,C051,Singapore,SPD,Product B,2025-06-21,79,Enquiry
+PO00589,C051,Singapore,SPD,Product C,2025-06-08,67,Confirmed Order
+PO00590,C052,Singapore,SPD,Product A,2025-06-06,105,Confirmed Order
+PO00591,C052,Singapore,SPD,Product B,2025-06-02,89,Confirmed Order
+PO00592,C052,Singapore,SPD,Product C,2025-06-16,73,Pending Purchase Request
+PO00593,C001,Singapore,SPD,Product A,2025-07-14,121,Confirmed Order
+PO00594,C001,Singapore,SPD,Product B,2025-07-21,78,Confirmed Order
+PO00595,C001,Singapore,SPD,Product C,2025-07-16,54,Confirmed Order
+PO00596,C002,Singapore,QTS,Product B,2025-07-03,90,Confirmed Order
+PO00597,C002,Singapore,QTS,Product C,2025-07-05,71,Enquiry
+PO00598,C003,Singapore,QTG,Product A,2025-07-27,128,Confirmed Order
+PO00599,C003,Singapore,QTG,Product B,2025-07-27,81,Confirmed Order
+PO00600,C003,Singapore,QTG,Product C,2025-07-17,60,Pending Purchase Request
+PO00601,C004,Singapore,SPD,Product A,2025-07-11,117,Confirmed Order
+PO00602,C004,Singapore,SPD,Product B,2025-07-10,86,Confirmed Order
+PO00603,C004,Singapore,SPD,Product C,2025-07-25,58,Confirmed Order
+PO00604,C006,Singapore,QTG,Product A,2025-07-27,116,Confirmed Order
+PO00605,C006,Singapore,QTG,Product B,2025-07-17,85,Confirmed Order
+PO00606,C006,Singapore,QTG,Product C,2025-07-26,57,Confirmed Order
+PO00607,C007,Singapore,SPD,Product A,2025-07-06,118,Confirmed Order
+PO00608,C007,Singapore,SPD,Product B,2025-07-15,84,Enquiry
+PO00609,C008,Singapore,QTS,Product A,2025-07-22,102,Confirmed Order
+PO00610,C008,Singapore,QTS,Product B,2025-07-13,92,Enquiry
+PO00611,C008,Singapore,QTS,Product C,2025-07-12,64,Confirmed Order
+PO00612,C009,Singapore,QTG,Product A,2025-07-23,129,Confirmed Order
+PO00613,C009,Singapore,QTG,Product B,2025-07-21,93,Confirmed Order
+PO00614,C009,Singapore,QTG,Product C,2025-07-26,66,Confirmed Order
+PO00615,C010,Singapore,SPD,Product A,2025-07-13,120,Enquiry
+PO00616,C011,Malaysia,SPD,Product A,2025-07-13,123,Confirmed Order
+PO00617,C012,Malaysia,QTS,Product A,2025-07-11,110,Enquiry
+PO00618,C012,Malaysia,QTS,Product B,2025-07-27,82,Confirmed Order
+PO00619,C012,Malaysia,QTS,Product C,2025-07-26,64,Enquiry
+PO00620,C013,Malaysia,QTG,Product A,2025-07-19,120,Confirmed Order
+PO00621,C013,Malaysia,QTG,Product B,2025-07-15,58,Confirmed Order
+PO00622,C014,Malaysia,SPD,Product A,2025-07-11,124,Confirmed Order
+PO00623,C014,Malaysia,SPD,Product C,2025-07-18,66,Confirmed Order
+PO00624,C015,Malaysia,QTS,Product A,2025-07-05,127,Confirmed Order
+PO00625,C016,Malaysia,QTG,Product A,2025-07-17,122,Confirmed Order
+PO00626,C016,Malaysia,QTG,Product B,2025-07-03,70,Confirmed Order
+PO00627,C017,Malaysia,SPD,Product A,2025-07-02,107,Confirmed Order
+PO00628,C017,Malaysia,SPD,Product B,2025-07-19,76,Confirmed Order
+PO00629,C018,Malaysia,QTS,Product A,2025-07-10,98,Confirmed Order
+PO00630,C018,Malaysia,QTS,Product C,2025-07-10,56,Confirmed Order
+PO00631,C019,Malaysia,QTG,Product A,2025-07-03,124,Confirmed Order
+PO00632,C019,Malaysia,QTG,Product C,2025-07-17,53,Confirmed Order
+PO00633,C020,Malaysia,SPD,Product A,2025-07-18,106,Confirmed Order
+PO00634,C021,Indonesia,SPD,Product A,2025-07-08,167,Enquiry
+PO00635,C022,Indonesia,QTS,Product A,2025-07-21,103,Confirmed Order
+PO00636,C022,Indonesia,QTS,Product B,2025-07-10,85,Confirmed Order
+PO00637,C022,Indonesia,QTS,Product C,2025-07-07,50,Confirmed Order
+PO00638,C023,Indonesia,QTG,Product A,2025-07-01,142,Confirmed Order
+PO00639,C023,Indonesia,QTG,Product B,2025-07-19,113,Confirmed Order
+PO00640,C023,Indonesia,QTG,Product C,2025-07-24,53,Confirmed Order
+PO00641,C024,Indonesia,SPD,Product A,2025-07-13,144,Confirmed Order
+PO00642,C024,Indonesia,SPD,Product B,2025-07-06,99,Confirmed Order
+PO00643,C024,Indonesia,SPD,Product C,2025-07-02,61,Confirmed Order
+PO00644,C025,Indonesia,QTS,Product A,2025-07-17,147,Confirmed Order
+PO00645,C026,Indonesia,QTG,Product A,2025-07-13,146,Confirmed Order
+PO00646,C026,Indonesia,QTG,Product C,2025-07-05,68,Confirmed Order
+PO00647,C027,Indonesia,SPD,Product A,2025-07-23,111,Confirmed Order
+PO00648,C027,Indonesia,SPD,Product B,2025-07-27,104,Confirmed Order
+PO00649,C027,Indonesia,SPD,Product C,2025-07-21,64,Confirmed Order
+PO00650,C028,Indonesia,QTS,Product A,2025-07-05,100,Confirmed Order
+PO00651,C028,Indonesia,QTS,Product B,2025-07-12,72,Enquiry
+PO00652,C029,Indonesia,QTG,Product B,2025-07-15,92,Enquiry
+PO00653,C029,Indonesia,QTG,Product C,2025-07-08,45,Confirmed Order
+PO00654,C030,Indonesia,SPD,Product A,2025-07-11,114,Confirmed Order
+PO00655,C031,Thailand,SPD,Product A,2025-07-01,91,Confirmed Order
+PO00656,C031,Thailand,SPD,Product B,2025-07-20,63,Pending Purchase Request
+PO00657,C031,Thailand,SPD,Product C,2025-07-09,49,Confirmed Order
+PO00658,C032,Thailand,QTS,Product A,2025-07-08,93,Confirmed Order
+PO00659,C032,Thailand,QTS,Product B,2025-07-05,50,Confirmed Order
+PO00660,C033,Thailand,QTG,Product B,2025-07-20,58,Confirmed Order
+PO00661,C033,Thailand,QTG,Product C,2025-07-02,52,Confirmed Order
+PO00662,C034,Thailand,SPD,Product A,2025-07-18,71,Confirmed Order
+PO00663,C034,Thailand,SPD,Product B,2025-07-04,64,Confirmed Order
+PO00664,C034,Thailand,SPD,Product C,2025-07-09,41,Confirmed Order
+PO00665,C035,Thailand,QTS,Product A,2025-07-17,78,Confirmed Order
+PO00666,C036,Thailand,QTG,Product A,2025-07-23,97,Enquiry
+PO00667,C036,Thailand,QTG,Product B,2025-07-08,60,Confirmed Order
+PO00668,C036,Thailand,QTG,Product C,2025-07-07,49,Confirmed Order
+PO00669,C037,Thailand,SPD,Product C,2025-07-25,38,Confirmed Order
+PO00670,C038,Thailand,QTS,Product A,2025-07-12,78,Confirmed Order
+PO00671,C038,Thailand,QTS,Product C,2025-07-23,41,Confirmed Order
+PO00672,C039,Thailand,QTG,Product A,2025-07-11,99,Confirmed Order
+PO00673,C039,Thailand,QTG,Product B,2025-07-04,76,Confirmed Order
+PO00674,C039,Thailand,QTG,Product C,2025-07-12,48,Confirmed Order
+PO00675,C040,Thailand,SPD,Product A,2025-07-14,82,Confirmed Order
+PO00676,C041,Vietnam,SPD,Product B,2025-07-18,61,Confirmed Order
+PO00677,C041,Vietnam,SPD,Product C,2025-07-07,48,Confirmed Order
+PO00678,C042,Vietnam,QTS,Product B,2025-07-13,66,Confirmed Order
+PO00679,C042,Vietnam,QTS,Product C,2025-07-11,56,Confirmed Order
+PO00680,C043,Vietnam,QTG,Product A,2025-07-05,119,Confirmed Order
+PO00681,C043,Vietnam,QTG,Product B,2025-07-07,59,Confirmed Order
+PO00682,C043,Vietnam,QTG,Product C,2025-07-14,42,Confirmed Order
+PO00683,C044,Vietnam,SPD,Product A,2025-07-14,111,Confirmed Order
+PO00684,C044,Vietnam,SPD,Product B,2025-07-18,60,Confirmed Order
+PO00685,C044,Vietnam,SPD,Product C,2025-07-15,52,Confirmed Order
+PO00686,C045,Vietnam,QTS,Product A,2025-07-26,100,Confirmed Order
+PO00687,C046,Vietnam,QTG,Product A,2025-07-09,100,Confirmed Order
+PO00688,C046,Vietnam,QTG,Product C,2025-07-09,45,Confirmed Order
+PO00689,C047,Vietnam,SPD,Product B,2025-07-23,68,Confirmed Order
+PO00690,C047,Vietnam,SPD,Product C,2025-07-25,49,Pending Purchase Request
+PO00691,C048,Vietnam,QTS,Product B,2025-07-17,76,Confirmed Order
+PO00692,C048,Vietnam,QTS,Product C,2025-07-09,41,Confirmed Order
+PO00693,C049,Vietnam,QTG,Product A,2025-07-08,93,Confirmed Order
+PO00694,C049,Vietnam,QTG,Product B,2025-07-14,56,Confirmed Order
+PO00695,C049,Vietnam,QTG,Product C,2025-07-01,47,Confirmed Order
+PO00696,C051,Singapore,SPD,Product A,2025-07-11,127,Confirmed Order
+PO00697,C051,Singapore,SPD,Product C,2025-07-01,64,Pending Purchase Request
+PO00698,C052,Singapore,SPD,Product A,2025-07-27,119,Confirmed Order
+PO00699,C052,Singapore,SPD,Product B,2025-07-22,79,Enquiry
+PO00700,C052,Singapore,SPD,Product C,2025-07-02,53,Confirmed Order
+PO00701,C001,Singapore,SPD,Product A,2025-08-09,120,Confirmed Order
+PO00702,C001,Singapore,SPD,Product B,2025-08-05,88,Confirmed Order
+PO00703,C002,Singapore,QTS,Product A,2025-08-05,108,Confirmed Order
+PO00704,C002,Singapore,QTS,Product B,2025-08-09,96,Enquiry
+PO00705,C002,Singapore,QTS,Product C,2025-08-05,47,Confirmed Order
+PO00706,C003,Singapore,QTG,Product A,2025-08-06,110,Confirmed Order
+PO00707,C003,Singapore,QTG,Product B,2025-08-17,75,Confirmed Order
+PO00708,C003,Singapore,QTG,Product C,2025-08-10,52,Confirmed Order
+PO00709,C004,Singapore,SPD,Product A,2025-08-12,118,Enquiry
+PO00710,C004,Singapore,SPD,Product B,2025-08-23,85,Confirmed Order
+PO00711,C005,Singapore,QTS,Product A,2025-08-09,119,Confirmed Order
+PO00712,C006,Singapore,QTG,Product C,2025-08-12,46,Confirmed Order
+PO00713,C007,Singapore,SPD,Product C,2025-08-16,55,Pending Purchase Request
+PO00714,C008,Singapore,QTS,Product A,2025-08-26,117,Confirmed Order
+PO00715,C008,Singapore,QTS,Product B,2025-08-09,91,Confirmed Order
+PO00716,C008,Singapore,QTS,Product C,2025-08-13,51,Confirmed Order
+PO00717,C009,Singapore,QTG,Product C,2025-08-13,64,Enquiry
+PO00718,C010,Singapore,SPD,Product A,2025-08-23,110,Confirmed Order
+PO00719,C011,Malaysia,SPD,Product A,2025-08-18,93,Confirmed Order
+PO00720,C011,Malaysia,SPD,Product B,2025-08-01,81,Confirmed Order
+PO00721,C012,Malaysia,QTS,Product B,2025-08-20,90,Confirmed Order
+PO00722,C012,Malaysia,QTS,Product C,2025-08-03,56,Enquiry
+PO00723,C013,Malaysia,QTG,Product A,2025-08-23,109,Confirmed Order
+PO00724,C013,Malaysia,QTG,Product B,2025-08-26,89,Confirmed Order
+PO00725,C013,Malaysia,QTG,Product C,2025-08-14,40,Confirmed Order
+PO00726,C014,Malaysia,SPD,Product A,2025-08-19,116,Confirmed Order
+PO00727,C014,Malaysia,SPD,Product B,2025-08-06,88,Confirmed Order
+PO00728,C014,Malaysia,SPD,Product C,2025-08-17,43,Confirmed Order
+PO00729,C015,Malaysia,QTS,Product A,2025-08-22,125,Confirmed Order
+PO00730,C016,Malaysia,QTG,Product A,2025-08-12,88,Confirmed Order
+PO00731,C016,Malaysia,QTG,Product B,2025-08-13,82,Pending Purchase Request
+PO00732,C016,Malaysia,QTG,Product C,2025-08-19,45,Confirmed Order
+PO00733,C017,Malaysia,SPD,Product A,2025-08-26,103,Confirmed Order
+PO00734,C017,Malaysia,SPD,Product B,2025-08-09,85,Confirmed Order
+PO00735,C018,Malaysia,QTS,Product A,2025-08-18,113,Confirmed Order
+PO00736,C018,Malaysia,QTS,Product C,2025-08-21,58,Confirmed Order
+PO00737,C019,Malaysia,QTG,Product A,2025-08-01,99,Confirmed Order
+PO00738,C019,Malaysia,QTG,Product B,2025-08-11,45,Confirmed Order
+PO00739,C019,Malaysia,QTG,Product C,2025-08-13,69,Confirmed Order
+PO00740,C020,Malaysia,SPD,Product A,2025-08-02,113,Confirmed Order
+PO00741,C021,Indonesia,SPD,Product A,2025-08-19,136,Confirmed Order
+PO00742,C021,Indonesia,SPD,Product C,2025-08-23,70,Confirmed Order
+PO00743,C022,Indonesia,QTS,Product A,2025-08-23,146,Pending Purchase Request
+PO00744,C022,Indonesia,QTS,Product B,2025-08-13,96,Confirmed Order
+PO00745,C022,Indonesia,QTS,Product C,2025-08-23,64,Pending Purchase Request
+PO00746,C023,Indonesia,QTG,Product B,2025-08-06,91,Confirmed Order
+PO00747,C023,Indonesia,QTG,Product C,2025-08-17,70,Confirmed Order
+PO00748,C024,Indonesia,SPD,Product A,2025-08-10,109,Confirmed Order
+PO00749,C024,Indonesia,SPD,Product B,2025-08-24,89,Enquiry
+PO00750,C024,Indonesia,SPD,Product C,2025-08-12,59,Confirmed Order
+PO00751,C025,Indonesia,QTS,Product A,2025-08-01,136,Confirmed Order
+PO00752,C026,Indonesia,QTG,Product B,2025-08-22,78,Confirmed Order
+PO00753,C027,Indonesia,SPD,Product A,2025-08-08,107,Confirmed Order
+PO00754,C028,Indonesia,QTS,Product A,2025-08-06,107,Confirmed Order
+PO00755,C028,Indonesia,QTS,Product B,2025-08-01,78,Confirmed Order
+PO00756,C028,Indonesia,QTS,Product C,2025-08-11,66,Confirmed Order
+PO00757,C029,Indonesia,QTG,Product A,2025-08-24,138,Pending Purchase Request
+PO00758,C029,Indonesia,QTG,Product B,2025-08-24,94,Confirmed Order
+PO00759,C030,Indonesia,SPD,Product A,2025-08-17,103,Confirmed Order
+PO00760,C031,Thailand,SPD,Product C,2025-08-14,32,Confirmed Order
+PO00761,C033,Thailand,QTG,Product C,2025-08-27,51,Confirmed Order
+PO00762,C034,Thailand,SPD,Product A,2025-08-13,106,Confirmed Order
+PO00763,C034,Thailand,SPD,Product B,2025-08-25,62,Enquiry
+PO00764,C034,Thailand,SPD,Product C,2025-08-19,44,Confirmed Order
+PO00765,C035,Thailand,QTS,Product A,2025-08-22,92,Confirmed Order
+PO00766,C036,Thailand,QTG,Product A,2025-08-11,112,Confirmed Order
+PO00767,C036,Thailand,QTG,Product B,2025-08-03,59,Confirmed Order
+PO00768,C036,Thailand,QTG,Product C,2025-08-25,45,Confirmed Order
+PO00769,C037,Thailand,SPD,Product B,2025-08-04,72,Confirmed Order
+PO00770,C037,Thailand,SPD,Product C,2025-08-14,42,Confirmed Order
+PO00771,C038,Thailand,QTS,Product A,2025-08-19,78,Confirmed Order
+PO00772,C038,Thailand,QTS,Product B,2025-08-02,67,Confirmed Order
+PO00773,C038,Thailand,QTS,Product C,2025-08-25,46,Confirmed Order
+PO00774,C039,Thailand,QTG,Product A,2025-08-08,92,Confirmed Order
+PO00775,C039,Thailand,QTG,Product B,2025-08-13,69,Confirmed Order
+PO00776,C040,Thailand,SPD,Product A,2025-08-09,93,Confirmed Order
+PO00777,C041,Vietnam,SPD,Product C,2025-08-27,52,Enquiry
+PO00778,C042,Vietnam,QTS,Product A,2025-08-09,105,Confirmed Order
+PO00779,C042,Vietnam,QTS,Product C,2025-08-02,49,Confirmed Order
+PO00780,C044,Vietnam,SPD,Product A,2025-08-21,104,Confirmed Order
+PO00781,C044,Vietnam,SPD,Product B,2025-08-07,72,Confirmed Order
+PO00782,C045,Vietnam,QTS,Product A,2025-08-01,106,Confirmed Order
+PO00783,C046,Vietnam,QTG,Product A,2025-08-05,104,Confirmed Order
+PO00784,C047,Vietnam,SPD,Product A,2025-08-06,102,Confirmed Order
+PO00785,C047,Vietnam,SPD,Product B,2025-08-16,82,Confirmed Order
+PO00786,C048,Vietnam,QTS,Product A,2025-08-11,83,Confirmed Order
+PO00787,C048,Vietnam,QTS,Product B,2025-08-07,68,Pending Purchase Request
+PO00788,C048,Vietnam,QTS,Product C,2025-08-12,47,Confirmed Order
+PO00789,C049,Vietnam,QTG,Product A,2025-08-12,90,Enquiry
+PO00790,C049,Vietnam,QTG,Product B,2025-08-07,68,Enquiry
+PO00791,C049,Vietnam,QTG,Product C,2025-08-15,42,Enquiry
+PO00792,C050,Vietnam,SPD,Product A,2025-08-16,103,Confirmed Order
+PO00793,C051,Singapore,SPD,Product A,2025-08-26,115,Confirmed Order
+PO00794,C051,Singapore,SPD,Product B,2025-08-03,91,Pending Purchase Request
+PO00795,C052,Singapore,SPD,Product A,2025-08-12,110,Confirmed Order
+PO00796,C052,Singapore,SPD,Product B,2025-08-09,69,Confirmed Order
+PO00797,C001,Singapore,SPD,Product A,2025-09-14,133,Confirmed Order
+PO00798,C001,Singapore,SPD,Product B,2025-09-27,72,Pending Purchase Request
+PO00799,C002,Singapore,QTS,Product A,2025-09-12,109,Confirmed Order
+PO00800,C002,Singapore,QTS,Product B,2025-09-15,101,Confirmed Order
+PO00801,C002,Singapore,QTS,Product C,2025-09-19,57,Enquiry
+PO00802,C003,Singapore,QTG,Product A,2025-09-10,114,Confirmed Order
+PO00803,C003,Singapore,QTG,Product B,2025-09-27,87,Confirmed Order
+PO00804,C003,Singapore,QTG,Product C,2025-09-10,54,Confirmed Order
+PO00805,C004,Singapore,SPD,Product A,2025-09-17,112,Confirmed Order
+PO00806,C004,Singapore,SPD,Product C,2025-09-14,45,Confirmed Order
+PO00807,C005,Singapore,QTS,Product A,2025-09-04,102,Enquiry
+PO00808,C006,Singapore,QTG,Product A,2025-09-07,109,Confirmed Order
+PO00809,C006,Singapore,QTG,Product C,2025-09-17,56,Confirmed Order
+PO00810,C007,Singapore,SPD,Product A,2025-09-27,112,Confirmed Order
+PO00811,C007,Singapore,SPD,Product C,2025-09-09,52,Confirmed Order
+PO00812,C008,Singapore,QTS,Product A,2025-09-06,113,Confirmed Order
+PO00813,C008,Singapore,QTS,Product B,2025-09-01,74,Confirmed Order
+PO00814,C009,Singapore,QTG,Product A,2025-09-11,106,Confirmed Order
+PO00815,C009,Singapore,QTG,Product B,2025-09-24,74,Confirmed Order
+PO00816,C009,Singapore,QTG,Product C,2025-09-03,58,Confirmed Order
+PO00817,C011,Malaysia,SPD,Product A,2025-09-22,91,Pending Purchase Request
+PO00818,C011,Malaysia,SPD,Product B,2025-09-22,79,Confirmed Order
+PO00819,C012,Malaysia,QTS,Product A,2025-09-18,104,Confirmed Order
+PO00820,C012,Malaysia,QTS,Product B,2025-09-18,73,Enquiry
+PO00821,C012,Malaysia,QTS,Product C,2025-09-03,59,Confirmed Order
+PO00822,C013,Malaysia,QTG,Product A,2025-09-24,99,Confirmed Order
+PO00823,C013,Malaysia,QTG,Product B,2025-09-21,84,Pending Purchase Request
+PO00824,C013,Malaysia,QTG,Product C,2025-09-15,52,Confirmed Order
+PO00825,C014,Malaysia,SPD,Product A,2025-09-13,112,Confirmed Order
+PO00826,C014,Malaysia,SPD,Product B,2025-09-21,69,Confirmed Order
+PO00827,C014,Malaysia,SPD,Product C,2025-09-18,42,Confirmed Order
+PO00828,C016,Malaysia,QTG,Product A,2025-09-09,79,Confirmed Order
+PO00829,C016,Malaysia,QTG,Product B,2025-09-02,66,Confirmed Order
+PO00830,C017,Malaysia,SPD,Product A,2025-09-25,114,Enquiry
+PO00831,C017,Malaysia,SPD,Product B,2025-09-22,66,Confirmed Order
+PO00832,C017,Malaysia,SPD,Product C,2025-09-11,45,Confirmed Order
+PO00833,C018,Malaysia,QTS,Product A,2025-09-11,84,Confirmed Order
+PO00834,C018,Malaysia,QTS,Product B,2025-09-18,73,Confirmed Order
+PO00835,C018,Malaysia,QTS,Product C,2025-09-12,45,Confirmed Order
+PO00836,C019,Malaysia,QTG,Product A,2025-09-13,76,Pending Purchase Request
+PO00837,C019,Malaysia,QTG,Product B,2025-09-21,65,Confirmed Order
+PO00838,C019,Malaysia,QTG,Product C,2025-09-15,51,Pending Purchase Request
+PO00839,C020,Malaysia,SPD,Product A,2025-09-12,99,Confirmed Order
+PO00840,C021,Indonesia,SPD,Product B,2025-09-16,87,Confirmed Order
+PO00841,C021,Indonesia,SPD,Product C,2025-09-27,66,Confirmed Order
+PO00842,C022,Indonesia,QTS,Product B,2025-09-15,77,Enquiry
+PO00843,C023,Indonesia,QTG,Product A,2025-09-06,108,Confirmed Order
+PO00844,C023,Indonesia,QTG,Product B,2025-09-21,73,Confirmed Order
+PO00845,C024,Indonesia,SPD,Product B,2025-09-13,79,Pending Purchase Request
+PO00846,C024,Indonesia,SPD,Product C,2025-09-25,55,Confirmed Order
+PO00847,C025,Indonesia,QTS,Product A,2025-09-12,129,Confirmed Order
+PO00848,C026,Indonesia,QTG,Product A,2025-09-14,124,Confirmed Order
+PO00849,C026,Indonesia,QTG,Product B,2025-09-27,75,Confirmed Order
+PO00850,C027,Indonesia,SPD,Product A,2025-09-08,135,Enquiry
+PO00851,C027,Indonesia,SPD,Product C,2025-09-02,58,Confirmed Order
+PO00852,C028,Indonesia,QTS,Product B,2025-09-23,97,Confirmed Order
+PO00853,C028,Indonesia,QTS,Product C,2025-09-18,59,Confirmed Order
+PO00854,C029,Indonesia,QTG,Product A,2025-09-02,123,Confirmed Order
+PO00855,C029,Indonesia,QTG,Product B,2025-09-06,70,Confirmed Order
+PO00856,C029,Indonesia,QTG,Product C,2025-09-19,74,Confirmed Order
+PO00857,C030,Indonesia,SPD,Product A,2025-09-26,127,Confirmed Order
+PO00858,C031,Thailand,SPD,Product A,2025-09-15,73,Confirmed Order
+PO00859,C031,Thailand,SPD,Product B,2025-09-09,69,Enquiry
+PO00860,C032,Thailand,QTS,Product A,2025-09-07,99,Confirmed Order
+PO00861,C032,Thailand,QTS,Product C,2025-09-19,37,Confirmed Order
+PO00862,C033,Thailand,QTG,Product A,2025-09-02,93,Confirmed Order
+PO00863,C034,Thailand,SPD,Product A,2025-09-19,76,Confirmed Order
+PO00864,C034,Thailand,SPD,Product C,2025-09-24,42,Confirmed Order
+PO00865,C035,Thailand,QTS,Product A,2025-09-06,80,Pending Purchase Request
+PO00866,C036,Thailand,QTG,Product A,2025-09-02,81,Confirmed Order
+PO00867,C036,Thailand,QTG,Product B,2025-09-26,72,Confirmed Order
+PO00868,C036,Thailand,QTG,Product C,2025-09-06,37,Pending Purchase Request
+PO00869,C037,Thailand,SPD,Product B,2025-09-12,65,Confirmed Order
+PO00870,C037,Thailand,SPD,Product C,2025-09-03,45,Enquiry
+PO00871,C039,Thailand,QTG,Product A,2025-09-22,85,Confirmed Order
+PO00872,C039,Thailand,QTG,Product B,2025-09-06,60,Confirmed Order
+PO00873,C040,Thailand,SPD,Product A,2025-09-20,65,Confirmed Order
+PO00874,C041,Vietnam,SPD,Product A,2025-09-06,112,Confirmed Order
+PO00875,C042,Vietnam,QTS,Product A,2025-09-05,95,Confirmed Order
+PO00876,C042,Vietnam,QTS,Product C,2025-09-14,49,Confirmed Order
+PO00877,C043,Vietnam,QTG,Product C,2025-09-19,33,Confirmed Order
+PO00878,C044,Vietnam,SPD,Product A,2025-09-10,93,Confirmed Order
+PO00879,C044,Vietnam,SPD,Product B,2025-09-12,53,Pending Purchase Request
+PO00880,C044,Vietnam,SPD,Product C,2025-09-08,47,Confirmed Order
+PO00881,C046,Vietnam,QTG,Product A,2025-09-03,110,Confirmed Order
+PO00882,C046,Vietnam,QTG,Product B,2025-09-27,63,Confirmed Order
+PO00883,C046,Vietnam,QTG,Product C,2025-09-22,44,Enquiry
+PO00884,C047,Vietnam,SPD,Product B,2025-09-21,72,Pending Purchase Request
+PO00885,C048,Vietnam,QTS,Product A,2025-09-18,100,Confirmed Order
+PO00886,C048,Vietnam,QTS,Product B,2025-09-06,71,Confirmed Order
+PO00887,C048,Vietnam,QTS,Product C,2025-09-26,42,Confirmed Order
+PO00888,C049,Vietnam,QTG,Product B,2025-09-06,60,Enquiry
+PO00889,C049,Vietnam,QTG,Product C,2025-09-16,46,Confirmed Order
+PO00890,C050,Vietnam,SPD,Product A,2025-09-26,99,Confirmed Order
+PO00891,C051,Singapore,SPD,Product B,2025-09-19,84,Confirmed Order
+PO00892,C052,Singapore,SPD,Product A,2025-09-19,109,Confirmed Order
+PO00893,C052,Singapore,SPD,Product B,2025-09-15,76,Confirmed Order
+PO00894,C001,Singapore,SPD,Product A,2025-10-23,100,Confirmed Order
+PO00895,C001,Singapore,SPD,Product B,2025-10-12,75,Confirmed Order
+PO00896,C001,Singapore,SPD,Product C,2025-10-13,53,Pending Purchase Request
+PO00897,C002,Singapore,QTS,Product A,2025-10-12,121,Confirmed Order
+PO00898,C002,Singapore,QTS,Product B,2025-10-05,87,Confirmed Order
+PO00899,C002,Singapore,QTS,Product C,2025-10-16,54,Confirmed Order
+PO00900,C003,Singapore,QTG,Product A,2025-10-26,105,Confirmed Order
+PO00901,C003,Singapore,QTG,Product C,2025-10-19,64,Confirmed Order
+PO00902,C004,Singapore,SPD,Product A,2025-10-13,124,Confirmed Order
+PO00903,C004,Singapore,SPD,Product B,2025-10-22,90,Confirmed Order
+PO00904,C005,Singapore,QTS,Product A,2025-10-18,96,Confirmed Order
+PO00905,C006,Singapore,QTG,Product A,2025-10-13,109,Confirmed Order
+PO00906,C006,Singapore,QTG,Product B,2025-10-03,69,Confirmed Order
+PO00907,C006,Singapore,QTG,Product C,2025-10-20,60,Pending Purchase Request
+PO00908,C007,Singapore,SPD,Product A,2025-10-27,111,Confirmed Order
+PO00909,C007,Singapore,SPD,Product B,2025-10-25,81,Confirmed Order
+PO00910,C007,Singapore,SPD,Product C,2025-10-05,58,Confirmed Order
+PO00911,C008,Singapore,QTS,Product A,2025-10-01,123,Confirmed Order
+PO00912,C008,Singapore,QTS,Product C,2025-10-06,52,Confirmed Order
+PO00913,C009,Singapore,QTG,Product A,2025-10-14,134,Confirmed Order
+PO00914,C009,Singapore,QTG,Product B,2025-10-16,71,Confirmed Order
+PO00915,C009,Singapore,QTG,Product C,2025-10-16,57,Confirmed Order
+PO00916,C010,Singapore,SPD,Product A,2025-10-27,114,Confirmed Order
+PO00917,C011,Malaysia,SPD,Product A,2025-10-21,106,Confirmed Order
+PO00918,C011,Malaysia,SPD,Product B,2025-10-18,61,Confirmed Order
+PO00919,C011,Malaysia,SPD,Product C,2025-10-01,53,Confirmed Order
+PO00920,C012,Malaysia,QTS,Product B,2025-10-15,79,Confirmed Order
+PO00921,C012,Malaysia,QTS,Product C,2025-10-14,53,Confirmed Order
+PO00922,C013,Malaysia,QTG,Product A,2025-10-04,102,Confirmed Order
+PO00923,C014,Malaysia,SPD,Product A,2025-10-03,99,Confirmed Order
+PO00924,C014,Malaysia,SPD,Product B,2025-10-12,78,Confirmed Order
+PO00925,C014,Malaysia,SPD,Product C,2025-10-07,50,Confirmed Order
+PO00926,C015,Malaysia,QTS,Product A,2025-10-16,97,Confirmed Order
+PO00927,C016,Malaysia,QTG,Product B,2025-10-12,63,Confirmed Order
+PO00928,C016,Malaysia,QTG,Product C,2025-10-27,47,Confirmed Order
+PO00929,C018,Malaysia,QTS,Product A,2025-10-11,113,Confirmed Order
+PO00930,C018,Malaysia,QTS,Product B,2025-10-10,84,Confirmed Order
+PO00931,C018,Malaysia,QTS,Product C,2025-10-07,48,Enquiry
+PO00932,C019,Malaysia,QTG,Product A,2025-10-13,107,Confirmed Order
+PO00933,C019,Malaysia,QTG,Product B,2025-10-27,69,Confirmed Order
+PO00934,C019,Malaysia,QTG,Product C,2025-10-04,59,Confirmed Order
+PO00935,C021,Indonesia,SPD,Product A,2025-10-05,136,Pending Purchase Request
+PO00936,C021,Indonesia,SPD,Product B,2025-10-26,76,Confirmed Order
+PO00937,C022,Indonesia,QTS,Product A,2025-10-15,137,Confirmed Order
+PO00938,C022,Indonesia,QTS,Product B,2025-10-14,91,Confirmed Order
+PO00939,C022,Indonesia,QTS,Product C,2025-10-17,64,Confirmed Order
+PO00940,C023,Indonesia,QTG,Product A,2025-10-14,131,Pending Purchase Request
+PO00941,C023,Indonesia,QTG,Product B,2025-10-10,103,Confirmed Order
+PO00942,C023,Indonesia,QTG,Product C,2025-10-04,62,Enquiry
+PO00943,C024,Indonesia,SPD,Product A,2025-10-02,88,Confirmed Order
+PO00944,C024,Indonesia,SPD,Product B,2025-10-15,96,Confirmed Order
+PO00945,C026,Indonesia,QTG,Product B,2025-10-13,81,Confirmed Order
+PO00946,C026,Indonesia,QTG,Product C,2025-10-15,64,Confirmed Order
+PO00947,C027,Indonesia,SPD,Product A,2025-10-22,111,Confirmed Order
+PO00948,C027,Indonesia,SPD,Product B,2025-10-27,80,Pending Purchase Request
+PO00949,C028,Indonesia,QTS,Product A,2025-10-06,109,Confirmed Order
+PO00950,C028,Indonesia,QTS,Product B,2025-10-25,82,Confirmed Order
+PO00951,C028,Indonesia,QTS,Product C,2025-10-07,62,Confirmed Order
+PO00952,C029,Indonesia,QTG,Product A,2025-10-27,130,Enquiry
+PO00953,C029,Indonesia,QTG,Product B,2025-10-21,73,Confirmed Order
+PO00954,C031,Thailand,SPD,Product A,2025-10-15,82,Enquiry
+PO00955,C031,Thailand,SPD,Product B,2025-10-15,50,Pending Purchase Request
+PO00956,C032,Thailand,QTS,Product A,2025-10-10,75,Confirmed Order
+PO00957,C032,Thailand,QTS,Product C,2025-10-06,45,Confirmed Order
+PO00958,C033,Thailand,QTG,Product A,2025-10-27,77,Confirmed Order
+PO00959,C033,Thailand,QTG,Product B,2025-10-19,73,Confirmed Order
+PO00960,C033,Thailand,QTG,Product C,2025-10-15,47,Pending Purchase Request
+PO00961,C034,Thailand,SPD,Product A,2025-10-17,81,Confirmed Order
+PO00962,C034,Thailand,SPD,Product B,2025-10-24,64,Enquiry
+PO00963,C034,Thailand,SPD,Product C,2025-10-15,38,Confirmed Order
+PO00964,C035,Thailand,QTS,Product A,2025-10-02,71,Enquiry
+PO00965,C036,Thailand,QTG,Product B,2025-10-20,61,Confirmed Order
+PO00966,C037,Thailand,SPD,Product A,2025-10-12,72,Enquiry
+PO00967,C037,Thailand,SPD,Product B,2025-10-06,39,Pending Purchase Request
+PO00968,C037,Thailand,SPD,Product C,2025-10-14,44,Confirmed Order
+PO00969,C038,Thailand,QTS,Product A,2025-10-27,85,Pending Purchase Request
+PO00970,C038,Thailand,QTS,Product B,2025-10-13,51,Enquiry
+PO00971,C038,Thailand,QTS,Product C,2025-10-23,46,Confirmed Order
+PO00972,C039,Thailand,QTG,Product A,2025-10-12,72,Confirmed Order
+PO00973,C039,Thailand,QTG,Product B,2025-10-20,58,Confirmed Order
+PO00974,C039,Thailand,QTG,Product C,2025-10-20,45,Confirmed Order
+PO00975,C040,Thailand,SPD,Product A,2025-10-05,88,Confirmed Order
+PO00976,C041,Vietnam,SPD,Product A,2025-10-22,92,Confirmed Order
+PO00977,C041,Vietnam,SPD,Product C,2025-10-23,45,Enquiry
+PO00978,C042,Vietnam,QTS,Product B,2025-10-08,68,Confirmed Order
+PO00979,C043,Vietnam,QTG,Product A,2025-10-12,92,Confirmed Order
+PO00980,C043,Vietnam,QTG,Product B,2025-10-09,66,Confirmed Order
+PO00981,C043,Vietnam,QTG,Product C,2025-10-05,51,Confirmed Order
+PO00982,C044,Vietnam,SPD,Product A,2025-10-16,85,Confirmed Order
+PO00983,C044,Vietnam,SPD,Product B,2025-10-08,67,Confirmed Order
+PO00984,C044,Vietnam,SPD,Product C,2025-10-02,47,Confirmed Order
+PO00985,C045,Vietnam,QTS,Product A,2025-10-15,92,Confirmed Order
+PO00986,C046,Vietnam,QTG,Product A,2025-10-03,96,Confirmed Order
+PO00987,C046,Vietnam,QTG,Product B,2025-10-11,65,Confirmed Order
+PO00988,C046,Vietnam,QTG,Product C,2025-10-09,44,Confirmed Order
+PO00989,C047,Vietnam,SPD,Product A,2025-10-20,115,Pending Purchase Request
+PO00990,C047,Vietnam,SPD,Product B,2025-10-10,69,Confirmed Order
+PO00991,C048,Vietnam,QTS,Product C,2025-10-21,47,Confirmed Order
+PO00992,C049,Vietnam,QTG,Product A,2025-10-23,99,Confirmed Order
+PO00993,C049,Vietnam,QTG,Product C,2025-10-06,46,Confirmed Order
+PO00994,C050,Vietnam,SPD,Product A,2025-10-01,78,Confirmed Order
+PO00995,C051,Singapore,SPD,Product B,2025-10-02,88,Confirmed Order
+PO00996,C051,Singapore,SPD,Product C,2025-10-13,62,Enquiry
+PO00997,C052,Singapore,SPD,Product C,2025-10-16,58,Pending Purchase Request
+PO00998,C001,Singapore,SPD,Product A,2025-11-14,113,Confirmed Order
+PO00999,C002,Singapore,QTS,Product C,2025-11-02,56,Confirmed Order
+PO01000,C003,Singapore,QTG,Product C,2025-11-02,53,Pending Purchase Request
+PO01001,C004,Singapore,SPD,Product A,2025-11-03,128,Confirmed Order
+PO01002,C004,Singapore,SPD,Product B,2025-11-25,87,Confirmed Order
+PO01003,C004,Singapore,SPD,Product C,2025-11-04,68,Confirmed Order
+PO01004,C005,Singapore,QTS,Product A,2025-11-08,126,Confirmed Order
+PO01005,C006,Singapore,QTG,Product A,2025-11-13,100,Confirmed Order
+PO01006,C006,Singapore,QTG,Product B,2025-11-17,69,Confirmed Order
+PO01007,C006,Singapore,QTG,Product C,2025-11-02,61,Confirmed Order
+PO01008,C007,Singapore,SPD,Product C,2025-11-06,61,Confirmed Order
+PO01009,C008,Singapore,QTS,Product A,2025-11-04,117,Confirmed Order
+PO01010,C008,Singapore,QTS,Product B,2025-11-07,93,Enquiry
+PO01011,C008,Singapore,QTS,Product C,2025-11-02,54,Confirmed Order
+PO01012,C009,Singapore,QTG,Product A,2025-11-16,125,Confirmed Order
+PO01013,C009,Singapore,QTG,Product B,2025-11-24,86,Confirmed Order
+PO01014,C010,Singapore,SPD,Product A,2025-11-27,87,Enquiry
+PO01015,C011,Malaysia,SPD,Product A,2025-11-24,59,Confirmed Order
+PO01016,C011,Malaysia,SPD,Product B,2025-11-20,77,Confirmed Order
+PO01017,C011,Malaysia,SPD,Product C,2025-11-12,68,Confirmed Order
+PO01018,C012,Malaysia,QTS,Product A,2025-11-18,114,Confirmed Order
+PO01019,C012,Malaysia,QTS,Product B,2025-11-17,82,Confirmed Order
+PO01020,C012,Malaysia,QTS,Product C,2025-11-09,44,Confirmed Order
+PO01021,C013,Malaysia,QTG,Product A,2025-11-08,97,Confirmed Order
+PO01022,C013,Malaysia,QTG,Product B,2025-11-09,82,Confirmed Order
+PO01023,C013,Malaysia,QTG,Product C,2025-11-14,57,Confirmed Order
+PO01024,C014,Malaysia,SPD,Product A,2025-11-11,124,Confirmed Order
+PO01025,C014,Malaysia,SPD,Product B,2025-11-17,87,Confirmed Order
+PO01026,C014,Malaysia,SPD,Product C,2025-11-01,66,Confirmed Order
+PO01027,C016,Malaysia,QTG,Product A,2025-11-20,126,Confirmed Order
+PO01028,C016,Malaysia,QTG,Product C,2025-11-21,45,Confirmed Order
+PO01029,C017,Malaysia,SPD,Product A,2025-11-24,117,Enquiry
+PO01030,C017,Malaysia,SPD,Product B,2025-11-25,74,Confirmed Order
+PO01031,C017,Malaysia,SPD,Product C,2025-11-05,55,Confirmed Order
+PO01032,C018,Malaysia,QTS,Product A,2025-11-19,78,Confirmed Order
+PO01033,C019,Malaysia,QTG,Product A,2025-11-01,105,Pending Purchase Request
+PO01034,C019,Malaysia,QTG,Product B,2025-11-07,68,Confirmed Order
+PO01035,C019,Malaysia,QTG,Product C,2025-11-20,53,Confirmed Order
+PO01036,C020,Malaysia,SPD,Product A,2025-11-03,90,Confirmed Order
+PO01037,C021,Indonesia,SPD,Product A,2025-11-25,121,Confirmed Order
+PO01038,C021,Indonesia,SPD,Product B,2025-11-19,95,Confirmed Order
+PO01039,C022,Indonesia,QTS,Product B,2025-11-16,106,Confirmed Order
+PO01040,C022,Indonesia,QTS,Product C,2025-11-06,58,Enquiry
+PO01041,C023,Indonesia,QTG,Product A,2025-11-24,109,Confirmed Order
+PO01042,C023,Indonesia,QTG,Product C,2025-11-07,60,Confirmed Order
+PO01043,C024,Indonesia,SPD,Product A,2025-11-26,134,Pending Purchase Request
+PO01044,C024,Indonesia,SPD,Product B,2025-11-22,92,Confirmed Order
+PO01045,C025,Indonesia,QTS,Product A,2025-11-19,111,Enquiry
+PO01046,C026,Indonesia,QTG,Product A,2025-11-03,113,Enquiry
+PO01047,C026,Indonesia,QTG,Product B,2025-11-06,76,Confirmed Order
+PO01048,C027,Indonesia,SPD,Product A,2025-11-27,111,Confirmed Order
+PO01049,C027,Indonesia,SPD,Product C,2025-11-07,69,Confirmed Order
+PO01050,C028,Indonesia,QTS,Product B,2025-11-06,86,Confirmed Order
+PO01051,C029,Indonesia,QTG,Product B,2025-11-23,81,Enquiry
+PO01052,C029,Indonesia,QTG,Product C,2025-11-02,66,Enquiry
+PO01053,C030,Indonesia,SPD,Product A,2025-11-15,125,Confirmed Order
+PO01054,C031,Thailand,SPD,Product A,2025-11-20,85,Confirmed Order
+PO01055,C031,Thailand,SPD,Product C,2025-11-12,36,Confirmed Order
+PO01056,C032,Thailand,QTS,Product A,2025-11-19,76,Enquiry
+PO01057,C032,Thailand,QTS,Product B,2025-11-27,69,Confirmed Order
+PO01058,C032,Thailand,QTS,Product C,2025-11-08,40,Confirmed Order
+PO01059,C033,Thailand,QTG,Product A,2025-11-08,94,Confirmed Order
+PO01060,C033,Thailand,QTG,Product C,2025-11-19,46,Confirmed Order
+PO01061,C034,Thailand,SPD,Product A,2025-11-24,87,Confirmed Order
+PO01062,C034,Thailand,SPD,Product B,2025-11-23,56,Confirmed Order
+PO01063,C034,Thailand,SPD,Product C,2025-11-17,43,Confirmed Order
+PO01064,C035,Thailand,QTS,Product A,2025-11-05,76,Confirmed Order
+PO01065,C036,Thailand,QTG,Product B,2025-11-19,69,Confirmed Order
+PO01066,C036,Thailand,QTG,Product C,2025-11-06,42,Confirmed Order
+PO01067,C037,Thailand,SPD,Product A,2025-11-02,85,Confirmed Order
+PO01068,C037,Thailand,SPD,Product B,2025-11-24,65,Confirmed Order
+PO01069,C037,Thailand,SPD,Product C,2025-11-25,40,Confirmed Order
+PO01070,C038,Thailand,QTS,Product C,2025-11-26,44,Confirmed Order
+PO01071,C039,Thailand,QTG,Product C,2025-11-02,40,Confirmed Order
+PO01072,C040,Thailand,SPD,Product A,2025-11-05,83,Confirmed Order
+PO01073,C041,Vietnam,SPD,Product A,2025-11-21,84,Confirmed Order
+PO01074,C041,Vietnam,SPD,Product B,2025-11-24,68,Confirmed Order
+PO01075,C041,Vietnam,SPD,Product C,2025-11-09,40,Confirmed Order
+PO01076,C042,Vietnam,QTS,Product A,2025-11-02,115,Confirmed Order
+PO01077,C042,Vietnam,QTS,Product C,2025-11-02,41,Confirmed Order
+PO01078,C043,Vietnam,QTG,Product B,2025-11-02,69,Pending Purchase Request
+PO01079,C043,Vietnam,QTG,Product C,2025-11-09,48,Confirmed Order
+PO01080,C044,Vietnam,SPD,Product A,2025-11-15,93,Pending Purchase Request
+PO01081,C044,Vietnam,SPD,Product B,2025-11-17,83,Confirmed Order
+PO01082,C044,Vietnam,SPD,Product C,2025-11-13,46,Enquiry
+PO01083,C046,Vietnam,QTG,Product A,2025-11-12,115,Confirmed Order
+PO01084,C046,Vietnam,QTG,Product B,2025-11-25,62,Confirmed Order
+PO01085,C046,Vietnam,QTG,Product C,2025-11-07,47,Confirmed Order
+PO01086,C047,Vietnam,SPD,Product A,2025-11-09,103,Confirmed Order
+PO01087,C047,Vietnam,SPD,Product B,2025-11-10,53,Confirmed Order
+PO01088,C048,Vietnam,QTS,Product A,2025-11-19,111,Pending Purchase Request
+PO01089,C048,Vietnam,QTS,Product B,2025-11-14,82,Pending Purchase Request
+PO01090,C049,Vietnam,QTG,Product A,2025-11-14,97,Confirmed Order
+PO01091,C049,Vietnam,QTG,Product B,2025-11-20,71,Pending Purchase Request
+PO01092,C049,Vietnam,QTG,Product C,2025-11-04,51,Enquiry
+PO01093,C050,Vietnam,SPD,Product A,2025-11-10,81,Confirmed Order
+PO01094,C051,Singapore,SPD,Product A,2025-11-26,97,Confirmed Order
+PO01095,C051,Singapore,SPD,Product C,2025-11-12,46,Pending Purchase Request
+PO01096,C052,Singapore,SPD,Product A,2025-11-26,126,Confirmed Order
+PO01097,C052,Singapore,SPD,Product B,2025-11-25,99,Enquiry
+PO01098,C052,Singapore,SPD,Product C,2025-11-10,48,Pending Purchase Request
+PO01099,C001,Singapore,SPD,Product C,2025-12-24,59,Confirmed Order
+PO01100,C002,Singapore,QTS,Product A,2025-12-12,117,Confirmed Order
+PO01101,C002,Singapore,QTS,Product B,2025-12-07,89,Confirmed Order
+PO01102,C003,Singapore,QTG,Product A,2025-12-03,116,Confirmed Order
+PO01103,C004,Singapore,SPD,Product A,2025-12-16,95,Confirmed Order
+PO01104,C004,Singapore,SPD,Product B,2025-12-19,81,Pending Purchase Request
+PO01105,C004,Singapore,SPD,Product C,2025-12-17,54,Confirmed Order
+PO01106,C006,Singapore,QTG,Product A,2025-12-08,101,Confirmed Order
+PO01107,C006,Singapore,QTG,Product B,2025-12-24,93,Confirmed Order
+PO01108,C006,Singapore,QTG,Product C,2025-12-09,49,Enquiry
+PO01109,C007,Singapore,SPD,Product A,2025-12-21,122,Confirmed Order
+PO01110,C007,Singapore,SPD,Product B,2025-12-21,94,Confirmed Order
+PO01111,C008,Singapore,QTS,Product A,2025-12-03,96,Confirmed Order
+PO01112,C008,Singapore,QTS,Product B,2025-12-16,89,Confirmed Order
+PO01113,C009,Singapore,QTG,Product A,2025-12-09,127,Confirmed Order
+PO01114,C009,Singapore,QTG,Product B,2025-12-19,94,Confirmed Order
+PO01115,C009,Singapore,QTG,Product C,2025-12-02,53,Confirmed Order
+PO01116,C011,Malaysia,SPD,Product A,2025-12-11,121,Confirmed Order
+PO01117,C011,Malaysia,SPD,Product B,2025-12-06,90,Confirmed Order
+PO01118,C012,Malaysia,QTS,Product B,2025-12-08,88,Confirmed Order
+PO01119,C012,Malaysia,QTS,Product C,2025-12-20,38,Confirmed Order
+PO01120,C013,Malaysia,QTG,Product A,2025-12-21,109,Confirmed Order
+PO01121,C014,Malaysia,SPD,Product A,2025-12-14,112,Confirmed Order
+PO01122,C014,Malaysia,SPD,Product B,2025-12-01,86,Confirmed Order
+PO01123,C014,Malaysia,SPD,Product C,2025-12-10,51,Confirmed Order
+PO01124,C015,Malaysia,QTS,Product A,2025-12-12,99,Confirmed Order
+PO01125,C016,Malaysia,QTG,Product A,2025-12-19,114,Confirmed Order
+PO01126,C016,Malaysia,QTG,Product B,2025-12-24,78,Confirmed Order
+PO01127,C016,Malaysia,QTG,Product C,2025-12-12,51,Confirmed Order
+PO01128,C017,Malaysia,SPD,Product A,2025-12-13,119,Confirmed Order
+PO01129,C017,Malaysia,SPD,Product C,2025-12-20,56,Pending Purchase Request
+PO01130,C018,Malaysia,QTS,Product B,2025-12-21,83,Pending Purchase Request
+PO01131,C018,Malaysia,QTS,Product C,2025-12-19,60,Confirmed Order
+PO01132,C019,Malaysia,QTG,Product A,2025-12-10,92,Enquiry
+PO01133,C021,Indonesia,SPD,Product B,2025-12-18,91,Confirmed Order
+PO01134,C021,Indonesia,SPD,Product C,2025-12-03,72,Confirmed Order
+PO01135,C022,Indonesia,QTS,Product A,2025-12-20,136,Confirmed Order
+PO01136,C023,Indonesia,QTG,Product C,2025-12-13,72,Confirmed Order
+PO01137,C024,Indonesia,SPD,Product A,2025-12-27,154,Confirmed Order
+PO01138,C024,Indonesia,SPD,Product C,2025-12-14,69,Confirmed Order
+PO01139,C025,Indonesia,QTS,Product A,2025-12-14,129,Confirmed Order
+PO01140,C026,Indonesia,QTG,Product B,2025-12-22,102,Confirmed Order
+PO01141,C026,Indonesia,QTG,Product C,2025-12-06,63,Confirmed Order
+PO01142,C027,Indonesia,SPD,Product A,2025-12-20,136,Confirmed Order
+PO01143,C027,Indonesia,SPD,Product B,2025-12-23,72,Enquiry
+PO01144,C027,Indonesia,SPD,Product C,2025-12-24,62,Confirmed Order
+PO01145,C028,Indonesia,QTS,Product A,2025-12-26,138,Enquiry
+PO01146,C028,Indonesia,QTS,Product C,2025-12-12,74,Enquiry
+PO01147,C029,Indonesia,QTG,Product A,2025-12-13,121,Pending Purchase Request
+PO01148,C031,Thailand,SPD,Product B,2025-12-18,65,Confirmed Order
+PO01149,C031,Thailand,SPD,Product C,2025-12-05,52,Confirmed Order
+PO01150,C032,Thailand,QTS,Product A,2025-12-01,108,Enquiry
+PO01151,C032,Thailand,QTS,Product C,2025-12-08,50,Confirmed Order
+PO01152,C033,Thailand,QTG,Product A,2025-12-06,84,Confirmed Order
+PO01153,C033,Thailand,QTG,Product B,2025-12-03,64,Confirmed Order
+PO01154,C034,Thailand,SPD,Product B,2025-12-09,79,Confirmed Order
+PO01155,C035,Thailand,QTS,Product A,2025-12-09,82,Confirmed Order
+PO01156,C036,Thailand,QTG,Product A,2025-12-09,98,Confirmed Order
+PO01157,C037,Thailand,SPD,Product B,2025-12-10,75,Confirmed Order
+PO01158,C037,Thailand,SPD,Product C,2025-12-27,49,Pending Purchase Request
+PO01159,C038,Thailand,QTS,Product A,2025-12-18,86,Confirmed Order
+PO01160,C038,Thailand,QTS,Product B,2025-12-26,65,Confirmed Order
+PO01161,C038,Thailand,QTS,Product C,2025-12-16,46,Enquiry
+PO01162,C039,Thailand,QTG,Product B,2025-12-18,60,Confirmed Order
+PO01163,C039,Thailand,QTG,Product C,2025-12-24,53,Confirmed Order
+PO01164,C040,Thailand,SPD,Product A,2025-12-02,107,Confirmed Order
+PO01165,C041,Vietnam,SPD,Product B,2025-12-08,79,Enquiry
+PO01166,C042,Vietnam,QTS,Product B,2025-12-14,64,Confirmed Order
+PO01167,C042,Vietnam,QTS,Product C,2025-12-11,44,Confirmed Order
+PO01168,C043,Vietnam,QTG,Product A,2025-12-13,90,Confirmed Order
+PO01169,C043,Vietnam,QTG,Product B,2025-12-14,71,Confirmed Order
+PO01170,C043,Vietnam,QTG,Product C,2025-12-09,44,Confirmed Order
+PO01171,C044,Vietnam,SPD,Product A,2025-12-26,98,Confirmed Order
+PO01172,C044,Vietnam,SPD,Product B,2025-12-15,87,Enquiry
+PO01173,C044,Vietnam,SPD,Product C,2025-12-10,54,Confirmed Order
+PO01174,C045,Vietnam,QTS,Product A,2025-12-26,87,Confirmed Order
+PO01175,C046,Vietnam,QTG,Product A,2025-12-07,104,Confirmed Order
+PO01176,C047,Vietnam,SPD,Product A,2025-12-16,75,Enquiry
+PO01177,C047,Vietnam,SPD,Product B,2025-12-26,84,Confirmed Order
+PO01178,C047,Vietnam,SPD,Product C,2025-12-26,50,Enquiry
+PO01179,C048,Vietnam,QTS,Product A,2025-12-25,94,Enquiry
+PO01180,C048,Vietnam,QTS,Product B,2025-12-17,60,Enquiry
+PO01181,C049,Vietnam,QTG,Product A,2025-12-13,97,Confirmed Order
+PO01182,C049,Vietnam,QTG,Product B,2025-12-23,71,Confirmed Order
+PO01183,C049,Vietnam,QTG,Product C,2025-12-22,55,Confirmed Order
+PO01184,C050,Vietnam,SPD,Product A,2025-12-21,106,Confirmed Order
+PO01185,C051,Singapore,SPD,Product A,2025-12-23,136,Confirmed Order
+PO01186,C051,Singapore,SPD,Product B,2025-12-11,108,Confirmed Order
+PO01187,C051,Singapore,SPD,Product C,2025-12-24,74,Confirmed Order
+PO01188,C052,Singapore,SPD,Product A,2025-12-04,112,Confirmed Order
+PO01189,C052,Singapore,SPD,Product B,2025-12-04,83,Confirmed Order
+PO01190,C052,Singapore,SPD,Product C,2025-12-11,64,Confirmed Order
