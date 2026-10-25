@@ -1,5 +1,6 @@
 """Approval decisions and sensitive reads are authorized and audited transactions."""
 
+import json
 from sqlalchemy import select
 
 from mdm_config import APPROVAL_ROLES, MAX_JUSTIFICATION_LENGTH
@@ -47,14 +48,16 @@ def decide_request(request_id: int, role: str, decision: str, reason: str, actor
             audit(session, request_id, "REQUEST_REJECTED", actor.id)
         elif all(other.status == "Approved" for other in steps):
             # Recheck at finalization in case master data was added by another integration.
-            if any(match.source == "Master" for match in find_matches(
+            if any(match.source == "Master" and match.blocking for match in find_matches(
                 session, request.record_type, request.name, request.country,
+                json.loads(request.details_json),
             )):
                 raise ValueError("An existing master record now matches this request. Ask a data steward to review it.")
             master = MasterRecord(
                 record_type=request.record_type, name=request.name,
                 normalized_name=request.normalized_name, country=request.country,
                 business_entity=request.business_entity,
+                details_json=request.details_json,
             )
             session.add(master)
             session.flush()

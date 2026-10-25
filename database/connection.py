@@ -7,6 +7,8 @@ from sqlalchemy import create_engine, event, inspect, text
 from sqlalchemy.orm import DeclarativeBase, sessionmaker
 
 DATABASE_FILE = Path(os.environ.get("MDM_DATABASE_PATH", Path(__file__).resolve().parent / "lives_mdm.db"))
+# Increment when startup migrations change so live Streamlit sessions rerun them.
+DATABASE_SCHEMA_VERSION = 2
 
 engine = create_engine(
     f"sqlite:///{DATABASE_FILE.as_posix()}",
@@ -45,6 +47,20 @@ def initialize_database():
         for name, definition in additions.items():
             if name not in columns:
                 connection.exec_driver_sql(f"ALTER TABLE mdm_requests ADD COLUMN {name} {definition}")
+        master_columns = {column["name"] for column in inspect(connection).get_columns("master_records")}
+        if "details_json" not in master_columns:
+            connection.exec_driver_sql("ALTER TABLE master_records ADD COLUMN details_json TEXT NOT NULL DEFAULT '{}'")
+        # Recover identity fields for masters created before they stored intake details.
+        connection.exec_driver_sql("""
+            UPDATE master_records SET details_json = (
+                SELECT details_json FROM mdm_requests
+                WHERE master_record_id = master_records.id AND status = 'Approved'
+                ORDER BY id DESC LIMIT 1
+            ) WHERE details_json = '{}' AND EXISTS (
+                SELECT 1 FROM mdm_requests
+                WHERE master_record_id = master_records.id AND status = 'Approved'
+            )
+        """)
         audit_columns = {column["name"] for column in inspect(connection).get_columns("audit_logs")}
         if "details" not in audit_columns:
             connection.exec_driver_sql("ALTER TABLE audit_logs ADD COLUMN details TEXT NOT NULL DEFAULT ''")

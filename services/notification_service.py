@@ -42,7 +42,7 @@ def send_due_reminders(now=None) -> int:
 
 def _visible(session, notification: Notification, actor: Actor) -> bool:
     request = session.get(MdmRequest, notification.request_id)
-    if request is None or not in_scope(actor, request):
+    if request is None or request.status == "Deleted" or not in_scope(actor, request):
         return False
     if notification.recipient is not None:
         return notification.recipient == actor.id

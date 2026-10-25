@@ -11,7 +11,7 @@ from services.access_service import Actor
 from services.approval_service import decide_request
 from services.clarification_service import answer_clarification, ask_clarification
 from services.notification_service import as_utc, list_notifications, send_due_reminders
-from services.request_service import RequestData, export_audit, get_request, list_requests, submit_request
+from services.request_service import RequestData, delete_request, export_audit, get_request, list_reply_requests, list_requests, submit_request
 
 
 def create_request(requestor):
@@ -62,6 +62,33 @@ def test_question_reply_and_followup_preserve_audit_and_notifications(requestor)
     decide_request(request_id, "regional_manager", "Approved", "Regional check complete",
                    Actor("regional", frozenset({"regional_manager"})))
     assert get_request(request_id, requestor)["status"] == "Approved"
+
+
+@pytest.mark.parametrize("finish", ["reply", "reject", "delete"])
+def test_reply_alerts_remain_until_resolved_and_respect_scope(requestor, finish):
+    from services.notification_service import mark_notifications_read
+
+    request_id = create_request(requestor)
+    question_id = ask_clarification(request_id, "data_steward", "Confirm specification", steward())
+    ask_clarification(request_id, "regional_manager", "Which region?",
+                      Actor("manager", frozenset({"regional_manager"})))
+    mark_notifications_read(requestor)
+    alerts = list_reply_requests(requestor)
+    assert len(alerts) == 1 and alerts[0]["Questions"] == 2
+    assert alerts[0]["ID"] == request_id
+    assert list_reply_requests(Actor("another", frozenset({"requestor"}))) == []
+    assert list_reply_requests(Actor(requestor.id, frozenset({"requestor"}), countries=())) == []
+    assert list_reply_requests(steward()) == []
+    if finish == "reply":
+        answer_clarification(question_id, "Confirmed", requestor)
+        assert list_reply_requests(requestor)[0]["Questions"] == 1
+        return
+    if finish == "reject":
+        decide_request(request_id, "business_owner", "Rejected", "Not needed",
+                       Actor("owner", frozenset({"business_owner"})))
+    else:
+        delete_request(request_id, requestor)
+    assert list_reply_requests(requestor) == []
 
 
 def test_only_assigned_approvers_can_ask_and_only_owner_can_reply(requestor):

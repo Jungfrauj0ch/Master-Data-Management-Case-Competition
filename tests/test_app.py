@@ -29,7 +29,10 @@ def click_request(app, table_key, request_id):
     states = app._tree.get_widget_states()
     event = states.widgets.add()
     event.id = table.proto.id
-    event.string_value = json.dumps({"selection": {"rows": [row], "columns": [], "cells": []}})
+    event.string_value = json.dumps(
+        {"edited_rows": {str(row): {"Open": True}}, "added_rows": [], "deleted_rows": []}
+        if table_key == "dashboard_request_rows" else
+        {"selection": {"rows": [row], "columns": [], "cells": []}})
     return app._run(widget_state=states)
 
 
@@ -74,7 +77,100 @@ def test_ui_submission_approval_and_tracking():
     assert not app.exception
     click_request(app, "dashboard_request_rows", request_id)
     assert get_request(request_id, requestor)["status"] == "Approved"
-    assert any("Local master record" in message.value for message in app.success)
+    assert not any("Local master record" in message.value for message in app.success)
+
+
+@pytest.mark.parametrize("confirm", [True, False])
+def test_requestor_deletes_request_from_dashboard(confirm):
+    from services.request_service import RequestData, submit_request
+
+    requestor = Actor("demo_requestor", frozenset({"requestor"}))
+    result = submit_request(RequestData(
+        "Item", "Disposable demo item", "Singapore", "SPD", "Test deletion",
+        {"item_code": "DELETE-UI", "category": "Medical equipment"},
+    ), requestor)
+    assert result.success
+    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"), default_timeout=15).run()
+    table = next(frame for frame in app.dataframe if frame.key == "dashboard_request_rows")
+    row = list(table.value["ID"]).index(result.request_id)
+    states = app._tree.get_widget_states()
+    event = states.widgets.add()
+    event.id = table.proto.id
+    event.string_value = json.dumps({"edited_rows": {str(row): {"Delete": True}},
+                                    "added_rows": [], "deleted_rows": []})
+    app._run(widget_state=states)
+    assert not any(button.label == "Delete my request" for button in app.button)
+    assert not app.exception
+    assert get_request(result.request_id, requestor)["status"] == "Pending Approval"
+    assert any("Are you sure" in message.value for message in app.markdown)
+    widget(app.button, "Delete request" if confirm else "Cancel").click().run()
+    if confirm:
+        assert any("deleted" in message.value for message in app.success)
+    # AppTest retains stale dialog elements until a subsequent full render.
+    app.run()
+    assert not app.exception
+    assert get_request(result.request_id, requestor)["status"] == ("Deleted" if confirm else "Pending Approval")
+    assert not any(button.label == "Delete request" for button in app.button)
+    if confirm:
+        assert list_requests(requestor) == []
+    else:
+        app.run()
+        assert len(list_requests(requestor)) == 1
+        assert not any(button.label == "Delete request" for button in app.button)
+
+
+def test_business_owner_has_no_create_or_delete_options():
+    from services.request_service import RequestData, submit_request
+
+    requestor = Actor("demo_requestor", frozenset({"requestor"}))
+    result = submit_request(RequestData(
+        "Item", "Owner visibility test", "Singapore", "SPD", "Test role visibility",
+        {"item_code": "ROLE001", "category": "Medical equipment"},
+    ), requestor)
+    assert result.success
+    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"), default_timeout=15).run()
+    assert "New MDM Request" in widget(app.radio, "Navigation").options
+    assert "Approval Workflow" not in widget(app.radio, "Navigation").options
+    widget(app.radio, "Navigation").set_value("New MDM Request").run()
+    widget(app.selectbox, "Demo identity").set_value("Business owner").run()
+    assert not app.exception
+    assert "New MDM Request" not in widget(app.radio, "Navigation").options
+    assert "Approval Workflow" in widget(app.radio, "Navigation").options
+    widget(app.radio, "Navigation").set_value("Dashboard").run()
+    table = next(frame for frame in app.dataframe if frame.key == "dashboard_request_rows")
+    assert "Delete" not in table.value.columns
+    assert not any("Delete…" in message.value for message in app.caption)
+    click_request(app, "dashboard_request_rows", result.request_id)
+    assert not app.exception
+    assert not any(button.label in {"Delete request", "Delete my request"} for button in app.button)
+    widget(app.selectbox, "Demo identity").set_value("Requestor").run()
+    assert "New MDM Request" in widget(app.radio, "Navigation").options
+    assert "Approval Workflow" not in widget(app.radio, "Navigation").options
+    table = next(frame for frame in app.dataframe if frame.key == "dashboard_request_rows")
+    assert "Delete" in table.value.columns
+
+
+@pytest.mark.parametrize("identity", ["Business owner", "Data steward", "Finance", "Compliance", "Regional manager", "Auditor"])
+def test_all_review_identities_have_a_separate_messages_page(identity):
+    from services.request_service import RequestData, submit_request
+
+    result = submit_request(RequestData(
+        "Item", "Messages visibility test", "Singapore", "SPD", "New equipment",
+        {"item_code": "MSG001", "category": "Medical equipment"},
+    ), Actor("demo_requestor", frozenset({"requestor"})))
+    assert result.success
+    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"), default_timeout=15).run()
+    widget(app.selectbox, "Demo identity").set_value(identity).run()
+    assert "Messages" in widget(app.radio, "Navigation").options
+    assert not any(expander.label.startswith("Notifications") for expander in app.expander)
+    widget(app.radio, "Navigation").set_value("Messages").run()
+    assert not app.exception
+    assert widget(app.selectbox, "Request").value == result.request_id
+    assert any(expander.label.startswith("Notifications") for expander in app.expander)
+    if identity in {"Auditor", "Finance", "Compliance"}:
+        assert not any(item.label == "Clarifying question *" for item in app.text_area)
+    else:
+        assert widget(app.text_area, "Clarifying question *")
 
 
 def test_protected_field_disabled_without_configuration():
@@ -147,6 +243,28 @@ def test_duplicates_appear_automatically_and_follow_intake_fields():
     widget(app.text_input, "Record Name *").set_value("NUH").run()
     assert not app.exception
     assert not app.dataframe
+
+
+def test_schema_version_refreshes_cached_startup_for_duplicate_search(monkeypatch, database):
+    from database import connection
+    from sqlalchemy import inspect
+
+    monkeypatch.setattr(connection, "DATABASE_SCHEMA_VERSION", 1)
+    app = AppTest.from_file(str(Path(__file__).resolve().parents[1] / "app.py"), default_timeout=15).run()
+    widget(app.radio, "Navigation").set_value("New MDM Request").run()
+    # Reproduce a cached startup with the old on-disk master schema.
+    with database.begin() as transaction:
+        transaction.exec_driver_sql("ALTER TABLE master_records DROP COLUMN details_json")
+    widget(app.text_input, "Record Name *").set_value("National University Hospital").run()
+    assert any("database operation could not be completed" in message.value for message in app.error)
+    # A schema change must invalidate startup even though the app is still running.
+    monkeypatch.setattr(connection, "DATABASE_SCHEMA_VERSION", 2)
+    app.run()
+    assert not app.exception
+    assert not app.error
+    assert "details_json" in {column["name"] for column in inspect(database).get_columns("master_records")}
+    assert any("Possible existing records" in message.value for message in app.warning)
+    assert app.dataframe[0].value.iloc[0]["Name"] == "National University Hospital"
 
 
 def test_submit_rechecks_duplicates_added_after_preview():
@@ -258,6 +376,9 @@ def test_row_click_question_and_requestor_reply():
     widget(app.radio, "Navigation").set_value("Approval Workflow").run()
     click_request(app, "approval_request_rows", request_id)
     assert not app.exception
+    assert not any(item.label == "Clarifying question *" for item in app.text_area)
+    widget(app.button, "Message requestor").click().run()
+    assert widget(app.radio, "Navigation").value == "Messages"
     widget(app.text_area, "Clarifying question *").set_value("Which product specification should we use?")
     widget(app.button, "Send question").click().run()
     assert not app.exception
@@ -266,18 +387,42 @@ def test_row_click_question_and_requestor_reply():
 
     widget(app.selectbox, "Demo identity").set_value("Requestor").run()
     widget(app.radio, "Navigation").set_value("Dashboard").run()
+    assert any("Action needed: 1 approver question" in message.value for message in app.warning)
+    widget(app.button, "Open Messages").click().run()
+    assert widget(app.radio, "Navigation").value == "Messages"
+    assert widget(app.selectbox, "Request").value == request_id
+    notification = next(button for button in app.button if button.label == f"View request #{request_id}")
+    notification.click().run()
+    assert not app.exception
+    assert widget(app.selectbox, "Request").value == request_id
+    widget(app.radio, "Navigation").set_value("Dashboard").run()
+    widget(app.multiselect, "Filter by status").set_value(["Pending Approval"]).run()
     click_request(app, "dashboard_request_rows", request_id)
+    assert not any("Messages from your approvers" in item.value for item in app.markdown)
+    assert not any(item.label == "Your reply *" for item in app.text_area)
+    widget(app.button, f"Reply to request #{request_id}").click().run()
+    assert widget(app.radio, "Navigation").value == "Messages"
+    assert widget(app.selectbox, "Request").value == request_id
+    widget(app.button, "Mark notifications read").click().run()
+    assert any("1 approver question needs your reply" in message.value for message in app.warning)
     assert not app.exception
     assert any(item.value == "Which product specification should we use?" for item in app.text)
     widget(app.text_area, "Your reply *").set_value("Use specification revision 2.")
     widget(app.button, "Send reply").click().run()
     assert not app.exception
+    assert not any("question needs your reply" in message.value for message in app.warning)
+    widget(app.radio, "Navigation").set_value("Dashboard").run()
+    assert not any("Action needed:" in message.value for message in app.warning)
 
     widget(app.selectbox, "Demo identity").set_value("Data steward").run()
     widget(app.radio, "Navigation").set_value("Approval Workflow").run()
     click_request(app, "approval_request_rows", request_id)
     assert not app.exception
+    assert not any(item.value == "Use specification revision 2." for item in app.text)
+    widget(app.button, f"View messages for request #{request_id}").click().run()
     assert any(item.value == "Use specification revision 2." for item in app.text)
+    widget(app.button, f"Review request #{request_id}").click().run()
+    assert widget(app.radio, "Navigation").value == "Approval Workflow"
     widget(app.text_area, "Decision reason * (exclude sensitive details)").set_value("Specification confirmed")
     widget(app.button, "Record decision").click().run()
     assert not app.exception
