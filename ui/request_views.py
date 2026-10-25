@@ -244,10 +244,24 @@ def request_detail(request_id: int, actor: Actor, allow_decision=False):
     if request["status"] == "Needs Update":
         st.warning("This legacy submission lacks the standardized intake fields. Submit a new request using the intake form.")
     if request["steps"]:
+        # Visual progress is calculated from existing approval steps only.
+        # No approval decisions or database records are changed here.
+        steps = request["steps"]
+        approved_count = sum(step["Status"] == "Approved" for step in steps)
+        total_count = len(steps)
+        st.write("**Approval progress**")
+        st.progress(approved_count / total_count if total_count else 0,
+                    text=f"{approved_count} of {total_count} checks approved")
+        for step in steps:
+            role_name = APPROVAL_ROLES.get(step["Role"], step["Role"].replace("_", " ").title())
+            status = step["Status"]
+            symbol = "✓" if status == "Approved" else "✕" if status == "Rejected" else "○"
+            st.caption(f"{symbol} {role_name}: {status}")
+
         st.write("**Parallel approval checks**")
-        st.dataframe(style_status_rows(request["steps"]), hide_index=True, width="stretch")
+        st.dataframe(style_status_rows(steps), hide_index=True, width="stretch")
         now = datetime.now(timezone.utc)
-        overdue = [step for step in request["steps"] if step["Status"] == "Pending"
+        overdue = [step for step in steps if step["Status"] == "Pending"
                    and as_utc(step["Due (UTC)"]) < now]
         if overdue:
             st.warning("Overdue: " + ", ".join(APPROVAL_ROLES[step["Role"]] for step in overdue))
