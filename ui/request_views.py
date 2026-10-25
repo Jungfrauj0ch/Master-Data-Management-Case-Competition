@@ -312,6 +312,63 @@ def request_detail(request_id: int, actor: Actor, allow_decision=False):
                                "text/csv", on_click="ignore")
 
 
+def operational_performance(actor: Actor, requests: list[dict]):
+    """Read-only operational KPIs computed from requests visible to this actor."""
+    if not requests:
+        return
+
+    # Keep the automatically refreshed dashboard responsive for a demo.
+    sample = requests[:100]
+    now = datetime.now(timezone.utc)
+    overdue_count = 0
+    pending_by_role: dict[str, int] = {}
+    elapsed_hours = []
+    completed_count = 0
+
+    for row in sample:
+        detail = get_request(row["ID"], actor)
+        steps = detail["steps"]
+        for step in steps:
+            if step["Status"] in {"Pending", "Needs Clarification"}:
+                label = APPROVAL_ROLES.get(step["Role"], step["Role"].replace("_", " ").title())
+                pending_by_role[label] = pending_by_role.get(label, 0) + 1
+            if step["Status"] == "Pending" and as_utc(step["Due (UTC)"]) < now:
+                overdue_count += 1
+
+        if detail["status"] == "Approved":
+            completed_count += 1
+            starts = [as_utc(event["Time (UTC)"]) for event in detail["audit"]
+                      if event["Action"] == "REQUEST_CREATED"]
+            decisions = [as_utc(step["Decided (UTC)"]) for step in steps
+                         if step["Status"] == "Approved" and step["Decided (UTC)"] is not None]
+            if starts and len(decisions) == len(steps) and steps:
+                duration = (max(decisions) - min(starts)).total_seconds() / 3600
+                if duration >= 0:
+                    elapsed_hours.append(duration)
+
+    st.subheader("MDM Operational Performance")
+    average = (f"{sum(elapsed_hours) / len(elapsed_hours):.1f} hours"
+               if elapsed_hours else "N/A")
+    cols = st.columns(4)
+    cols[0].metric("Avg. completed approval time", average)
+    cols[1].metric("Approval completion rate", f"{completed_count / len(sample):.0%}")
+    cols[2].metric("Overdue approval checks", overdue_count)
+    cols[3].metric("Pending approval checks", sum(pending_by_role.values()))
+    st.caption("Computed from visible demo requests, not actual Lives Group operations. "
+               "Approval time runs from request creation to last recorded approval. "
+               "Completion rate = approved requests / visible requests (including open requests). "
+               "Clarification checks count as outstanding; only pending checks past their deadline count as overdue.")
+    if pending_by_role:
+        st.write("**Outstanding checks by approving role**")
+        summary = pd.DataFrame([{"Role": role, "Outstanding checks": count}
+                                for role, count in pending_by_role.items()])
+        st.bar_chart(summary.set_index("Role"), y="Outstanding checks")
+    else:
+        st.success("No outstanding approval checks in the visible requests.")
+    if len(requests) > len(sample):
+        st.caption(f"Showing performance for the {len(sample)} newest visible requests only.")
+
+
 def _dashboard(actor: Actor):
     st.header("MDM Overview")
     st.caption(f"Requests and notifications update automatically every {LIVE_REFRESH_SECONDS} seconds.")
@@ -321,6 +378,7 @@ def _dashboard(actor: Actor):
     columns[0].metric("Visible requests", len(requests))
     columns[1].metric("Pending approvals", sum(item["Status"] == "Pending Approval" for item in requests))
     columns[2].metric("Approved requests", sum(item["Status"] == "Approved" for item in requests))
+    operational_performance(actor, requests)
     inbox(actor)
     if not requests:
         st.info("No requests visible to your account.")
