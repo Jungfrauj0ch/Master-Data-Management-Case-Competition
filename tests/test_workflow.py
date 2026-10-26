@@ -82,7 +82,9 @@ def test_duplicate_master_acronym_and_pending_requests(requestor):
     duplicate = submit_request(data(name="ORCHID MEDICAL SUPPLIES!", business_entity="QTG"), requestor)
     assert not duplicate.success and duplicate.duplicates
     assert get_request(request_id, requestor)["status"] == "Pending Approval"
-    assert create(requestor, name="医疗器材公司")
+    assert create(requestor, name="医疗器材公司",
+                  details={"registration_number": "SG-654321", "contact_email": "new@example.com",
+                           "address": "2 Example Road"})
 
 
 def test_parallel_approvals_create_exactly_one_master_and_audit(requestor):

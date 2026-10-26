@@ -14,7 +14,7 @@ from services.clarification_service import answer_clarification, ask_clarificati
 from services.duplicate_service import normalize_name
 from services.notification_service import as_utc, list_notifications, mark_notifications_read, send_due_reminders
 from services.request_service import (
-    RequestData, export_audit, get_request, list_requests, search_duplicates, submit_request,
+    RequestData, delete_request, export_audit, get_request, list_reply_requests, list_requests, search_duplicates, submit_request,
 )
 from services.security_service import SecurityConfigurationError, cipher
 
@@ -73,6 +73,18 @@ def submit_intake(record_type: str, actor: Actor):
                 state[key] = ""
 
 
+def remove_request(request_id: int, actor: Actor):
+    try:
+        delete_request(request_id, actor)
+        if st.session_state.get("dashboard_request") == request_id:
+            st.session_state.pop("dashboard_request", None)
+        st.session_state["flash"] = f"Request #{request_id} deleted. Outstanding approvals cancelled; audit history retained."
+    except (ValueError, PermissionError) as exc:
+        st.session_state["flash_error"] = str(exc)
+    except SQLAlchemyError:
+        st.session_state["flash_error"] = "The request could not be deleted. Please try again."
+
+
 def record_decision(request_id: int, actor: Actor):
     """Run before the next render so the queue and request details stay consistent."""
     try:
@@ -116,13 +128,94 @@ def select_request_row(table_key: str, selection_key: str, rendered_ids: tuple[i
         st.session_state.pop(selection_key, None)
 
 
-def request_table(requests: list[dict], selection_key: str) -> int | None:
+def resolve_delete_confirmation(actor: Actor, confirmed: bool):
+    pending = st.session_state.pop("dashboard_request_delete", None)
+    if confirmed and pending is not None and pending[1] == actor.id:
+        remove_request(pending[0], actor)
+
+
+def dismiss_delete_confirmation():
+    st.session_state.pop("dashboard_request_delete", None)
+
+
+@st.dialog("Delete this request?", on_dismiss=dismiss_delete_confirmation)
+def delete_confirmation(item: dict, actor: Actor):
+    st.write("Are you sure you want to delete this request?")
+    with st.container(border=True):
+        st.text(item["Name"])
+        st.caption(f"Request #{item['ID']} · {item['Type']} · {item['Country']} · {item['Status']}")
+    st.write("Outstanding approvals will be cancelled.")
+    cancel, confirm = st.columns(2)
+    if cancel.button("Cancel", key="dashboard_request_cancel_delete", width="stretch"):
+        resolve_delete_confirmation(actor, False)
+        st.rerun()
+    if confirm.button("Delete request", key="dashboard_request_confirm_delete",
+                      type="primary", icon=":material/delete:", width="stretch"):
+        resolve_delete_confirmation(actor, True)
+        st.rerun()
+
+
+def prepare_delete_confirmation(request_id: int, actor: Actor):
+    """Check eligibility before asking; the delete transaction checks again."""
+    dismiss_delete_confirmation()
+    try:
+        request = get_request(request_id, actor)
+        if request["requestor"] != actor.id or "requestor" not in actor.roles:
+            st.session_state["flash_error"] = "You can only delete requests you submitted."
+        elif request["status"] == "Approved" or request["master_record_id"]:
+            st.session_state["flash_error"] = "This request has already created a master record and cannot be deleted."
+        elif request["status"] == "Deleted":
+            st.session_state["flash_error"] = "This request has already been deleted."
+        else:
+            st.session_state["dashboard_request_delete"] = (request_id, actor.id)
+    except PermissionError:
+        st.session_state["flash_error"] = "This request is no longer available to your account."
+    except SQLAlchemyError:
+        st.session_state["flash_error"] = "The request could not be checked. Please try again."
+
+
+def edit_dashboard_rows(table_key: str, request_ids: tuple[int, ...], actor: Actor):
+    edits = st.session_state.get(table_key, {}).get("edited_rows", {})
+    for row, changes in edits.items():
+        if not 0 <= int(row) < len(request_ids):
+            continue
+        request_id = request_ids[int(row)]
+        if changes.get("Delete") and "requestor" in actor.roles:
+            prepare_delete_confirmation(request_id, actor)
+        elif changes.get("Open"):
+            st.session_state["dashboard_request"] = request_id
+        elif changes.get("Open") is False and st.session_state.get("dashboard_request") == request_id:
+            st.session_state.pop("dashboard_request", None)
+    st.session_state.pop(table_key, None)
+
+
+def request_table(requests: list[dict], selection_key: str, actor: Actor | None = None) -> int | None:
     request_ids = tuple(request["ID"] for request in requests)
     selected_id = st.session_state.get(selection_key)
     if selected_id not in request_ids:
         st.session_state.pop(selection_key, None)
         selected_id = None
     table_key = f"{selection_key}_rows"
+    if actor is not None:
+        can_delete = "requestor" in actor.roles
+        rows = [{"Open": item["ID"] == selected_id, **({"Delete": False} if can_delete else {}), **item}
+                for item in requests]
+        columns = {"Open": st.column_config.CheckboxColumn("Open")}
+        if can_delete:
+            columns["Delete"] = st.column_config.CheckboxColumn(
+                "Delete…", help="Opens a confirmation dialog. Only your own requests without a master record can be deleted.")
+        st.data_editor(style_status_rows(rows), hide_index=True, width="stretch", key=table_key,
+                       disabled=list(requests[0]),
+                       column_config=columns,
+                       on_change=edit_dashboard_rows, args=(table_key, request_ids, actor))
+        pending = st.session_state.get("dashboard_request_delete")
+        if pending is not None:
+            item = next((item for item in requests if item["ID"] == pending[0]), None)
+            if not can_delete or pending[1] != actor.id or item is None:
+                st.session_state.pop("dashboard_request_delete", None)
+            else:
+                delete_confirmation(item, actor)
+        return selected_id
     # Selection follows the request ID when refresh inserts or removes rows.
     st.session_state[table_key] = {
         "selection": {"rows": [request_ids.index(selected_id)] if selected_id is not None else [],
@@ -137,10 +230,12 @@ def request_table(requests: list[dict], selection_key: str) -> int | None:
 def clarification_history(request: dict, actor: Actor):
     if not request["clarifications"]:
         return
-    st.write("**Questions and replies**")
+    st.write("**Messages from your approvers**" if request["requestor"] == actor.id else "**Questions and replies**")
     st.caption("Keep bank details and credit terms in their protected fields, not in questions or replies.")
-    for item in request["clarifications"]:
+    for item in sorted(request["clarifications"], key=lambda item: item["answered_at"] is not None):
         with st.container(border=True):
+            if item["answered_at"] is None and request["status"] == "Pending Approval" and request["requestor"] == actor.id:
+                st.badge("Reply needed", icon=":material/chat:", color="orange")
             st.caption(f"{APPROVAL_ROLES[item['role']]} · Asked by {item['asked_by']} · "
                        f"{item['asked_at'].strftime('%Y-%m-%d %H:%M')} UTC")
             st.text(item["question"])
@@ -153,15 +248,17 @@ def clarification_history(request: dict, actor: Actor):
             elif request["requestor"] == actor.id:
                 with st.form(f"clarification_reply_form_{item['id']}", clear_on_submit=True):
                     st.text_area("Your reply *", max_chars=2000, key=f"clarification_reply_{item['id']}")
-                    st.form_submit_button("Send reply", on_click=send_reply, args=(item["id"], actor))
+                    st.form_submit_button("Send reply", type="primary", on_click=send_reply, args=(item["id"], actor))
             else:
                 st.caption("Waiting for the requestor's reply.")
 
 
 def duplicate_preview(actor: Actor, record_type: str, name: str, country: str):
-    if not normalize_name(name):
+    details = {key: st.session_state.get(f"intake_{record_type}_{key}", "") or ""
+               for key in INTAKE_FIELDS[record_type]}
+    if not normalize_name(name) and not any(details.values()):
         return
-    matches = search_duplicates(actor, record_type, name, country)
+    matches = search_duplicates(actor, record_type, name, country, details)
     if matches:
         st.warning("Possible existing records found. Review these matches before creating a request.")
         st.dataframe(matches, hide_index=True, width="stretch")
@@ -176,6 +273,7 @@ def new_request(actor: Actor):
         return
     record_type = st.selectbox("Record Type", RECORD_TYPES, key="intake_type")
     st.caption("All fields marked * are required. Duplicate checking is automatic.")
+    st.caption("Names and identifiers are checked before submission. Shared emails or addresses trigger review warnings.")
     country = st.selectbox("Country *", actor.countries, key=f"intake_country_{record_type}")
     name = st.text_input("Record Name *", max_chars=200, key=f"intake_name_{record_type}",
                          help="Matching records appear automatically after you finish editing the name.")
@@ -210,20 +308,120 @@ def new_request(actor: Actor):
     if result:
         if result.success:
             st.success(f"Request #{result.request_id} submitted. Track progress on the Dashboard.")
+            for match in result.duplicates:
+                st.warning(f"Review shared contact details: {match}")
         else:
             st.error(result.message)
             for match in result.duplicates:
                 st.warning(match)
 
 
+def go_to_messages(request_id: int | None = None):
+    if request_id is not None:
+        st.session_state["messages_target"] = request_id
+    st.session_state["navigation_target"] = "Messages"
+    # Navigation sits outside this fragment, so refresh the complete app.
+    st.rerun(scope="app")
+
+
+def question_form(request: dict, actor: Actor):
+    roles = [step["Role"] for step in request["steps"]
+             if step["Status"] == "Pending" and step["Role"] in actor.roles]
+    if request["status"] != "Pending Approval" or request["requestor"] == actor.id or not roles:
+        return
+    request_id = request["id"]
+    with st.form(f"clarification_question_form_{request_id}", clear_on_submit=True):
+        st.selectbox("Question for approval check", roles, format_func=APPROVAL_ROLES.get,
+                     key=f"clarification_role_{request_id}")
+        st.text_area("Clarifying question *", max_chars=2000,
+                     key=f"clarification_question_{request_id}")
+        st.form_submit_button("Send question", type="primary", on_click=send_question, args=(request_id, actor))
+
+
+def reply_alerts(actor: Actor):
+    requests = list_reply_requests(actor)
+    unread = sum(not item["Read"] for item in list_notifications(actor))
+    if not requests and not unread:
+        return
+    count = sum(item["Questions"] for item in requests)
+    summary, action = st.columns([3, 1], vertical_alignment="center")
+    with summary:
+        if count:
+            st.warning(f"Action needed: {count} approver {'question needs' if count == 1 else 'questions need'} your reply.",
+                       icon=":material/chat:")
+        else:
+            st.info(f"You have {unread} unread {'update' if unread == 1 else 'updates'} in Messages.",
+                    icon=":material/notifications:")
+    if action.button("Open Messages", type="primary", key="dashboard_request_open_messages"):
+        go_to_messages(requests[0]["ID"] if requests else None)
+
+
+@st.fragment(run_every=LIVE_REFRESH_SECONDS)
+def messages(actor: Actor):
+    st.header("Messages")
+    try:
+        render_feedback()
+        pending = list_reply_requests(actor)
+        count = sum(item["Questions"] for item in pending)
+        if count:
+            st.warning(f"{count} approver {'question needs' if count == 1 else 'questions need'} your reply.",
+                       icon=":material/chat:")
+        requests = list_requests(actor)
+        pending_ids = {item["ID"] for item in pending}
+        requests.sort(key=lambda item: item["ID"] not in pending_ids)
+        target = st.session_state.pop("messages_target", None)
+        if requests:
+            by_id = {item["ID"]: item for item in requests}
+            if target in by_id:
+                st.session_state["messages_request"] = target
+            if st.session_state.get("messages_request") not in by_id:
+                st.session_state["messages_request"] = requests[0]["ID"]
+            request_id = st.selectbox("Request", list(by_id), key="messages_request",
+                                      format_func=lambda value: f"Request #{value} · {by_id[value]['Name']}"
+                                      + (" · Reply needed" if value in pending_ids else ""))
+            request = get_request(request_id, actor)
+            st.subheader(f"Request #{request_id}: {request['name']}")
+            if request["clarifications"]:
+                clarification_history(request, actor)
+            else:
+                st.info("No messages for this request yet.")
+            question_form(request, actor)
+            can_review = (request["status"] == "Pending Approval" and request["requestor"] != actor.id
+                          and any(step["Role"] in actor.roles and step["Status"] in {"Pending", "Needs Clarification"}
+                                  for step in request["steps"]))
+            if can_review and st.button(f"Review request #{request_id}", icon=":material/fact_check:"):
+                st.session_state["approval_request"] = request_id
+                st.session_state["navigation_target"] = "Approval Workflow"
+                st.rerun(scope="app")
+        else:
+            st.info("No requests to show yet.")
+        st.divider()
+        inbox(actor)
+    except (PermissionError, SQLAlchemyError):
+        st.error("Messages could not be refreshed. Please try again.")
+
+
 def inbox(actor: Actor):
     send_due_reminders()
     notifications = list_notifications(actor)
     unread = [item for item in notifications if not item["Read"]]
+    if unread:
+        st.info(f"You have {len(unread)} unread {'update' if len(unread) == 1 else 'updates'}. Open Notifications to review them.",
+                icon=":material/notifications_active:")
     with st.expander(f"Notifications ({len(unread)} unread)", expanded=bool(unread)):
         st.caption(f"Updates automatically every {LIVE_REFRESH_SECONDS} seconds.")
         if notifications:
-            st.dataframe(notifications[:50], hide_index=True, width="stretch")
+            for item in unread[:5]:
+                with st.container(border=True):
+                    st.badge("New", color="blue")
+                    st.text(item["Message"])
+                    st.caption(f"Request #{item['Request']} · {item['Created (UTC)'].strftime('%d %b %Y, %H:%M')} UTC")
+                    if st.button(f"View request #{item['Request']}", key=f"dashboard_request_message_{item['ID']}"):
+                        go_to_messages(item["Request"])
+            if len(unread) > 5:
+                st.caption(f"{len(unread) - 5} more unread updates are listed below.")
+            with st.expander("All notification history"):
+                st.dataframe(notifications[:50], hide_index=True, width="stretch")
             if unread:
                 st.button("Mark notifications read", on_click=mark_notifications_read, args=(actor,))
         else:
@@ -233,14 +431,54 @@ def inbox(actor: Actor):
 def request_detail(request_id: int, actor: Actor, allow_decision=False):
     request = get_request(request_id, actor)
     st.subheader(f"Request #{request_id}: {request['name']}")
-    st.write(f"**Status:** {request['status']} · **Requestor:** {request['requestor']}")
-    st.write(f"{request['record_type']} · {request['country']} · {request['entity']}")
-    st.write("**Business justification**")
-    st.text(request["justification"])
-    for key, value in request["details"].items():
-        st.text(f"{INTAKE_FIELDS[request['record_type']].get(key, key)}: {value}")
-    if request["master_record_id"]:
-        st.success(f"Local master record #{request['master_record_id']} created.")
+    needs_reply = (request["requestor"] == actor.id and request["status"] == "Pending Approval"
+                   and any(item["answered_at"] is None for item in request["clarifications"]))
+    if request["clarifications"] or (allow_decision and request["requestor"] != actor.id):
+        label = (f"Reply to request #{request_id}" if needs_reply else
+                 f"View messages for request #{request_id}" if request["clarifications"] else "Message requestor")
+        if st.button(label, key=f"dashboard_request_conversation_{request_id}",
+                     type="primary" if needs_reply else "secondary", icon=":material/chat:"):
+            go_to_messages(request_id)
+    with st.container(border=True):
+        status, requestor = st.columns([1, 2])
+        with status:
+            st.caption("Status")
+            color = {"Approved": "green", "Rejected": "red", "Pending Approval": "orange",
+                     "Needs Update": "orange", "Deleted": "gray"}.get(request["status"], "blue")
+            st.badge(request["status"], color=color)
+        with requestor:
+            st.caption("Requested by")
+            st.write(request["requestor"])
+        st.divider()
+        for column, label, value in zip(st.columns(3),
+                                        ("Record type", "Country", "Business entity"),
+                                        (request["record_type"], request["country"], request["entity"])):
+            with column:
+                st.caption(label)
+                st.write(value)
+        st.divider()
+        justification, details = st.columns(2, gap="large")
+        with justification:
+            st.markdown("**Business justification**")
+            st.write(request["justification"])
+        with details:
+            st.markdown("**Record details**")
+            for key, value in request["details"].items():
+                st.caption(INTAKE_FIELDS[request["record_type"]].get(key, key))
+                st.write(value)
+    if request["status"] == "Approved" and request["master_record_id"]:
+        st.write("**Simulated SAP handoff**")
+        st.caption("Prepare this approved record for a simulated SAP handoff.")
+        if st.button("Prepare simulated SAP export", key=f"sap_export_{request_id}"):
+            from services.sap_service import export_sap_handoff
+
+            try:
+                contents = export_sap_handoff(request_id, actor)
+                st.download_button("Download simulated SAP JSON", contents,
+                                   f"request-{request_id}-sap-simulation.json",
+                                   "application/json", on_click="ignore")
+            except (ValueError, PermissionError) as exc:
+                st.error(str(exc))
     if request["status"] == "Needs Update":
         st.warning("This legacy submission lacks the standardized intake fields. Submit a new request using the intake form.")
     if request["steps"]:
@@ -279,7 +517,6 @@ def request_detail(request_id: int, actor: Actor, allow_decision=False):
                     st.caption("Access recorded in the audit history. Values clear on the next page action.")
                 except (ValueError, PermissionError) as exc:
                     st.error(str(exc))
-    clarification_history(request, actor)
     if allow_decision:
         roles = [step["Role"] for step in request["steps"]
                  if step["Status"] == "Pending" and step["Role"] in actor.roles]
@@ -294,22 +531,16 @@ def request_detail(request_id: int, actor: Actor, allow_decision=False):
                 st.text_area("Decision reason * (exclude sensitive details)", max_chars=2000,
                              key=f"decision_reason_{request_id}")
                 st.form_submit_button("Record decision", on_click=record_decision, args=(request_id, actor))
-            with st.form(f"clarification_question_form_{request_id}", clear_on_submit=True):
-                st.selectbox("Question for approval check", roles, format_func=APPROVAL_ROLES.get,
-                             key=f"clarification_role_{request_id}")
-                st.text_area("Clarifying question *", max_chars=2000,
-                             key=f"clarification_question_{request_id}")
-                st.form_submit_button("Send question", on_click=send_question, args=(request_id, actor))
         elif any(step["Status"] == "Needs Clarification" and step["Role"] in actor.roles
                  for step in request["steps"]):
             st.info("Your approval check is waiting for the requestor's reply.")
     with st.expander("Audit history", expanded=True):
         # Read again to include a sensitive-access event recorded during this render.
         st.dataframe(get_request(request_id, actor)["audit"], hide_index=True, width="stretch")
-        if st.button("Prepare audit export", key=f"audit_export_{request_id}"):
+        if st.button("Prepare audit export", key=f"audit_export_{request_id}", type="primary"):
             contents = export_audit(request_id, actor)
             st.download_button("Download audit CSV", contents, f"request-{request_id}-audit.csv",
-                               "text/csv", on_click="ignore")
+                               "text/csv", on_click="ignore", type="primary")
 
 
 def operational_performance(actor: Actor, requests: list[dict]):
@@ -373,6 +604,8 @@ def _dashboard(actor: Actor):
     st.header("MDM Overview")
     st.caption(f"Requests and notifications update automatically every {LIVE_REFRESH_SECONDS} seconds.")
     render_feedback()
+    send_due_reminders()
+    reply_alerts(actor)
     requests = list_requests(actor)
     columns = st.columns(3)
     columns[0].metric("Visible requests", len(requests))
@@ -383,14 +616,18 @@ def _dashboard(actor: Actor):
     if not requests:
         st.info("No requests visible to your account.")
         return
-    statuses = st.multiselect("Filter by status", sorted({item["Status"] for item in requests}))
+    statuses = st.multiselect("Filter by status", sorted({item["Status"] for item in requests}),
+                              key="dashboard_request_status_filter")
     visible = [item for item in requests if not statuses or item["Status"] in statuses]
     if visible:
-        request_id = request_table(visible, "dashboard_request")
+        st.caption("Check Open to view details." + (
+            " Delete… opens a confirmation dialog; nothing is deleted until you confirm."
+            if "requestor" in actor.roles else ""))
+        request_id = request_table(visible, "dashboard_request", actor)
         if request_id is not None:
             request_detail(request_id, actor)
         else:
-            st.info("Click a request row to view its details and reply to questions.")
+            st.info("Check Open on a request to view its details and reply to questions.")
     else:
         st.session_state.pop("dashboard_request", None)
         st.info("No requests match these filters.")
@@ -408,7 +645,8 @@ def _approval_queue(actor: Actor):
     st.header("Approval Queue")
     st.caption("Independent checks run in parallel. Each needs a different approver; self-approval is prohibited.")
     render_feedback()
-    inbox(actor)
+    send_due_reminders()
+    reply_alerts(actor)
     pending = []
     for item in list_requests(actor):
         if item["Status"] != "Pending Approval" or item["Requestor"] == actor.id:

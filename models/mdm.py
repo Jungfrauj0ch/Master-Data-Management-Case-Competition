@@ -32,6 +32,7 @@ class MasterRecord(Base):
     business_entity: Mapped[str] = mapped_column(
         String(10), nullable=False
     )
+    details_json: Mapped[str] = mapped_column(Text, default="{}", nullable=False)
 
 
 class MdmRequest(Base):

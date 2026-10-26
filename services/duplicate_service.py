@@ -1,13 +1,14 @@
 """Unicode-aware duplicate discovery across master data and active intake."""
 
 from dataclasses import dataclass
+import json
 import re
 import unicodedata
 
 from rapidfuzz import fuzz
 from sqlalchemy import select
 
-from mdm_config import DUPLICATE_THRESHOLD
+from mdm_config import DUPLICATE_THRESHOLD, INTAKE_FIELDS
 from models.mdm import MasterRecord, MdmRequest
 
 
@@ -24,6 +25,8 @@ class DuplicateMatch:
     country: str
     entity: str
     score: int
+    reasons: tuple[str, ...] = ()
+    blocking: bool = True
 
 
 def similarity(left: str, right: str) -> float:
@@ -36,9 +39,22 @@ def similarity(left: str, right: str) -> float:
     return score
 
 
-def find_matches(session, record_type: str, name: str, country: str) -> tuple[DuplicateMatch, ...]:
+def normalize_identity(key: str, value: str) -> str:
+    if key == "contact_email":
+        return unicodedata.normalize("NFKC", value).strip().casefold()
+    normalized = normalize_name(value)
+    # Ignore separators in identifiers, but preserve word boundaries in addresses.
+    return normalized if key == "address" else normalized.replace(" ", "")
+
+
+def find_matches(session, record_type: str, name: str, country: str,
+                 details: dict[str, str] | None = None) -> tuple[DuplicateMatch, ...]:
     normalized = normalize_name(name)
-    if not normalized:
+    fields = INTAKE_FIELDS.get(record_type, {})
+    identities = {key: normalize_identity(key, value) for key, value in (details or {}).items()
+                  if key in fields and key in {"registration_number", "item_code", "cost_center_code", "contact_email", "address"}}
+    identities = {key: value for key, value in identities.items() if value}
+    if not normalized and not identities:
         return ()
     masters = session.scalars(select(MasterRecord).where(
         MasterRecord.record_type == record_type, MasterRecord.country == country,
@@ -51,8 +67,17 @@ def find_matches(session, record_type: str, name: str, country: str) -> tuple[Du
     matches = []
     for source, records in (("Master", masters), ("Request", requests)):
         for record in records:
-            score = similarity(normalized, normalize_name(record.name))
-            if score >= DUPLICATE_THRESHOLD:
+            score = similarity(normalized, normalize_name(record.name)) if normalized else 0
+            reasons = ["Similar name"] if score >= DUPLICATE_THRESHOLD else []
+            blocking = bool(reasons)
+            stored = json.loads(record.details_json)
+            for key, value in identities.items():
+                if value == normalize_identity(key, stored.get(key, "")):
+                    reasons.append(fields[key])
+                    score = 100
+                    if key in {"registration_number", "item_code", "cost_center_code"}:
+                        blocking = True
+            if reasons:
                 matches.append(DuplicateMatch(record.id, source, record.name, record.country,
-                                              record.business_entity, round(score)))
-    return tuple(sorted(matches, key=lambda match: (-match.score, match.source, match.id)))
+                                              record.business_entity, round(score), tuple(reasons), blocking))
+    return tuple(sorted(matches, key=lambda match: (not match.blocking, -match.score, match.source, match.id)))

@@ -18,6 +18,36 @@ Only demo mode inserts sample data.
 
 ## Workflow
 
+The requestor Dashboard highlights unanswered approver questions in a compact
+**Action needed** alert. **Open Messages** opens the dedicated **Messages** page;
+**Reply to request** in a record's details opens that specific conversation.
+Every identity has a **Messages** page containing its authorized requests,
+conversations, and notifications. Assigned approvers send questions there;
+requestors reply there, and auditors can read conversations within their scope.
+**Message requestor** opens a conversation from Approval Workflow, and **Review
+request** returns to the approval decision. Dashboard and Approval Workflow show
+compact message alerts rather than the full inbox. Reading notifications does not dismiss unanswered questions;
+the action alert clears when the questions are answered or the request is closed.
+
+Duplicate detection compares records of the same type and country across business
+entities, searching master records and pending requests. Similar names (score 88
+or higher), matching registration numbers, item codes, or cost center codes block
+submission. Identifier comparison ignores case, spacing, and punctuation. Exact
+normalized email or address matches produce review warnings without blocking,
+because contacts and premises may be shared. Matching reasons are displayed without
+revealing the matched field values. Intake fields are checked on submission; the
+name preview also uses any form values already submitted. Final approval repeats
+the blocking checks against master records. Existing approved requests backfill
+their master records' intake details on startup; older standalone masters without
+those details can only be matched by name until their details are supplied.
+
+Requestors can check **Delete…** on their own request's row in the Dashboard table
+before a master record is created. A dialog identifies the request and explains
+the effect. Choose **Delete request** to confirm, or **Cancel** (or close the dialog)
+to keep it. Deletion hides the request from active views,
+cancels outstanding approvals and notifications, and retains audit history.
+Approved requests with master records cannot be deleted.
+
 1. Select **Requestor**, open **New MDM Request**, and choose a record type.
 2. Enter the country and record name. Matching master records and pending
    requests appear automatically when you finish editing the name, or change
@@ -35,6 +65,12 @@ Only demo mode inserts sample data.
    decisions are rejected in the service layer. Rejection cancels remaining
    checks. All approvals must pass before exactly one local master record is
    created. This prototype does not send data to SAP.
+   Open an approved request and click **Prepare simulated SAP export**, then
+   **Download simulated SAP JSON** to prepare its handoff file. Preparation is
+   audited with a timestamp; it does not confirm download or SAP receipt. The file
+   includes a stable handoff reference, local master ID, identity, and standardized
+   intake fields. Protected financial fields are excluded. This demo JSON format
+   requires mapping to a target SAP interface before real integration.
 5. Return to **Requestor** and open **Dashboard**. Click a request row to see
    status, completed checks, outstanding roles, due dates, reasons, questions,
    and timestamped audit history. Reply to an approver's question directly in

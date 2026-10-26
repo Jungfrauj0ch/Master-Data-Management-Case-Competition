@@ -82,22 +82,31 @@ def validate_request(data: RequestData) -> str | None:
     return None
 
 
+def describe_match(match) -> str:
+    return (f"{match.name} ({match.entity}, {match.country}; {match.source} #{match.id}; "
+            f"matched on: {', '.join(match.reasons)})")
+
+
 def find_duplicates(session, data: RequestData) -> tuple[str, ...]:
     return tuple(
-        f"{match.name} ({match.entity}, {match.country}; {match.source} #{match.id}, {match.score}% match)"
-        for match in find_matches(session, data.record_type, data.name, data.country)
+        describe_match(match)
+        for match in find_matches(session, data.record_type, data.name, data.country, data.details)
+        if match.blocking
     )
 
 
-def search_duplicates(actor: Actor, record_type: str, name: str, country: str) -> list[dict]:
+def search_duplicates(actor: Actor, record_type: str, name: str, country: str,
+                      details: dict[str, str] | None = None) -> list[dict]:
     if country not in actor.countries:
         raise PermissionError("Country is outside your access scope.")
     with SessionLocal() as session:
         # Cross-entity discovery exposes only identity metadata, never request payloads.
         return [
             {"Source": match.source, "ID": match.id, "Name": match.name,
-             "Country": match.country, "Entity": match.entity, "Match %": match.score}
-            for match in find_matches(session, record_type, name, country)
+             "Country": match.country, "Entity": match.entity, "Match %": match.score,
+             "Matched on": ", ".join(match.reasons),
+             "Action": "Blocks submission" if match.blocking else "Review shared contact details"}
+            for match in find_matches(session, record_type, name, country, details)
         ]
 
 
@@ -114,7 +123,8 @@ def submit_request(data: RequestData, actor: Actor) -> SubmissionResult:
         # Encrypt before starting the transaction. Never store plaintext as a fallback.
         ciphertext = encrypt_sensitive(sensitive) if sensitive else None
         with write_session() as session:
-            duplicates = find_duplicates(session, data)
+            matches = find_matches(session, data.record_type, data.name, data.country, data.details)
+            duplicates = tuple(describe_match(match) for match in matches if match.blocking)
             if duplicates:
                 return SubmissionResult(False, "Possible duplicate detected. Check existing records before proceeding.",
                                         duplicates=duplicates)
@@ -133,7 +143,8 @@ def submit_request(data: RequestData, actor: Actor) -> SubmissionResult:
             audit(session, request.id, "REQUEST_CREATED", actor.id,
                   "Standard intake validated; parallel approval checks opened.")
             request_id = request.id
-        return SubmissionResult(True, "Request submitted successfully.", request_id=request_id)
+        return SubmissionResult(True, "Request submitted successfully.", request_id=request_id,
+                                duplicates=tuple(describe_match(match) for match in matches if not match.blocking))
     except SecurityConfigurationError as exc:
         return SubmissionResult(False, str(exc))
     except SQLAlchemyError:
@@ -145,6 +156,7 @@ def list_requests(actor: Actor) -> list[dict]:
     with SessionLocal() as session:
         requests = session.scalars(select(MdmRequest).where(
             MdmRequest.country.in_(actor.countries), MdmRequest.business_entity.in_(actor.entities),
+            MdmRequest.status != "Deleted",
         ).order_by(MdmRequest.id.desc())).all()
         steps = session.scalars(select(ApprovalStep).join(MdmRequest).where(
             MdmRequest.country.in_(actor.countries), MdmRequest.business_entity.in_(actor.entities),
@@ -165,6 +177,29 @@ def list_requests(actor: Actor) -> list[dict]:
              "Created (UTC)": request.created_at.strftime("%Y-%m-%d %H:%M")}
             for request in requests if can_view(actor, request)
         ]
+
+
+def list_reply_requests(actor: Actor) -> list[dict]:
+    """Outstanding questions remain actionable even after notifications are read."""
+    if "requestor" not in actor.roles:
+        return []
+    with SessionLocal() as session:
+        rows = session.execute(select(MdmRequest, Clarification).join(
+            Clarification, Clarification.request_id == MdmRequest.id,
+        ).join(ApprovalStep, (ApprovalStep.request_id == MdmRequest.id)
+               & (ApprovalStep.role == Clarification.role)).where(
+            MdmRequest.requestor == actor.id, MdmRequest.status == "Pending Approval",
+            MdmRequest.country.in_(actor.countries), MdmRequest.business_entity.in_(actor.entities),
+            Clarification.answered_at.is_(None), ApprovalStep.status == "Needs Clarification",
+        ).order_by(Clarification.asked_at, Clarification.id)).all()
+        requests = {}
+        for request, question in rows:
+            item = requests.setdefault(request.id, {"ID": request.id, "Name": request.name,
+                                                   "Questions": 0, "Roles": []})
+            item["Questions"] += 1
+            if question.role not in item["Roles"]:
+                item["Roles"].append(question.role)
+        return list(requests.values())
 
 
 def get_request(request_id: int, actor: Actor) -> dict:
@@ -197,6 +232,25 @@ def get_request(request_id: int, actor: Actor) -> dict:
             "audit": [{"Time (UTC)": log.created_at, "Action": log.action,
                        "Actor": log.actor, "Details": log.details} for log in logs],
         }
+
+
+def delete_request(request_id: int, actor: Actor) -> None:
+    """Remove an owned request from active views while retaining its audit trail."""
+    with write_session() as session:
+        request = session.get(MdmRequest, request_id)
+        require_view(actor, request)
+        if "requestor" not in actor.roles or request.requestor != actor.id:
+            raise PermissionError("Only the requestor can delete their own request.")
+        if request.status == "Approved" or request.master_record_id is not None:
+            raise ValueError("Approved requests with master records cannot be deleted.")
+        if request.status == "Deleted":
+            raise ValueError("This request has already been deleted.")
+        request.status = "Deleted"
+        for step in session.scalars(select(ApprovalStep).where(ApprovalStep.request_id == request_id)):
+            if step.status in {"Pending", "Needs Clarification"}:
+                step.status = "Cancelled"
+        audit(session, request_id, "REQUEST_DELETED", actor.id,
+              "Request removed from active views by its requestor; history retained.")
 
 
 def export_audit(request_id: int, actor: Actor) -> str:
