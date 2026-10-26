@@ -207,6 +207,49 @@ def render_overview(orders, confirmed, selected_countries, selected_products):
     else:
         st.caption("A growth percentage is not meaningful when the previous month has zero confirmed purchases.")
 
+    # Growth for every selected country-product pair (15 rows with all filters selected).
+    # Always compare the same final two reporting months, including combinations
+    # with zero orders, rather than silently skipping months with no activity.
+    st.markdown("### Country-by-product volume and growth")
+    st.caption(
+        f"Reporting period: {index[0]:%b %Y}–{index[-1]:%b %Y}. "
+        "Growth = (latest-month confirmed units − previous-month confirmed units) "
+        "÷ previous-month confirmed units × 100. "
+        "An undefined percentage is shown as 'N/A' when the previous month has zero units."
+    )
+    totals = filtered.groupby(["country", "product"])["quantity"].sum()
+    previous_month = index[-2]
+    latest_month = index[-1]
+    previous_totals = filtered.loc[filtered["month"].eq(previous_month)].groupby(
+        ["country", "product"]
+    )["quantity"].sum()
+    latest_totals = filtered.loc[filtered["month"].eq(latest_month)].groupby(
+        ["country", "product"]
+    )["quantity"].sum()
+    growth_rows = []
+    for country in selected_countries:
+        for product in selected_products:
+            key = (country, product)
+            previous_units = int(previous_totals.get(key, 0))
+            latest_units = int(latest_totals.get(key, 0))
+            growth = ((latest_units - previous_units) / previous_units * 100
+                      if previous_units > 0 else None)
+            growth_rows.append({
+                "Country": country,
+                "Product": product,
+                "2025 confirmed units": int(totals.get(key, 0)),
+                f"{previous_month:%b %Y} units": previous_units,
+                f"{latest_month:%b %Y} units": latest_units,
+                "Latest monthly growth": f"{growth:+.1f}%" if growth is not None else "N/A",
+            })
+    growth_table = pd.DataFrame(growth_rows).sort_values(["Country", "Product"])
+    st.dataframe(growth_table, hide_index=True, use_container_width=True)
+    st.caption(
+        "These are confirmed-order unit volumes, not sales revenue or MDM setup requests. "
+        "Growth compares the two latest months, not year-over-year performance. "
+        "All data and suggested decisions are illustrative."
+    )
+
     # Actual management takeaways come from the current filtered dataset,
     # never a hard-coded ranking or a claim of realised business growth.
     top_country = by_country.iloc[0]
@@ -268,6 +311,24 @@ def render_forecasts(confirmed):
     x.metric("Six-month average", f"{next_forecasts['Six-month average']:,.0f} units")
     y.metric("Trend-aware", f"{next_forecasts['Trend-aware']:,.0f} units")
     st.success(f"**Preliminary recommendation:** {preferred}, approximately **{next_forecasts[preferred]:,.0f} units**. It had the lower error in this three-month synthetic-data backtest.")
+    if baseline_error < trend_error:
+        st.info(
+            f"**What the comparison means:** The simpler six-month average was more accurate "
+            f"than the trend-aware method for {country}, {product} in this backtest "
+            f"({baseline_error:,.1f} vs {trend_error:,.1f} units of mean absolute error). "
+            "The benefit of the analytics is to compare methods objectively; this example "
+            "does not demonstrate an accuracy improvement from the trend-aware model."
+        )
+    elif trend_error < baseline_error:
+        st.info(
+            f"**What the comparison means:** The trend-aware method performed better for "
+            f"{country}, {product} in this backtest "
+            f"({trend_error:,.1f} vs {baseline_error:,.1f} units of mean absolute error). "
+            "This is preliminary evidence from only three test months, not a guarantee of future accuracy."
+        )
+    else:
+        st.info("**What the comparison means:** Both methods had the same backtested error. "
+                "The simpler six-month average is selected as the tie-breaker.")
     st.caption("A forecasting estimate is not a purchase order or an inventory target. Confirm with real demand, lead times, and stock constraints.")
     with st.expander("Show forecast calculations"):
         st.dataframe(test, hide_index=True)
