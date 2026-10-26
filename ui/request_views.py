@@ -468,17 +468,32 @@ def request_detail(request_id: int, actor: Actor, allow_decision=False):
                 st.write(value)
     if request["status"] == "Approved" and request["master_record_id"]:
         st.write("**Simulated SAP handoff**")
-        st.caption("Prepare this approved record for a simulated SAP handoff.")
+        st.caption(
+            "Prepare and download a JSON file for simulated SAP Business One handoff. "
+            "No live SAP connection is made."
+        )
+        # Preserve the prepared export through the dashboard's 5-second refresh.
+        # Include the signed-in identity in the key to avoid sharing an export
+        # between demo identities in the same Streamlit session.
+        export_key = f"sap_export_payload_{actor.id}_{request_id}"
         if st.button("Prepare simulated SAP export", key=f"sap_export_{request_id}"):
             from services.sap_service import export_sap_handoff
 
             try:
-                contents = export_sap_handoff(request_id, actor)
-                st.download_button("Download simulated SAP JSON", contents,
-                                   f"request-{request_id}-sap-simulation.json",
-                                   "application/json", on_click="ignore")
+                st.session_state[export_key] = export_sap_handoff(request_id, actor)
             except (ValueError, PermissionError) as exc:
+                st.session_state.pop(export_key, None)
                 st.error(str(exc))
+
+        if export_key in st.session_state:
+            st.download_button(
+                "Download simulated SAP JSON",
+                data=st.session_state[export_key],
+                file_name=f"request-{request_id}-sap-simulation.json",
+                mime="application/json",
+                key=f"sap_download_{request_id}",
+                on_click="ignore",
+            )
     if request["status"] == "Needs Update":
         st.warning("This legacy submission lacks the standardized intake fields. Submit a new request using the intake form.")
     if request["steps"]:
