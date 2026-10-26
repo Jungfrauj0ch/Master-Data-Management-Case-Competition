@@ -1,7 +1,7 @@
 # Lives Group Master Data Management
 
 A Streamlit case-competition prototype with standardized intake, duplicate discovery,
-parallel approvals, request tracking, in-app notifications, and an audit trail.
+parallel approvals, request tracking, request conversations, and an audit trail.
 Python 3.11 or newer is required.
 
 ## Run
@@ -16,18 +16,49 @@ data only: switching a demo identity is not authentication. The demo seeds
 National University Hospital for duplicate-search demonstrations (try `NUH`).
 Only demo mode inserts sample data.
 
+## Regional forecasting and sales intelligence
+
+Open **Regional Sales Analytics → Forecasting** for monthly forecasts of Products
+A, B and C across the five illustrative countries. The dashboard compares a
+six-month average, robust damped trend, damped Holt and ARIMA on matching 1-, 3-,
+6- or 12-month test horizons. **Trend outlook** defaults to a robust projection of
+recent momentum that eases over time. **Best historical fit** uses the model
+selected by historical testing. Regional totals sum the underlying forecasts.
+The page separates **Outlook & actions** and **Regional priorities**, with a
+small **ⓘ** button for a brief model explanation. Recommendation cards identify supply reviews, demand
+review frequency, and sales or retention follow-ups, with an owner for each.
+Monthly and regional CSV exports include the forecast view and low/high scenarios.
+**Sales Insights** ranks missing-product reviews using reconciled identities
+and same-country peer adoption, alongside declining-account follow-ups.
+
+The bundled data contains only 12 synthetic months. The trend outlook is a
+planning projection; improved long-range accuracy is not established. Best
+historical fit retains the baseline when fewer than three matched test origins
+are available. Low/high scenarios reflect historical variability and are not
+calibrated confidence intervals. No real accuracy, productivity or sales uplift
+is claimed. Forecasts follow the dataset cutoff, not the current date. Input
+months must be complete; missing orders are treated as zero.
+
+See [the case answer](regional_analytics/CASE_ANSWER.md) for the proposed business
+approach, reference-project adaptation, pilot design and success measures.
+The implementation is original and draws on the workflow described in
+[panyashree12/Sales-Forecasting](https://github.com/panyashree12/Sales-Forecasting).
+
 ## Workflow
 
-The requestor Dashboard highlights unanswered approver questions in a compact
-**Action needed** alert. **Open Messages** opens the dedicated **Messages** page;
+The Dashboard and Approval Workflow show a compact **You have X notifications**
+card with a **Go to Messages** button inside it. The card counts unread updates
+and highlights unanswered approver questions. The button opens the relevant
+conversation, prioritizing requests that need a reply.
 **Reply to request** in a record's details opens that specific conversation.
-Every identity has a **Messages** page containing its authorized requests,
-conversations, and notifications. Assigned approvers send questions there;
+Every identity has a **Messages** page containing its authorized requests and
+conversations. Assigned approvers send questions there;
 requestors reply there, and auditors can read conversations within their scope.
 **Message requestor** opens a conversation from Approval Workflow, and **Review
 request** returns to the approval decision. Dashboard and Approval Workflow show
-compact message alerts rather than the full inbox. Reading notifications does not dismiss unanswered questions;
-the action alert clears when the questions are answered or the request is closed.
+alerts for unanswered questions. The action alert clears when the questions are
+answered or the request is closed. Full notification inboxes and read controls
+are not displayed.
 
 Duplicate detection compares records of the same type and country across business
 entities, searching master records and pending requests. Similar names (score 88
@@ -91,8 +122,8 @@ fields are not encrypted.
 
 An approver with a pending check can send a question from the request detail.
 That check becomes **Needs Clarification** and remains visible in the queue;
-independent checks continue. The requestor receives an in-app notification and
-can reply from the Dashboard by clicking the corresponding request row. Only
+independent checks continue. The requestor sees a reply-needed alert and can
+reply from Messages or open the conversation from the Dashboard request row. Only
 the original requestor, within their access scope, can reply.
 
 The reply notifies the approver, returns their check to **Pending**, and restarts
@@ -104,13 +135,12 @@ questions read-only. Questions, replies, authors, and UTC timestamps remain in
 the request history and audit export. Keep protected financial values in their
 designated encrypted fields, not in clarification messages.
 
-## Notifications and deadlines
+## Deadlines and refresh
 
-The app persists notifications immediately when a request is created or a
-decision is recorded. Role inboxes respect country/entity scopes, and read
-receipts are tracked per user. Requestors receive decision and overdue updates.
+The app retains notification records for workflow events and reminders and shows
+a compact unread count. Full notification inboxes and read controls are not shown.
 Dashboard and Approval Workflow refresh their requests, decisions, due dates,
-and notifications automatically every five seconds while the page is open.
+and question alerts automatically every five seconds while the page is open.
 The selected request stays selected while it is still available, and decision
 drafts are preserved while that approval remains pending. Completed checks
 leave the approval queue automatically. No refresh button is required.

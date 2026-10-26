@@ -77,6 +77,7 @@ def test_ui_submission_approval_and_tracking():
     assert not app.exception
     click_request(app, "dashboard_request_rows", request_id)
     assert get_request(request_id, requestor)["status"] == "Approved"
+    assert not any(caption.value.startswith(("✓ ", "✕ ", "○ ")) for caption in app.caption)
     assert not any("Local master record" in message.value for message in app.success)
 
 
@@ -166,7 +167,7 @@ def test_all_review_identities_have_a_separate_messages_page(identity):
     widget(app.radio, "Navigation").set_value("Messages").run()
     assert not app.exception
     assert widget(app.selectbox, "Request").value == result.request_id
-    assert any(expander.label.startswith("Notifications") for expander in app.expander)
+    assert not any(expander.label.startswith("Notifications") for expander in app.expander)
     if identity in {"Auditor", "Finance", "Compliance"}:
         assert not any(item.label == "Clarifying question *" for item in app.text_area)
     else:
@@ -387,13 +388,10 @@ def test_row_click_question_and_requestor_reply():
 
     widget(app.selectbox, "Demo identity").set_value("Requestor").run()
     widget(app.radio, "Navigation").set_value("Dashboard").run()
-    assert any("Action needed: 1 approver question" in message.value for message in app.warning)
-    widget(app.button, "Open Messages").click().run()
+    assert any("You have " in message.value and "notification" in message.value for message in app.markdown)
+    assert any("1 approver question needs your reply" in message.value for message in app.caption)
+    widget(app.button, "Go to Messages").click().run()
     assert widget(app.radio, "Navigation").value == "Messages"
-    assert widget(app.selectbox, "Request").value == request_id
-    notification = next(button for button in app.button if button.label == f"View request #{request_id}")
-    notification.click().run()
-    assert not app.exception
     assert widget(app.selectbox, "Request").value == request_id
     widget(app.radio, "Navigation").set_value("Dashboard").run()
     widget(app.multiselect, "Filter by status").set_value(["Pending Approval"]).run()
@@ -403,7 +401,6 @@ def test_row_click_question_and_requestor_reply():
     widget(app.button, f"Reply to request #{request_id}").click().run()
     assert widget(app.radio, "Navigation").value == "Messages"
     assert widget(app.selectbox, "Request").value == request_id
-    widget(app.button, "Mark notifications read").click().run()
     assert any("1 approver question needs your reply" in message.value for message in app.warning)
     assert not app.exception
     assert any(item.value == "Which product specification should we use?" for item in app.text)

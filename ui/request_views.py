@@ -12,7 +12,7 @@ from services.access_service import Actor
 from services.approval_service import decide_request, reveal_sensitive
 from services.clarification_service import answer_clarification, ask_clarification
 from services.duplicate_service import normalize_name
-from services.notification_service import as_utc, list_notifications, mark_notifications_read, send_due_reminders
+from services.notification_service import as_utc, list_notifications, send_due_reminders
 from services.request_service import (
     RequestData, delete_request, export_audit, get_request, list_reply_requests, list_requests, search_duplicates, submit_request,
 )
@@ -231,7 +231,6 @@ def clarification_history(request: dict, actor: Actor):
     if not request["clarifications"]:
         return
     st.write("**Messages from your approvers**" if request["requestor"] == actor.id else "**Questions and replies**")
-    st.caption("Keep bank details and credit terms in their protected fields, not in questions or replies.")
     for item in sorted(request["clarifications"], key=lambda item: item["answered_at"] is not None):
         with st.container(border=True):
             if item["answered_at"] is None and request["status"] == "Pending Approval" and request["requestor"] == actor.id:
@@ -340,20 +339,21 @@ def question_form(request: dict, actor: Actor):
 
 def reply_alerts(actor: Actor):
     requests = list_reply_requests(actor)
-    unread = sum(not item["Read"] for item in list_notifications(actor))
+    unread = [item for item in list_notifications(actor) if not item["Read"]]
     if not requests and not unread:
         return
     count = sum(item["Questions"] for item in requests)
-    summary, action = st.columns([3, 1], vertical_alignment="center")
-    with summary:
-        if count:
-            st.warning(f"Action needed: {count} approver {'question needs' if count == 1 else 'questions need'} your reply.",
-                       icon=":material/chat:")
+    with st.container(border=True):
+        summary, action = st.columns([3, 1], vertical_alignment="center")
+        if unread:
+            summary.markdown(f"**You have {len(unread)} notification{'s' if len(unread) != 1 else ''}**")
         else:
-            st.info(f"You have {unread} unread {'update' if unread == 1 else 'updates'} in Messages.",
-                    icon=":material/notifications:")
-    if action.button("Open Messages", type="primary", key="dashboard_request_open_messages"):
-        go_to_messages(requests[0]["ID"] if requests else None)
+            summary.markdown(f"**You have {count} question{'s' if count != 1 else ''} to answer**")
+        if count:
+            summary.caption(f"{count} approver {'question needs' if count == 1 else 'questions need'} your reply.")
+        if action.button("Go to Messages", type="primary", icon=":material/chat:",
+                         key="dashboard_request_open_messages", width="stretch"):
+            go_to_messages(requests[0]["ID"] if requests else unread[0]["Request"])
 
 
 @st.fragment(run_every=LIVE_REFRESH_SECONDS)
@@ -395,37 +395,8 @@ def messages(actor: Actor):
                 st.rerun(scope="app")
         else:
             st.info("No requests to show yet.")
-        st.divider()
-        inbox(actor)
     except (PermissionError, SQLAlchemyError):
         st.error("Messages could not be refreshed. Please try again.")
-
-
-def inbox(actor: Actor):
-    send_due_reminders()
-    notifications = list_notifications(actor)
-    unread = [item for item in notifications if not item["Read"]]
-    if unread:
-        st.info(f"You have {len(unread)} unread {'update' if len(unread) == 1 else 'updates'}. Open Notifications to review them.",
-                icon=":material/notifications_active:")
-    with st.expander(f"Notifications ({len(unread)} unread)", expanded=bool(unread)):
-        st.caption(f"Updates automatically every {LIVE_REFRESH_SECONDS} seconds.")
-        if notifications:
-            for item in unread[:5]:
-                with st.container(border=True):
-                    st.badge("New", color="blue")
-                    st.text(item["Message"])
-                    st.caption(f"Request #{item['Request']} · {item['Created (UTC)'].strftime('%d %b %Y, %H:%M')} UTC")
-                    if st.button(f"View request #{item['Request']}", key=f"dashboard_request_message_{item['ID']}"):
-                        go_to_messages(item["Request"])
-            if len(unread) > 5:
-                st.caption(f"{len(unread) - 5} more unread updates are listed below.")
-            with st.expander("All notification history"):
-                st.dataframe(notifications[:50], hide_index=True, width="stretch")
-            if unread:
-                st.button("Mark notifications read", on_click=mark_notifications_read, args=(actor,))
-        else:
-            st.info("No notifications.")
 
 
 def request_detail(request_id: int, actor: Actor, allow_decision=False):
@@ -505,12 +476,6 @@ def request_detail(request_id: int, actor: Actor, allow_decision=False):
         st.write("**Approval progress**")
         st.progress(approved_count / total_count if total_count else 0,
                     text=f"{approved_count} of {total_count} checks approved")
-        for step in steps:
-            role_name = APPROVAL_ROLES.get(step["Role"], step["Role"].replace("_", " ").title())
-            status = step["Status"]
-            symbol = "✓" if status == "Approved" else "✕" if status == "Rejected" else "○"
-            st.caption(f"{symbol} {role_name}: {status}")
-
         st.write("**Parallel approval checks**")
         st.dataframe(style_status_rows(steps), hide_index=True, width="stretch")
         now = datetime.now(timezone.utc)
@@ -600,10 +565,6 @@ def operational_performance(actor: Actor, requests: list[dict]):
     cols[1].metric("Approval completion rate", f"{completed_count / len(sample):.0%}")
     cols[2].metric("Overdue approval checks", overdue_count)
     cols[3].metric("Pending approval checks", sum(pending_by_role.values()))
-    st.caption("Computed from visible demo requests, not actual Lives Group operations. "
-               "Approval time runs from request creation to last recorded approval. "
-               "Completion rate = approved requests / visible requests (including open requests). "
-               "Clarification checks count as outstanding; only pending checks past their deadline count as overdue.")
     if pending_by_role:
         st.write("**Outstanding checks by approving role**")
         summary = pd.DataFrame([{"Role": role, "Outstanding checks": count}
@@ -617,7 +578,6 @@ def operational_performance(actor: Actor, requests: list[dict]):
 
 def _dashboard(actor: Actor):
     st.header("MDM Overview")
-    st.caption(f"Requests and notifications update automatically every {LIVE_REFRESH_SECONDS} seconds.")
     render_feedback()
     send_due_reminders()
     reply_alerts(actor)
@@ -627,7 +587,6 @@ def _dashboard(actor: Actor):
     columns[1].metric("Pending approvals", sum(item["Status"] == "Pending Approval" for item in requests))
     columns[2].metric("Approved requests", sum(item["Status"] == "Approved" for item in requests))
     operational_performance(actor, requests)
-    inbox(actor)
     if not requests:
         st.info("No requests visible to your account.")
         return

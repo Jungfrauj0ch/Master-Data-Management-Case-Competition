@@ -46,7 +46,7 @@ def current_actor() -> Actor:
 
     mode = os.environ.get("MDM_AUTH_MODE", "demo")
     if mode == "demo":
-        st.warning("Demo mode: identities can be switched. Use synthetic data only.")
+        st.warning("Demo mode: identities can be switched.")
         profile = st.sidebar.selectbox("Demo identity", tuple(DEMO_USERS), key="demo_identity")
         return DEMO_USERS[profile]
     if mode != "oidc":

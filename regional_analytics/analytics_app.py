@@ -1,7 +1,7 @@
 """LivesFlow | Regional purchasing intelligence (synthetic-data prototype).
 
-Run by itself: python -m streamlit run analytics_app.py
-Integrate into existing MDM app: from ui.regional_analytics import render_analytics
+Run by itself: python -m streamlit run regional_analytics/analytics_app.py
+Integrate into existing MDM app: from regional_analytics.analytics_app import render_analytics
                                  render_analytics()
 
 Expected files beside this module in data/: purchase_orders.csv, customers.csv,
@@ -14,7 +14,12 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 import plotly.express as px
+import plotly.graph_objects as go
 import streamlit as st
+
+from regional_analytics.forecasting import BASELINE, TREND, regional_forecast
+from regional_analytics.recommendations import regional_priorities, strategic_recommendations
+from regional_analytics.sales_opportunities import rank_opportunities
 
 PRODUCTS = ("Product A", "Product B", "Product C")
 REQUIRED_ORDERS = {
@@ -67,7 +72,7 @@ def load_and_validate(data_dir: Path):
     orders["quantity"] = pd.to_numeric(orders["quantity"], errors="coerce")
     if orders["order_date"].isna().any() or orders["quantity"].isna().any():
         raise ValueError("Invalid order dates or quantities found.")
-    if (orders["quantity"] <= 0).any():
+    if not np.isfinite(orders["quantity"]).all() or (orders["quantity"] <= 0).any():
         raise ValueError("Order quantities must be positive.")
     if not set(orders["product"]).issubset(PRODUCTS):
         raise ValueError("Unexpected product label; expected Product A, B or C.")
@@ -136,32 +141,10 @@ def declining_customers(data: pd.DataFrame, threshold: float = -30.0) -> pd.Data
     return result.sort_values("Change (%)").reset_index(drop=True)
 
 
-def forecast_comparison(data: pd.DataFrame, country: str, product: str):
-    """Rolling one-step-backtests, last three months, six-month history per model."""
-    selection = data.loc[(data["country"] == country) & (data["product"] == product)]
-    # Use dataset-wide reporting window, not just months with an order.
-    all_months = pd.date_range(data["month"].min(), data["month"].max(), freq="MS")
-    series = selection.groupby("month")["quantity"].sum().reindex(all_months, fill_value=0)
-    values = series.to_numpy(dtype=float)
-    if len(values) < 9:
-        return None
-    results = []
-    for index in range(len(values) - 3, len(values)):
-        recent = values[index - 6:index]
-        baseline = float(np.mean(recent))
-        slope, intercept = np.polyfit(np.arange(6), recent, 1)
-        trend = max(0.0, float(slope * 6 + intercept))
-        results.append({"Month": series.index[index], "Actual": values[index],
-                        "Six-month average": baseline, "Trend-aware": trend})
-    test = pd.DataFrame(results)
-    baseline_error = float(np.mean(np.abs(test["Actual"] - test["Six-month average"])))
-    trend_error = float(np.mean(np.abs(test["Actual"] - test["Trend-aware"])))
-    recent = values[-6:]
-    slope, intercept = np.polyfit(np.arange(6), recent, 1)
-    next_forecasts = {"Six-month average": float(np.mean(recent)),
-                      "Trend-aware": max(0.0, float(slope * 6 + intercept))}
-    preferred = "Six-month average" if baseline_error <= trend_error else "Trend-aware"
-    return test, baseline_error, trend_error, next_forecasts, preferred, all_months[-1] + pd.DateOffset(months=1)
+@st.cache_data(show_spinner=False, max_entries=8)
+def forecast_comparison(orders: pd.DataFrame, horizon: int, approach: str = "trend"):
+    """Cache model fitting; changing country/product only filters the result."""
+    return regional_forecast(orders, horizon, approach)
 
 
 def render_overview(orders, confirmed, selected_countries, selected_products):
@@ -213,8 +196,6 @@ def render_overview(orders, confirmed, selected_countries, selected_products):
     st.markdown("### Country-by-product volume and growth")
     st.caption(
         f"Reporting period: {index[0]:%b %Y}–{index[-1]:%b %Y}. "
-        "Growth = (latest-month confirmed units − previous-month confirmed units) "
-        "÷ previous-month confirmed units × 100. "
         "An undefined percentage is shown as 'N/A' when the previous month has zero units."
     )
     totals = filtered.groupby(["country", "product"])["quantity"].sum()
@@ -243,11 +224,10 @@ def render_overview(orders, confirmed, selected_countries, selected_products):
                 "Latest monthly growth": f"{growth:+.1f}%" if growth is not None else "N/A",
             })
     growth_table = pd.DataFrame(growth_rows).sort_values(["Country", "Product"])
-    st.dataframe(growth_table, hide_index=True, use_container_width=True)
+    st.dataframe(growth_table.style.map(change_style, subset=["Latest monthly growth"]),
+                 hide_index=True, use_container_width=True)
     st.caption(
-        "These are confirmed-order unit volumes, not sales revenue or MDM setup requests. "
-        "Growth compares the two latest months, not year-over-year performance. "
-        "All data and suggested decisions are illustrative."
+        "Confirmed units and growth between the latest two months. Illustrative data."
     )
 
     # Actual management takeaways come from the current filtered dataset,
@@ -284,59 +264,151 @@ def render_overview(orders, confirmed, selected_countries, selected_products):
         st.dataframe(excluded, hide_index=True)
 
 
-def render_forecasts(confirmed):
-    st.subheader("Forecast demand — compare methods fairly")
-    st.write("Both methods forecast each test month using **only the six preceding months**. Lower mean absolute error means smaller average mistakes.")
-    a, b = st.columns(2)
-    country = a.selectbox("Country", sorted(confirmed["country"].unique()), key="analytics_fc_country")
-    product = b.selectbox("Product", sorted(confirmed["product"].unique()), key="analytics_fc_product")
-    comparison = forecast_comparison(confirmed, country, product)
-    if comparison is None:
-        st.warning("At least nine consecutive reporting months are required for this comparison.")
+def forecast_chart(history, future, show_baseline=False):
+    """Keep observed orders, projection and scenario assumptions visually distinct."""
+    fig = go.Figure()
+    fig.add_trace(go.Scatter(x=future["Month"], y=future["Lower scenario"], mode="lines",
+                             line={"width": 0}, showlegend=False, hoverinfo="skip"))
+    fig.add_trace(go.Scatter(x=future["Month"], y=future["Upper scenario"], mode="lines",
+                             line={"width": 0}, fill="tonexty", fillcolor="rgba(37,99,235,0.10)",
+                             name="Planning scenarios", hoverinfo="skip"))
+    fig.add_trace(go.Scatter(x=history.index, y=history.values, name="Recorded orders",
+                             mode="lines+markers", line={"color": "#64748B", "width": 2},
+                             marker={"size": 5}, hovertemplate="%{y:,.0f} units<extra>Recorded orders</extra>"))
+    fig.add_trace(go.Scatter(
+        x=[history.index[-1], *future["Month"].tolist()],
+        y=[history.iloc[-1], *future["Forecast units"].tolist()], name="Demand outlook",
+        mode="lines+markers", line={"color": "#2563EB", "width": 3, "dash": "dash"},
+        marker={"size": 6}, hovertemplate="%{y:,.0f} units<extra>Demand outlook</extra>"))
+    if show_baseline:
+        fig.add_trace(go.Scatter(x=future["Month"], y=future["Baseline units"],
+                                 name="Six-month average", mode="lines",
+                                 line={"color": "#D97706", "width": 2, "dash": "dot"}))
+    fig.add_vline(x=future["Month"].iloc[0].timestamp() * 1000,
+                  line_dash="dot", line_color="#94A3B8", opacity=0.5)
+    fig.update_layout(height=380, margin={"l": 0, "r": 0, "t": 35, "b": 0},
+                      hovermode="x unified", legend={"orientation": "h", "y": 1.15, "x": 0},
+                      paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)")
+    fig.update_xaxes(tickformat="%b %y", showgrid=False, title=None)
+    fig.update_yaxes(title="Monthly units", rangemode="tozero", gridcolor="rgba(148,163,184,0.15)")
+    return fig
+
+
+def change_style(value):
+    """Use the same increase/decrease colors in analytics tables."""
+    try:
+        change = float(str(value).replace("%", "").replace(",", ""))
+    except (TypeError, ValueError):
+        return ""
+    if not np.isfinite(change) or change == 0:
+        return ""
+    if change > 0:
+        return "color: #166534; background-color: #dcfce7; font-weight: 600"
+    return "color: #991b1b; background-color: #fee2e2; font-weight: 600"
+
+
+def render_forecasts(orders, confirmed=None):
+    st.subheader("Demand outlook")
+    with st.container(border=True):
+        a, b, c, d = st.columns([1.1, 1, 0.8, 1.2])
+        country = a.selectbox("Country", sorted(orders["country"].unique()), key="analytics_fc_country")
+        product = b.selectbox("Product", list(PRODUCTS), key="analytics_fc_product")
+        horizon = c.selectbox("Months ahead", [1, 3, 6, 12], index=2, key="analytics_fc_horizon")
+        view = d.selectbox("Forecast view", ["Trend outlook", "Best historical fit"],
+                           key="analytics_fc_approach",
+                           help="Trend outlook projects recent momentum with a gradually easing trend. "
+                                "Best historical fit uses the model selected by historical tests and may be flat.")
+    approach = "trend" if view == "Trend outlook" else "backtest"
+    try:
+        with st.spinner("Preparing the demand outlook…"):
+            result = forecast_comparison(orders, horizon, approach)
+    except (ValueError, ImportError) as exc:
+        st.error(f"Forecast unavailable: {exc}")
         return
-    test, baseline_error, trend_error, next_forecasts, preferred, next_month = comparison
-    c1, c2 = st.columns(2)
-    c1.metric("Six-month average error", f"{baseline_error:,.1f} units")
-    c2.metric("Trend-aware error", f"{trend_error:,.1f} units")
-    st.caption("Mean absolute error, calculated over the final three historical months. This is a small test sample.")
-    long = test.melt(id_vars="Month", var_name="Series", value_name="Units")
-    fig = px.line(long, x="Month", y="Units", color="Series", markers=True,
-                  title=f"Backtest — {country}, {product}")
-    fig.update_xaxes(tickformat="%b %Y", dtick="M1")
-    fig.update_layout(hovermode="x unified")
-    st.plotly_chart(fig, use_container_width=True)
 
-    st.markdown(f"**Next-month forecast — {next_month:%B %Y}**")
-    x, y = st.columns(2)
-    x.metric("Six-month average", f"{next_forecasts['Six-month average']:,.0f} units")
-    y.metric("Trend-aware", f"{next_forecasts['Trend-aware']:,.0f} units")
-    st.success(f"**Preliminary recommendation:** {preferred}, approximately **{next_forecasts[preferred]:,.0f} units**. It had the lower error in this three-month synthetic-data backtest.")
-    if baseline_error < trend_error:
-        st.info(
-            f"**What the comparison means:** The simpler six-month average was more accurate "
-            f"than the trend-aware method for {country}, {product} in this backtest "
-            f"({baseline_error:,.1f} vs {trend_error:,.1f} units of mean absolute error). "
-            "The benefit of the analytics is to compare methods objectively; this example "
-            "does not demonstrate an accuracy improvement from the trend-aware model."
-        )
-    elif trend_error < baseline_error:
-        st.info(
-            f"**What the comparison means:** The trend-aware method performed better for "
-            f"{country}, {product} in this backtest "
-            f"({trend_error:,.1f} vs {baseline_error:,.1f} units of mean absolute error). "
-            "This is preliminary evidence from only three test months, not a guarantee of future accuracy."
-        )
-    else:
-        st.info("**What the comparison means:** Both methods had the same backtested error. "
-                "The simpler six-month average is selected as the tie-breaker.")
-    st.caption("A forecasting estimate is not a purchase order or an inventory target. Confirm with real demand, lead times, and stock constraints.")
-    with st.expander("Show forecast calculations"):
-        st.dataframe(test, hide_index=True)
+    def selected(frame):
+        return frame.loc[frame["Country"].eq(country) & frame["Product"].eq(product)]
 
+    row = selected(result["summary"]).iloc[0]
+    history = selected(result["history"]).set_index("Month")["Units"]
+    future = selected(result["forecast"])
+    start, end = future["Month"].min(), future["Month"].max()
+    context, info = st.columns([12, 1])
+    context.caption(f"{country} · {product} · {start:%b %Y}–{end:%b %Y} · Orders recorded through {history.index[-1]:%b %Y}")
+    with info.popover("ⓘ", help="About this forecast", type="tertiary"):
+        st.markdown(f"**{row['Selected model']}**")
+        if row["Selected model"] == TREND:
+            st.caption("Uses recent order trends, with changes gradually easing over time.")
+        elif row["Selected model"] == BASELINE:
+            st.caption("Uses the average monthly orders from the last six months.")
+        else:
+            st.caption("Projects demand using a model compared against past orders.")
+        st.caption("Low/high values are planning scenarios, not confidence intervals.")
+    a, b, c = st.columns(3)
+    a.metric("Expected orders over this period", f"{row['Forecast units']:,.0f} units", border=True)
+    change = row["Change vs recent average (%)"]
+    b.metric("Average per month", f"{row['Monthly forecast']:,.0f} units",
+             delta=f"{change:+.1f}% vs recent average" if pd.notna(change) else None,
+             delta_color="normal", border=True)
+    peak = future.loc[future["Forecast units"].idxmax()]
+    c.metric("Highest projected month", f"{peak['Month']:%b %Y}",
+             delta=f"{peak['Forecast units']:,.0f} units", delta_color="off", border=True)
+
+    outlook, regional = st.tabs(["Outlook & actions", "Regional priorities"])
+    with outlook:
+        show_baseline = st.checkbox("Compare with the six-month average", key="analytics_show_baseline")
+        st.plotly_chart(forecast_chart(history, future, show_baseline), use_container_width=True)
+        st.caption("Shaded area: low/high planning scenarios.")
+        st.markdown("### Strategic recommendations")
+        recommendations = strategic_recommendations(history, future, country, product, confirmed)
+        for column, category, recommendation in zip(
+            st.columns(3, gap="medium"), ("Stock planning", "Demand monitoring", "Sales follow-up"), recommendations
+        ):
+            with column, st.container(border=True):
+                st.caption(category)
+                if category == "Stock planning" and pd.notna(change):
+                    if change > 0:
+                        st.badge(f"↑ {change:.1f}%", color="green")
+                    elif change < 0:
+                        st.badge(f"↓ {abs(change):.1f}%", color="red")
+                    else:
+                        st.badge("No change", color="gray")
+                st.markdown(f"**{recommendation.title}**")
+                st.write(recommendation.action)
+                st.caption(f"Why: {recommendation.evidence}")
+                st.caption(f"Who: {recommendation.owner}")
+        if st.button("Open Sales Insights", key="analytics_forecast_sales"):
+            st.session_state["analytics_active_page"] = "sales"
+            st.rerun()
+        with st.expander("Monthly forecast and download"):
+            monthly = future[["Month", "Forecast units", "Lower scenario", "Upper scenario"]].copy()
+            monthly["Month"] = monthly["Month"].dt.strftime("%b %Y")
+            monthly = monthly.rename(columns={"Forecast units": "Expected units", "Lower scenario": "Low scenario", "Upper scenario": "High scenario"})
+            st.dataframe(monthly, hide_index=True, use_container_width=True,
+                         column_config={col: st.column_config.NumberColumn(format="%.0f")
+                                        for col in ("Expected units", "Low scenario", "High scenario")})
+            st.download_button("Download this outlook", future.to_csv(index=False).encode("utf-8"),
+                               file_name=f"synthetic_{country}_{product}_{horizon}m_{approach}.csv", mime="text/csv")
+
+    with regional:
+        st.markdown("#### Where to focus across the region")
+        st.caption(f"All 15 country–product combinations · {horizon}-month {view.lower()} · Prioritised by projected movement and recent variability.")
+        priorities = regional_priorities(result["summary"])
+        st.dataframe(priorities.style.map(change_style, subset=["Change vs recent average (%)"]),
+                     hide_index=True, use_container_width=True,
+                     column_config={
+                         "Forecast units": st.column_config.NumberColumn("Expected units", format="%.0f"),
+                         "Change vs recent average (%)": st.column_config.NumberColumn("Change vs recent average", format="%.1f%%"),
+                         "Recent variability (%)": st.column_config.NumberColumn("Recent variability", format="%.1f%%"),
+                     })
+        st.download_button("Download regional outlook", result["forecast"].to_csv(index=False).encode("utf-8"),
+                           file_name=f"synthetic_regional_{horizon}m_{approach}.csv", mime="text/csv")
+        with st.expander("Regional monthly totals"):
+            st.dataframe(result["regional"][["Month", "Forecast units"]], hide_index=True)
+            st.caption("Totals sum the underlying forecasts. Real products need comparable units of measure before quantities can be combined.")
 
 def render_sales(confirmed, customers):
-    st.subheader("Sales actions — customer identities already reconciled")
-    st.caption("Uses confirmed orders and verified synthetic customer mappings. These are leads to investigate, not guaranteed sales.")
+    st.subheader("Sales actions")
     names = customers.set_index("customer_id")["customer_name"].to_dict()
     countries = customers.set_index("customer_id")["country"].to_dict()
     leads = cross_sell_leads(confirmed)
@@ -350,8 +422,26 @@ def render_sales(confirmed, customers):
     if leads.empty:
         st.info("No missing-product candidates under these rules.")
     else:
-        st.dataframe(leads, hide_index=True, use_container_width=True)
+        with st.expander("Customer purchase coverage"):
+            st.dataframe(leads, hide_index=True, use_container_width=True)
     st.caption("Absence of a confirmed order does not establish that a product is suitable or commercially available to the customer.")
+
+    st.markdown("**Prioritised account and product reviews**")
+    opportunities = rank_opportunities(confirmed)
+    if opportunities.empty:
+        st.info("No recently active customers have missing-product leads.")
+    else:
+        opportunities.insert(1, "Customer", opportunities["Customer ID"].map(names))
+        st.dataframe(opportunities, hide_index=True, use_container_width=True,
+                     column_config={"Peer adoption (%)": st.column_config.NumberColumn(format="%.1f%%")})
+        st.download_button("Download sales review priorities", opportunities.to_csv(index=False).encode("utf-8"),
+                           file_name="synthetic_sales_review_priorities.csv", mime="text/csv")
+    st.caption(
+        "Ranked by the share of other recently active customers in the same country buying the product, "
+        "then by the account's recent purchasing volume. Uses verified customer identities. "
+        "Peer medians describe observed six-month purchases; they are not expected new sales. "
+        "Peer adoption is not a conversion probability. Review product fit, eligibility and margin before outreach."
+    )
 
     st.markdown("**Declining customers**")
     threshold = st.slider("Flag declines of at least", 10, 80, 30, 5, format="%d%%", key="analytics_decline_threshold")
@@ -362,15 +452,13 @@ def render_sales(confirmed, customers):
     else:
         declining["Customer"] = declining["Customer ID"].map(names)
         declining["Country"] = declining["Customer ID"].map(countries)
-        st.dataframe(declining, hide_index=True, use_container_width=True,
+        st.dataframe(declining.style.map(change_style, subset=["Change (%)"]),
+                     hide_index=True, use_container_width=True,
                      column_config={"Change (%)": st.column_config.NumberColumn(format="%.1f%%")})
     st.info("**Suggested action:** Ask account managers to investigate stockouts, seasonality, contract renewals, and possible customer churn before taking action.")
 
 
 def render_quality(orders, mapping, confirmed):
-    st.markdown("### The business story: one customer, fragmented records")
-    st.write("A customer can be recorded under several IDs. This splits order history and may lead to incorrect customer counts or sales follow-ups. LivesFlow's MDM workflow flags possible duplicates; **this analytics demonstration separately applies predefined, verified identity mappings** to show how reporting could improve.")
-    st.subheader("Why clean data matters")
     original = confirmed["customer_id"].nunique()
     reconciled = confirmed["canonical_customer_id"].nunique()
     total = confirmed["quantity"].sum()
@@ -408,7 +496,7 @@ def render_quality(orders, mapping, confirmed):
             st.dataframe(compare, hide_index=True)
 
     st.markdown("### Featured case — Prevent an unnecessary sales pitch")
-    st.warning("**Separate constructed example — not included in the 12-month dataset.** This example illustrates a possible failure mode, not a measured Lives Group outcome.")
+    st.caption("Illustrative example · Separate from the main dataset.")
     # Display the source records explicitly, so judges can follow the reasoning.
     illustrative_orders = pd.DataFrame([
         {"Customer ID": "C101", "Recorded name": "ABC Hospital", "Product": "Product A", "Units": 200},
@@ -450,10 +538,7 @@ def render_analytics(data_dir: Path | str | None = None):
         st.info("Put purchase_orders.csv, customers.csv and customer_mapping.csv inside the analytics data folder.")
         return
 
-    # Clear header and accessible navigation, with descriptive text in each card.
-    st.title("LivesFlow | Regional Sales Intelligence")
-    st.caption("**SYNTHETIC DEMONSTRATION — NOT ACTUAL LIVES GROUP RESULTS.** Countries and products are illustrative assumptions.")
-    st.markdown("**Cleaner customer records → clearer purchasing insights → better-informed decisions.**")
+    st.title("Regional Sales Intelligence")
 
     sections = [
         ("overview", "📊 Overview", "Regional purchasing performance"),
@@ -468,17 +553,15 @@ def render_analytics(data_dir: Path | str | None = None):
     for column, (page_id, label, subtitle) in zip(nav, sections):
         with column:
             active = st.session_state["analytics_active_page"] == page_id
-            # A bordered card gives every nav item its own readable, clickable area.
-            with st.container(border=True):
-                st.markdown(f"**{subtitle}**")
-                if st.button(
-                    label,
-                    key=f"analytics_nav_{page_id}",
-                    use_container_width=True,
-                    type="primary" if active else "secondary",
-                ):
-                    st.session_state["analytics_active_page"] = page_id
-                    st.rerun()
+            if st.button(
+                label,
+                key=f"analytics_nav_{page_id}",
+                help=subtitle,
+                use_container_width=True,
+                type="primary" if active else "secondary",
+            ):
+                st.session_state["analytics_active_page"] = page_id
+                st.rerun()
     st.divider()
 
     selected_page = st.session_state["analytics_active_page"]
@@ -496,22 +579,19 @@ def render_analytics(data_dir: Path | str | None = None):
         )
         render_overview(orders, confirmed, selected_countries, selected_products)
     elif selected_page == "forecast":
-        st.header("Demand Forecasting")
-        st.write("Test two practical forecasting approaches before making a planning recommendation.")
-        render_forecasts(confirmed)
+        render_forecasts(orders, confirmed)
     elif selected_page == "sales":
         st.header("Sales Insights")
         st.write("Prioritise follow-ups using reconciled customer identities, not duplicate records.")
         render_sales(confirmed, customers)
     else:
         st.header("Data Quality & Business Value")
-        st.write("See how verified customer identities improve reporting without inventing extra sales.")
+        st.write("See how verified customer matches improve reporting.")
         render_quality(orders, mapping, confirmed)
 
     st.divider()
     st.caption(
-        "**Decision guidance:** Validate demo patterns with real records before operational use. "
-        "Product fit, customer needs, regulatory obligations and ERP controls require human review."
+        "Illustrative decision support. Confirm customer needs, product fit and supply constraints before acting."
     )
 
 
