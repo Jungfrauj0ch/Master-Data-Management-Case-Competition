@@ -107,7 +107,7 @@ def predict(values, horizon: int, model: str) -> np.ndarray:
     return np.maximum(0.0, forecast)
 
 
-def evaluate_series(series: pd.Series, horizon: int) -> dict:
+def evaluate_series(series: pd.Series, horizon: int, *, models: tuple[str, ...] = MODELS) -> dict:
     """Compare each model on the same last six eligible forecast origins.
 
     Every origin predicts the *entire* requested horizon without observing any
@@ -121,7 +121,7 @@ def evaluate_series(series: pd.Series, horizon: int) -> dict:
         raise ValueError("At least six complete reporting months are required.")
     origins = list(range(max(MIN_HISTORY, len(values) - horizon - 5), len(values) - horizon + 1))
     records, scores, future = [], [], {}
-    for model in MODELS:
+    for model in models:
         rows = []
         status = "Available"
         try:
@@ -179,11 +179,17 @@ def regional_forecast(orders: pd.DataFrame, horizon: int = 6, approach: str = "t
     for country, product in combinations(sorted(panel["Country"].unique()), PRODUCTS):
         history = panel.loc[panel["Country"].eq(country) & panel["Product"].eq(product)]
         series = history.set_index("Month")["Units"]
-        result = evaluate_series(series, horizon)
+        # The trend view needs only these lightweight projections. Fit the
+        # statistical candidates when the user requests historical selection.
+        result = evaluate_series(
+            series, horizon, models=(BASELINE, TREND) if approach == "trend" else MODELS,
+        )
         selected = TREND if approach == "trend" and TREND in result["future"] else result["selected"]
         model_forecast = result["future"][selected]
         baseline = result["future"][BASELINE]
         validation = result["validation"]
+        if approach == "trend":
+            validation += "; baseline and trend checks only"
         recent = series.to_numpy(dtype=float)[-6:]
         recent_average = float(recent.mean())
         forecast_average = float(model_forecast.mean())
@@ -203,7 +209,10 @@ def regional_forecast(orders: pd.DataFrame, horizon: int = 6, approach: str = "t
                         "Recent monthly average": recent_average,
                         "Change vs recent average (%)": change,
                         "Recent variability (%)": variability,
-                        "Backtest best model": result["selected"] if result["origins"] >= MIN_SELECTION_ORIGINS else "Not established",
+                        "Backtest best model": (
+                            "Not evaluated in trend outlook" if approach == "trend" else
+                            result["selected"] if result["origins"] >= MIN_SELECTION_ORIGINS else "Not established"
+                        ),
                         "Forecast view": "Trend outlook" if approach == "trend" else "Best historical fit",
                         "Validation": validation})
         months = pd.date_range(series.index[-1] + pd.offsets.MonthBegin(1), periods=horizon, freq="MS")

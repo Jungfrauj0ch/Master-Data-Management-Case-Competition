@@ -47,7 +47,10 @@ A, B and C across the five illustrative countries. The dashboard compares a
 six-month average, robust damped trend, damped Holt and ARIMA on matching 1-, 3-,
 6- or 12-month test horizons. **Trend outlook** defaults to a robust projection of
 recent momentum that eases over time. **Best historical fit** uses the model
-selected by historical testing. Regional totals sum the underlying forecasts.
+selected by historical testing. The default trend view runs only the lightweight
+baseline and trend checks; Holt and ARIMA fitting runs when **Best historical fit**
+is selected. Each horizon and view is cached for subsequent visits while the app
+process stays running. Regional totals sum the underlying forecasts.
 The page separates **Outlook & actions** and **Regional priorities**, with a
 small **ⓘ** button for a brief model explanation. Recommendation cards identify supply reviews, demand
 review frequency, and sales or retention follow-ups, with an owner for each.

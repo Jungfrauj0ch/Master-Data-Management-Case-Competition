@@ -143,7 +143,7 @@ def declining_customers(data: pd.DataFrame, threshold: float = -30.0) -> pd.Data
 
 @st.cache_data(show_spinner=False, max_entries=8)
 def forecast_comparison(orders: pd.DataFrame, horizon: int, approach: str = "trend"):
-    """Cache model fitting; changing country/product only filters the result."""
+    """Cache each outlook; only historical selection fits all statistical models."""
     return regional_forecast(orders, horizon, approach)
 
 

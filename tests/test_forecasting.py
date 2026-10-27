@@ -145,6 +145,47 @@ def test_regional_forecasts_reconcile_and_preserve_fifteen_combinations(monkeypa
     assert len(regional_priorities(result["summary"])) == 15
 
 
+@pytest.mark.parametrize("horizon", [1, 3, 6, 12])
+def test_trend_outlook_skips_statistical_fits_and_preserves_projections(monkeypatch, horizon):
+    original_predict = fc.predict
+    calls = set()
+
+    def lightweight_only(values, horizon, model):
+        assert model in (fc.BASELINE, fc.TREND), "Trend view must not fit Holt or ARIMA"
+        calls.add(model)
+        return original_predict(values, horizon, model)
+
+    monkeypatch.setattr(fc, "predict", lightweight_only)
+    orders = pd.read_csv(ROOT / "regional_analytics/data/purchase_orders.csv")
+    result = fc.regional_forecast(orders, horizon, "trend")
+    assert calls == {fc.BASELINE, fc.TREND}
+    assert set(result["metrics"]["Model"]) == calls
+    assert result["summary"]["Backtest best model"].eq("Not evaluated in trend outlook").all()
+    for (country, product), future in result["forecast"].groupby(["Country", "Product"]):
+        history = result["history"].loc[
+            result["history"]["Country"].eq(country) & result["history"]["Product"].eq(product), "Units"
+        ]
+        np.testing.assert_allclose(future["Forecast units"], original_predict(history, horizon, fc.TREND))
+        np.testing.assert_allclose(future["Baseline units"], original_predict(history, horizon, fc.BASELINE))
+
+
+def test_best_historical_fit_still_compares_all_models(monkeypatch):
+    calls = set()
+
+    def candidate(values, horizon, model):
+        calls.add(model)
+        return np.repeat(np.mean(values[-6:]), horizon)
+
+    monkeypatch.setattr(fc, "predict", candidate)
+    orders = pd.read_csv(ROOT / "regional_analytics/data/purchase_orders.csv")
+    result = fc.regional_forecast(orders, 1, "backtest")
+    assert calls == set(fc.MODELS)
+    assert set(result["metrics"]["Model"]) == set(fc.MODELS)
+    assert set(result["backtest"]["Model"]) == set(fc.MODELS)
+    assert result["summary"]["Selected model"].eq(fc.BASELINE).all()
+    assert result["summary"]["Backtest best model"].eq(fc.BASELINE).all()
+
+
 def test_sales_priorities_respect_identity_and_country_boundaries():
     data = pd.DataFrame([
         {"canonical_customer_id": "C1", "country": "Singapore", "product": "Product A", "quantity": 20, "month": pd.Timestamp("2025-12-01")},
