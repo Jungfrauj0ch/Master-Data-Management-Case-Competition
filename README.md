@@ -16,6 +16,30 @@ data only: switching a demo identity is not authentication. The demo seeds
 National University Hospital for duplicate-search demonstrations (try `NUH`).
 Only demo mode inserts sample data.
 
+## Deploy a public demo
+
+The included `render.yaml` configures a free Render web service in Singapore,
+using Python 3.13, the host's assigned port, and Streamlit's health endpoint.
+
+1. Push this project, including `render.yaml` and `.python-version`, to GitHub.
+2. In [Render](https://dashboard.render.com/), choose **New > Blueprint**,
+   connect this repository, and select the `main` branch.
+3. Review the `livesflow-mdm` service and deploy it. When the deployment is live,
+   use the service's assigned `https://...onrender.com` URL to share the app.
+
+This deployment is a shared, synthetic-data demo. Anyone with the link can
+select any demo identity and use its workflow permissions. The free service
+sleeps when idle, and its SQLite database at `/tmp/lives_mdm.db` is temporary:
+submitted records can disappear on restart, redeployment, or spin-down. Bundled
+synthetic analytics files and the seeded demo master are restored from source.
+See [Render's free-service limits](https://render.com/docs/free).
+
+Protected financial fields remain disabled unless you set `MDM_ENCRYPTION_KEY`
+in the service's environment to a Fernet key; see **Protected fields** below.
+For durable records, use a paid service with a persistent disk, set
+`MDM_DATABASE_PATH` to a file within its mount path, and retain the encryption key
+across deployments. Configure OIDC before using real data.
+
 ## Regional forecasting and sales intelligence
 
 Open **Regional Sales Analytics → Forecasting** for monthly forecasts of Products

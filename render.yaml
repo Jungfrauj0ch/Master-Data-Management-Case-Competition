@@ -1,0 +1,22 @@
+# Free, public case-competition demo. SQLite data is temporary on this plan.
+services:
+  - type: web
+    name: livesflow-mdm
+    runtime: python
+    plan: free
+    region: singapore
+    buildCommand: python -m pip install -r requirements.txt
+    startCommand: >-
+      python -m streamlit run app.py
+      --server.address 0.0.0.0
+      --server.port $PORT
+      --server.headless true
+      --server.fileWatcherType none
+      --server.runOnSave false
+      --browser.gatherUsageStats false
+    healthCheckPath: /_stcore/health
+    envVars:
+      - key: MDM_AUTH_MODE
+        value: demo
+      - key: MDM_DATABASE_PATH
+        value: /tmp/lives_mdm.db

@@ -565,13 +565,6 @@ def operational_performance(actor: Actor, requests: list[dict]):
     cols[1].metric("Approval completion rate", f"{completed_count / len(sample):.0%}")
     cols[2].metric("Overdue approval checks", overdue_count)
     cols[3].metric("Pending approval checks", sum(pending_by_role.values()))
-    if pending_by_role:
-        st.write("**Outstanding checks by approving role**")
-        summary = pd.DataFrame([{"Role": role, "Outstanding checks": count}
-                                for role, count in pending_by_role.items()])
-        st.bar_chart(summary.set_index("Role"), y="Outstanding checks")
-    else:
-        st.success("No outstanding approval checks in the visible requests.")
     if len(requests) > len(sample):
         st.caption(f"Showing performance for the {len(sample)} newest visible requests only.")
 
