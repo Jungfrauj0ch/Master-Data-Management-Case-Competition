@@ -27,12 +27,6 @@ using Python 3.13, the host's assigned port, and Streamlit's health endpoint.
 3. Review the `livesflow-mdm` service and deploy it. When the deployment is live,
    use the service's assigned `https://...onrender.com` URL to share the app.
 
-This deployment is a shared, synthetic-data demo. Anyone with the link can
-select any demo identity and use its workflow permissions. The free service
-sleeps when idle, and its SQLite database at `/tmp/lives_mdm.db` is temporary:
-submitted records can disappear on restart, redeployment, or spin-down. Bundled
-synthetic analytics files and the seeded demo master are restored from source.
-See [Render's free-service limits](https://render.com/docs/free).
 
 Protected financial fields remain disabled unless you set `MDM_ENCRYPTION_KEY`
 in the service's environment to a Fernet key; see **Protected fields** below.
@@ -52,24 +46,13 @@ baseline and trend checks; Holt and ARIMA fitting runs when **Best historical fi
 is selected. Each horizon and view is cached for subsequent visits while the app
 process stays running. Regional totals sum the underlying forecasts.
 The page separates **Outlook & actions** and **Regional priorities**, with a
-small **ⓘ** button for a brief model explanation. Recommendation cards identify supply reviews, demand
+small **ⓘ** button for a brief model explanation. 
+
+Recommendation cards identify supply reviews, demand
 review frequency, and sales or retention follow-ups, with an owner for each.
 Monthly and regional CSV exports include the forecast view and low/high scenarios.
 **Sales Insights** ranks missing-product reviews using reconciled identities
 and same-country peer adoption, alongside declining-account follow-ups.
-
-The bundled data contains only 12 synthetic months. The trend outlook is a
-planning projection; improved long-range accuracy is not established. Best
-historical fit retains the baseline when fewer than three matched test origins
-are available. Low/high scenarios reflect historical variability and are not
-calibrated confidence intervals. No real accuracy, productivity or sales uplift
-is claimed. Forecasts follow the dataset cutoff, not the current date. Input
-months must be complete; missing orders are treated as zero.
-
-See [the case answer](regional_analytics/CASE_ANSWER.md) for the proposed business
-approach, reference-project adaptation, pilot design and success measures.
-The implementation is original and draws on the workflow described in
-[panyashree12/Sales-Forecasting](https://github.com/panyashree12/Sales-Forecasting).
 
 ## Workflow
 
@@ -92,8 +75,7 @@ entities, searching master records and pending requests. Similar names (score 88
 or higher), matching registration numbers, item codes, or cost center codes block
 submission. Identifier comparison ignores case, spacing, and punctuation. Exact
 normalized email or address matches produce review warnings without blocking,
-because contacts and premises may be shared. Matching reasons are displayed without
-revealing the matched field values. Intake fields are checked on submission; the
+because contacts and premises may be shared. Intake fields are checked on submission; the
 name preview also uses any form values already submitted. Final approval repeats
 the blocking checks against master records. Existing approved requests backfill
 their master records' intake details on startup; older standalone masters without
@@ -120,9 +102,7 @@ Approved requests with master records cannot be deleted.
 4. Switch to an approver identity and open **Approval Workflow**. Click a
    request row to open its details, then approve or reject with a reason,
    or send a clarifying question to the requestor. Self-approval, out-of-scope decisions, and repeated
-   decisions are rejected in the service layer. Rejection cancels remaining
-   checks. All approvals must pass before exactly one local master record is
-   created. This prototype does not send data to SAP.
+   decisions are rejected in the service layer.
    Open an approved request and click **Prepare simulated SAP export**, then
    **Download simulated SAP JSON** to prepare its handoff file. Preparation is
    audited with a timestamp; it does not confirm download or SAP receipt. The file
@@ -134,16 +114,6 @@ Approved requests with master records cannot be deleted.
    and timestamped audit history. Reply to an approver's question directly in
    the request. Audit
    CSV exports exclude protected values and escape spreadsheet formulas.
-
-Intake rules live in `INTAKE_FIELDS`: customers/vendors require registration,
-business contact email, and registered address; items require a code and an
-item type selected from In-vitro diagnostics (IVD), Medical equipment, or
-Laboratory solutions; cost centers require a code and department. Dropdown
-choices live in `INTAKE_OPTIONS`; unit of measure is not collected. These are
-illustrative rules to confirm with the business. Bank details and credit terms
-are optional, separately protected fields. Do not put sensitive values in names,
-addresses, justifications, decision reasons, or access reasons: these ordinary
-fields are not encrypted.
 
 ## Clarifications
 
@@ -162,20 +132,6 @@ questions read-only. Questions, replies, authors, and UTC timestamps remain in
 the request history and audit export. Keep protected financial values in their
 designated encrypted fields, not in clarification messages.
 
-## Deadlines and refresh
-
-The app retains notification records for workflow events and reminders and shows
-a compact unread count. Full notification inboxes and read controls are not shown.
-Dashboard and Approval Workflow refresh their requests, decisions, due dates,
-and question alerts automatically every five seconds while the page is open.
-The selected request stays selected while it is still available, and decision
-drafts are preserved while that approval remains pending. Completed checks
-leave the approval queue automatically. No refresh button is required.
-Checks become overdue after 48 hours, with at most one reminder per check per
-24 hours. Both intervals are configurable in `mdm_config.py`.
-
-For reminders while no browser is open, schedule this command externally
-(for example, hourly with Windows Task Scheduler):
 
 ```powershell
 python -m services.notification_service
@@ -250,23 +206,6 @@ minimal identity metadata across entities within an authorized country so users
 can discover existing shared records; it does not expose request payloads.
 Services accept an `Actor` from this trusted authentication boundary; these
 Python functions must not be exposed as endpoints accepting client-supplied roles.
-
-## Database and operational limits
-
-SQLite defaults to `database/lives_mdm.db`. Set `MDM_DATABASE_PATH` before startup
-to use a different path; its parent directory must already exist. SQLite foreign
-keys are enabled, and write transactions serialize duplicate checks and approval
-decisions. Existing demo databases receive additive schema changes. Legacy
-pending requests are retained as **Needs Update** with an audit entry because
-they lack standardized fields and approval assignments; resubmit them through
-the new form. Those legacy rows do not block corrected submissions.
-
-This is a local prototype. Audit rows are append-only through the application,
-but a database administrator can alter SQLite data. Production deployment needs
-HTTPS, managed key storage and rotation, database/backup access controls,
-independent audit retention, and confirmed approval policies. The optional
-OIDC path needs validation against your configured identity provider. Demo mode
-provides no identity security even if encryption is configured.
 
 ## Verify
 
