@@ -28,12 +28,6 @@ using Python 3.13, the host's assigned port, and Streamlit's health endpoint.
    use the service's assigned `https://...onrender.com` URL to share the app.
 
 
-Protected financial fields remain disabled unless you set `MDM_ENCRYPTION_KEY`
-in the service's environment to a Fernet key; see **Protected fields** below.
-For durable records, use a paid service with a persistent disk, set
-`MDM_DATABASE_PATH` to a file within its mount path, and retain the encryption key
-across deployments. Configure OIDC before using real data.
-
 ## Regional forecasting and sales intelligence
 
 Open **Regional Sales Analytics → Forecasting** for monthly forecasts of Products
@@ -43,10 +37,8 @@ six-month average, robust damped trend, damped Holt and ARIMA on matching 1-, 3-
 recent momentum that eases over time. **Best historical fit** uses the model
 selected by historical testing. The default trend view runs only the lightweight
 baseline and trend checks; Holt and ARIMA fitting runs when **Best historical fit**
-is selected. Each horizon and view is cached for subsequent visits while the app
-process stays running. Regional totals sum the underlying forecasts.
-The page separates **Outlook & actions** and **Regional priorities**, with a
-small **ⓘ** button for a brief model explanation. 
+is selected.
+
 
 Recommendation cards identify supply reviews, demand
 review frequency, and sales or retention follow-ups, with an owner for each.
@@ -94,11 +86,7 @@ the original requestor, within their access scope, can reply.
 The reply notifies the approver, returns their check to **Pending**, and restarts
 its approval deadline. Approver reminders pause while a reply is outstanding.
 The approver can approve, reject, or ask a follow-up question. Each question can
-be answered once; concurrent or repeated submissions are rejected. Rejecting
-the request cancels any checks waiting for clarification and makes unanswered
-questions read-only. Questions, replies, authors, and UTC timestamps remain in
-the request history and audit export. Keep protected financial values in their
-designated encrypted fields, not in clarification messages.
+be answered once; concurrent or repeated submissions are rejected. 
 
 
 ```powershell
@@ -127,9 +115,7 @@ dependency is unavailable, and service calls fail without writing a request.
 Bank account details and credit terms are encrypted before persistence in a
 separate table. Only Finance and Compliance can reveal them, within their
 country/entity scopes, after providing an access reason. The access audit must
-commit before plaintext is returned. Ordinary tables, notifications, and audit
-exports never include those values. Protected inputs are cleared on submission
-and identity switches; revealed values are not saved in session state.
+commit before plaintext is returned.
 
 ## Authenticated mode
 
