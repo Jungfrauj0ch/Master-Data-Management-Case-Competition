@@ -56,38 +56,6 @@ and same-country peer adoption, alongside declining-account follow-ups.
 
 ## Workflow
 
-The Dashboard and Approval Workflow show a compact **You have X notifications**
-card with a **Go to Messages** button inside it. The card counts unread updates
-and highlights unanswered approver questions. The button opens the relevant
-conversation, prioritizing requests that need a reply.
-**Reply to request** in a record's details opens that specific conversation.
-Every identity has a **Messages** page containing its authorized requests and
-conversations. Assigned approvers send questions there;
-requestors reply there, and auditors can read conversations within their scope.
-**Message requestor** opens a conversation from Approval Workflow, and **Review
-request** returns to the approval decision. Dashboard and Approval Workflow show
-alerts for unanswered questions. The action alert clears when the questions are
-answered or the request is closed. Full notification inboxes and read controls
-are not displayed.
-
-Duplicate detection compares records of the same type and country across business
-entities, searching master records and pending requests. Similar names (score 88
-or higher), matching registration numbers, item codes, or cost center codes block
-submission. Identifier comparison ignores case, spacing, and punctuation. Exact
-normalized email or address matches produce review warnings without blocking,
-because contacts and premises may be shared. Intake fields are checked on submission; the
-name preview also uses any form values already submitted. Final approval repeats
-the blocking checks against master records. Existing approved requests backfill
-their master records' intake details on startup; older standalone masters without
-those details can only be matched by name until their details are supplied.
-
-Requestors can check **Delete…** on their own request's row in the Dashboard table
-before a master record is created. A dialog identifies the request and explains
-the effect. Choose **Delete request** to confirm, or **Cancel** (or close the dialog)
-to keep it. Deletion hides the request from active views,
-cancels outstanding approvals and notifications, and retains audit history.
-Approved requests with master records cannot be deleted.
-
 1. Select **Requestor**, open **New MDM Request**, and choose a record type.
 2. Enter the country and record name. Matching master records and pending
    requests appear automatically when you finish editing the name, or change
